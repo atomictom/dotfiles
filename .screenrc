@@ -1,0 +1,33 @@
+defscrollback 10000
+
+term "screen-256color"
+
+attrcolor b ".I"    # allow bold colors - necessary for some reason
+## tell screen how to set colors. AB = background, AF=foreground
+#termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'   
+defbce on    # use current bg color for erased chars
+
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+altscreen on
+termcapinfo xterm* ti@:te@
+
+hardstatus on
+hardstatus alwayslastline
+
+# Cyan tabs, red focused tab, and green time/date...tabs "scroll" so focused
+# tab is always shown
+hardstatus string "%{Ck}%-w%{=b kR}%50>%n %t%{-}%+w%-15=%{=b kG}|%d/%m/%y %C"    
+
+bind = resize =
+bind + resize +1
+bind - resize -1
+bind _ resize max
+
+# Send screen buffer to X's buffer
+bind b eval writebuf 'exec /bin/sh -c "xsel -b -i < /tmp/screen-exchange"' 
+
+bindkey "^[[D" prev
+bindkey "^[[1;5D" prev  # change window with ctrl-left
+bindkey "^[[C" next
+bindkey "^[[1;5C" next  # change window with ctrl-right
+

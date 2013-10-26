@@ -1,0 +1,6 @@
+set status_display_program=/home/thomas/.cmus/status_display_program.sh
+cd /home/thomas/.cmus/
+unbind common ^S
+unbind common S
+bind common ^S shuffle
+bind common S shuffle
