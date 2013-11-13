@@ -23,3 +23,4 @@ fi
 
 export STEAM_FRAME_FORCE_CLOSE=1
 export EDITOR=vim
+export IDLESTARTUP='/home/thomas/.idle.py'
