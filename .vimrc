@@ -32,6 +32,15 @@ Bundle 'boras/gdbvim'
 Bundle 'mbbill/undotree'
 Bundle 'vim-scripts/CRefVim'
 Bundle 'xolox/vim-session'
+Bundle 'killphi/vim-ebnf'
+Bundle 'michaeljsmith/vim-indent-object'
+"Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'tomasr/molokai'
+Bundle 'vim-scripts/YankRing.vim'
+Bundle 'vim-scripts/a.vim'
+Bundle 'chrisbra/improvedft'
+Bundle 'arecarn/crunch'
+Bundle 'bling/vim-airline'
 
 filetype plugin indent on
 
@@ -45,6 +54,12 @@ let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
 
+set undodir='/home/thomas/.vim/undo/'
+set undofile
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+
 " Automatically open, but do not go to (if there are errors) the quickfix /
 " location list window, or close it when is has become empty.
 "
@@ -56,10 +71,16 @@ let g:vimwiki_list = [{'path': '~/.vimwiki'}]
 "autocmd QuickFixCmdPost [^l]* nested cwindow 4
 "autocmd QuickFixCmdPost    l* nested lwindow 4
 
-map <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
-map <Leader>t :tabnew<space>
-map <Leader>e :%!
-map <Leader>sh :.!sh<CR>
-nnoremap <F5> :UndotreeToggle<CR>
-map <Leader>s :SaveSession<space>
-map <Leader>so :OpenSession<space>
+noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
+noremap <Leader>t :tabnew<space>
+noremap <Leader>e :!
+noremap <Leader>ef :%!
+noremap <Leader>sh :.!sh<CR>
+noremap <Leader>s :SaveSession<space>
+noremap <Leader>so :OpenSession<space>
+noremap <Leader>v :tabnew ~/.vimrc
+inoremap jk <Esc>
+noremap <F5> :UndotreeToggle<CR>
+noremap <F4> :NERDTreeToggle<CR>
+noremap <Leader>a :normal A
+"unmap <Leader>wd
