@@ -39,6 +39,8 @@ alias uu='sudo apt-get update && sudo apt-get upgrade'
 alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/~Organized Music/Youtube/%(title)s.%(ext)s\""
 alias ic=iced
 alias fbs=files-by-size
+alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
+alias idle='idle-python2.7 -s &'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened. 
