@@ -35,7 +35,7 @@ Bundle 'xolox/vim-session'
 Bundle 'killphi/vim-ebnf'
 Bundle 'michaeljsmith/vim-indent-object'
 "Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'tomasr/molokai'
+"Bundle 'tomasr/molokai'
 Bundle 'vim-scripts/YankRing.vim'
 Bundle 'vim-scripts/a.vim'
 Bundle 'chrisbra/improvedft'
@@ -53,6 +53,8 @@ set smartcase
 let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
+let g:airline_powerline_fonts=1
+let g:airline_theme='badwolf'
 
 set undodir='/home/thomas/.vim/undo/'
 set undofile
@@ -66,7 +68,7 @@ set directory=~/.vim/tmp
 " Note: Must allow nesting of autocmds to enable any customizations for
 " quickfix buffers.
 " Note: Normally, :cwindow jumps to the quickfix window if the command opens it
-" (but not if it's already open). However, as part of the autocmd, this doesn't 
+" (but not if it's already open). However, as part of the autocmd, this doesn't
 " seem to happen.
 "autocmd QuickFixCmdPost [^l]* nested cwindow 4
 "autocmd QuickFixCmdPost    l* nested lwindow 4
@@ -75,7 +77,7 @@ noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
 noremap <Leader>t :tabnew<space>
 noremap <Leader>e :!
 noremap <Leader>ef :%!
-noremap <Leader>sh :.!sh<CR>
+noremap <Leader>sh :.!bash<CR>
 noremap <Leader>s :SaveSession<space>
 noremap <Leader>so :OpenSession<space>
 noremap <Leader>v :tabnew ~/.vimrc
@@ -83,4 +85,7 @@ inoremap jk <Esc>
 noremap <F5> :UndotreeToggle<CR>
 noremap <F4> :NERDTreeToggle<CR>
 noremap <Leader>a :normal A
+noremap <Leader>o :.w !bash<CR>
+noremap <Leader>r :%s///gc<Left><Left><Left><Left>
+noremap <Leader>re :%s///gc<Left><Left><Left><Left>
 "unmap <Leader>wd
