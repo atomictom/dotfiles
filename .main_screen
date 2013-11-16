@@ -11,5 +11,6 @@ screen -t fire
 screen -t air
 screen -t man
 screen -t vim bash -c 'vim; bash'
+screen -t vimwiki bash -c 'vim; bash'
 
 select 0 
