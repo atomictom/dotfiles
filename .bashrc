@@ -15,7 +15,7 @@ alias ls="ls --color=auto"
 case $- in
 	# If we are not running inside screen
 	*i*)	if [ -z "$STY" ]; then
-			screen '-xR' -S main -T linux -c $FIRST_SCREEN 
+			screen '-xR' -S main -T linux -c $FIRST_SCREEN
 		fi
 		;;
 esac
@@ -41,9 +41,10 @@ alias ic=iced
 alias fbs=files-by-size
 alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
+alias xo='xdg-open'
 
 # Start cmus in a new window inside the bash screen instant
-# if it is not already opened. 
+# if it is not already opened.
 #if ! cmus-remote -C >/dev/null 2>&1 ; then
 #	screen -S main -p music -X eval cmus
 #	screen -S main -X 'select' shell
@@ -55,10 +56,10 @@ function iced(){ ssh icedcoffee.no-ip.org -l $1; }
 function files-by-size(){ find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
 
 function fortune_cookie(){
-	BOX_NAMES=( $(cat /etc/boxes/boxes-config 
+	BOX_NAMES=( $(cat /etc/boxes/boxes-config
 		     |grep -Poz 'BOX \K(.*)'| grep -v test) )
 	BOX_COUNT=${#BOX_NAMES[@]}
 	BOX_TO_USE=${BOX_NAMES[ (( $RANDOM % $BOX_COUNT )) ]}
-	fortune |boxes -d $BOX_TO_USE 
+	fortune |boxes -d $BOX_TO_USE
 	#echo $BOX_TO_USE
 }
