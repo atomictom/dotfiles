@@ -2,6 +2,8 @@
 
 # Thomas Manning's bashrc file!
 
+stty -ixon
+
 # Set globalish variables
 PATH=$PATH:/home/thomas/.bin
 FIRST_SCREEN=~thomas/.main_screen
