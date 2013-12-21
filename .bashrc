@@ -3,6 +3,7 @@
 # Thomas Manning's bashrc file!
 
 stty -ixon
+shopt -s histappend
 
 # Set globalish variables
 PATH=$PATH:/home/thomas/.bin
@@ -26,7 +27,7 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias vi='vim'
-alias l='fc -s | less -r'
+#alias l='fc -s | less -r'
 alias to_rc='fc -ln -2 | xargs >> ~/.bashrc'
 alias sr='screen -r'
 alias sx='screen -x'
@@ -44,6 +45,7 @@ alias fbs=files-by-size
 alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
 alias xo='xdg-open'
+alias o='xdg-open'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened.
