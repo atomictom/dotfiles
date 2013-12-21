@@ -24,7 +24,6 @@ then
 	# However, if being the same means they are both empty, use the filename
 	if [[ -z ${data[title]} ]] 
 	then
-		echo oops > /tmp/cmuslog
 		output=${data[file]}
 	fi
 fi	
