@@ -1,6 +1,24 @@
 set status_display_program=/home/thomas/.cmus/status_display_program.sh
 cd /home/thomas/.cmus/
+
+# I use 'unbind' since the autosave file remembers all the bindings by default
 unbind common ^S
+unbind common ^U
+unbind common ^Y
+unbind common ^T
+unbind common ^H
+unbind common ^P
 unbind common S
+
+# This is nice if I happen to find out what the next song is and don't like it
 bind common ^S shuffle
 bind common S shuffle
+# Since I don't know of a way to do two commands, I source a file which adds music from my two music folders
+bind common ^U source /home/thomas/.cmus/update_library
+# This is a somewhat complicated little script which just finds all songs newer than the last one I've added to cmus and adds them to the current playlist
+bind common ^Y shell /home/thomas/.cmus/add_latest_youtube_song
+# For manually adding things or whatever
+bind common ^T cd /home/thomas/Music/~Organized Music/Youtube/
+# Think of it as "home"
+bind common ^H cd /home/thomas/.cmus/
+bind common ^P source /home/thomas/.cmus/silly_song
