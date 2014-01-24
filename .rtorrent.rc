@@ -1,5 +1,18 @@
+# Color / Canvas patch
+# 0 - Black
+# 1 - Red
+# 2 - Green
+# 3 - Yellow
+# 4 - Cool Blue
+# 5 - Purple
+# 6 - Light Blue
+# 7 - White
+done_fg_color = 4
+#done_bg_color = 2
+active_fg_color = 1
+#active_bg_color = 4
 
-
+# ------------------------------------------------------------------------------
 
 download_rate = 1000
 upload_rate = 50
@@ -18,7 +31,7 @@ check_hash = yes
 encryption = allow_incoming,enable_retry,try_outgoing
 use_udp_trackers = yes
 
-dht=auto
+dht=on
 peer_exchange = yes
 
 session = ~/Downloads/rtorrent/.session
@@ -28,4 +41,5 @@ schedule = low_diskspace,5,60,close_low_diskspace=2048M
 
 schedule = watch_directory,5,5,"load=~/Downloads/*.torrent"
 
-system.method.set_key = event.download.finished,make_torrent_link,"create_link=base_filename,~/Data/Torrents,"
+system.method.set_key = event.download.finished,make_torrent_link,"create_link=base_filename,~/Data/Torrents/,"
+
