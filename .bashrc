@@ -6,7 +6,7 @@ stty -ixon
 shopt -s histappend
 
 # Set globalish variables
-PATH=$PATH:/home/thomas/.bin
+PATH="$HOME/.bin:$PATH"
 FIRST_SCREEN=~thomas/.main_screen
 export TERM='xterm-256color'
 
@@ -46,6 +46,14 @@ alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
 alias xo='xdg-open'
 alias o='xdg-open'
+alias ..='cd ..'
+alias b='cd -'
+alias vb='vim ~/.bashrc'
+alias vv='vim ~/.vimrc'
+alias rv='unset DBUS_SESSION_BUS_ADDRESS SESSION_MANAGER'
+alias zzz='sudo pm-suspend'
+alias untar_all='for f in *; do tar xvfa $f; done'
+alias k='klink &'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened.
@@ -58,6 +66,27 @@ function mcf(){ ssh minecraftferret.no-ip.org -l $1; }
 function lxz(){ ssh linuxzoo.net -l $1; }
 function iced(){ ssh icedcoffee.no-ip.org -l $1; }
 function files-by-size(){ find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
+function copy(){ echo -n "$*" | xsel -b; }
+function sf(){ echo -n $(pwd)/$1 | xsel -b; }
+function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
+
+function backup-caeli(){
+	#echo >> ~/rsync_error_log
+	#echo "-------------------- Backup on $(date) --------------------" >> ~/rsync_error_log
+	#echo >> ~/rsync_error_log
+
+	dry=''
+	if [[ "$1" == "dry" ]]; then
+		dry='-n'
+	fi
+	#
+	for dir in Books Code Documents Games Music Other Pictures projects scratch Software Torrents Videos .icons .backups; do
+		echo
+		echo "-------------------- $dir --------------------"
+		echo
+		rsync -va --delete --max-delete=100 $dry "/home/thomas/Data/$dir/" "/media/thomas/Caeli/$dir/" || echo "Error on $dir" >> ~/rsync_error_log;
+	done
+}
 
 function fortune_cookie(){
 	BOX_NAMES=( $(cat /etc/boxes/boxes-config
