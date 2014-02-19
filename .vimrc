@@ -184,9 +184,17 @@ endfunction
 
 " At some point I will probably add some so this is just a place holder
 function s:CoffeeScriptAutocommands()
+	"Bundle 'AutoComplPop'
+	function Build()
+		write
+		silent !cake build
+		silent redraw!
+	endfunction
 	let coffee_cake_options='build'
 	let coffee_make_options='build'
 	compiler cake
+	"autocmd CursorHold *.coffee call Build()
+	noremap <F5> :call Build()<CR>
 endfunction
 
 " Automatically open, but do not go to (if there are errors) the quickfix /
