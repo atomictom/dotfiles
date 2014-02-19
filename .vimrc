@@ -126,12 +126,12 @@ let g:ycm_autoclose_preview_window_after_insertion=1
 let g:ycm_min_num_chars_for_completion=1
 let g:ycm_cache_omnifunc=0
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-"let g:syntastic_auto_jump = 1
-let g:syntastic_check_on_open=1
 let g:yankring_history_dir = '~/.vim'
 let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_update_on_write = 2
 let g:gist_open_browser_after_post = 1
+let g:syntastic_check_on_open=1
+let g:syntastic_always_populate_loc_list = 1
 
 set undodir='/home/thomas/.vim/undo/'
 set undofile
