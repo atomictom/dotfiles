@@ -152,6 +152,17 @@ augroup vimrc
 	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
 augroup END
 
+function s:WebAutoCommands()
+	" Auto save html, css, and js files whenever possible (for live.js)
+	" TODO: toggle this autocmd with a variable
+	" if g:web_autosave
+	augroup web_autosave
+		autocmd!
+		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' | update | endif
+	augroup END
+	let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
 function s:VimwikiAutocommands()
 	nnoremap j gj
 	nnoremap k gk
