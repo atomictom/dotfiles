@@ -2,12 +2,15 @@
 
 # Thomas Manning's bashrc file!
 
+source .bashrc.private
+
 stty -ixon
 shopt -s histappend
 
 # Set globalish variables
-PATH="$HOME/.bin:$PATH"
 FIRST_SCREEN=~thomas/.main_screen
+
+export PATH="$HOME/.bin/tmp:$PATH"
 export TERM='xterm-256color'
 
 # Customize the ls colors
@@ -40,8 +43,9 @@ alias cux='chmod u+x'
 alias less='less -r'
 alias uu='sudo apt-get update && sudo apt-get upgrade'
 alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/~Organized Music/Youtube/%(title)s.%(ext)s\""
-alias ic=iced
-alias fbs=files-by-size
+alias silly-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/Other/Silly/%(title)s.%(ext)s\""
+alias ic="iced"
+alias fbs="files-by-size"
 alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
 alias xo='xdg-open'
@@ -52,8 +56,11 @@ alias vb='vim ~/.bashrc'
 alias vv='vim ~/.vimrc'
 alias rv='unset DBUS_SESSION_BUS_ADDRESS SESSION_MANAGER'
 alias zzz='sudo pm-suspend'
+alias bright='sudo ~/.bin/bright'
+alias bl='sudo ~/.bin/bright'
 alias untar_all='for f in *; do tar xvfa $f; done'
 alias k='klink &'
+alias aps='apt-cache show'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened.
@@ -62,10 +69,8 @@ alias k='klink &'
 #	screen -S main -X 'select' shell
 #fi
 
-function mcf(){ ssh minecraftferret.no-ip.org -l $1; }
-function lxz(){ ssh linuxzoo.net -l $1; }
-function iced(){ ssh icedcoffee.no-ip.org -l $1; }
 function files-by-size(){ find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
+function files-by-size-x(){ find $1 -xdev -type f -print0 | xargs -0 du -sh |sort -hr; }
 function copy(){ echo -n "$*" | xsel -b; }
 function sf(){ echo -n $(pwd)/$1 | xsel -b; }
 function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
