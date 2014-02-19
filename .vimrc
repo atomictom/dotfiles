@@ -142,14 +142,14 @@ set directory=~/.vim/tmp
 augroup vimrc
 	" Delete all autocommands in this group (so we don't set them twice...)
 	autocmd!
-	" Auto save html, css, and js files whenever possible (for live.js)
-	autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' | update | endif
 	" Call appropriate functions for each filetype to do multiple things
+	autocmd BufNewFile,BufRead *.html,*.css,*.js call s:WebAutoCommands()
 	autocmd BufNewFile,BufRead *.wiki call s:VimwikiAutocommands()
 	autocmd BufNewFile,BufRead *.java call s:JavaAutocommands()
 	autocmd BufNewFile,BufRead *.coffee call s:CoffeeScriptAutocommands()
 	autocmd BufNewFile,BufRead *.py call s:PythonAutocommands()
-	"autocmd BufWrite *.coffee silent !cake build
+	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
+	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
 augroup END
 
 function s:VimwikiAutocommands()
