@@ -20,7 +20,7 @@ Bundle 'tpope/vim-sensible'
 " Automatically closes delimiters like quotes, braces, and parenthesis
 Bundle 'Raimondi/delimitMate'
 " Automatically opens omni completetion menu
-Bundle 'AutoComplPop'
+"Bundle 'AutoComplPop'
 " Adds coffeescript syntax and a few convenience functions for compiling,
 " running, and viewing the JS output of a coffeescript file
 Bundle 'kchmck/vim-coffee-script'
