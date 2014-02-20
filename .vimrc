@@ -197,6 +197,26 @@ function s:CoffeeScriptAutocommands()
 	noremap <F5> :call Build()<CR>
 endfunction
 
+function s:CAutocommands()
+	let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
+function s:CMinusMinusAutocommands()
+	" I guess these would affect non C-- buffers, but I don't feel like
+	" fixing this now since it's probably a non-issue.
+	let g:syntastic_disabled_filetypes=['c', 'cm']
+	" I thought syntastic was throwing warnings and this wasn't working,
+	" but it was YouCompleteMe...oh well
+	let g:syntastic_ignore_files = ['\v.*\.cm$', '.*\.cm', '\.*.cm', '\.\*.cm', '\v.*\.c', '.*\.c', '\.*.c']
+	let g:syntastic_check_on_open = 0
+	let g:syntastic_check_on_wq = 0
+	let g:syntastic_mode_map = {'mode': 'active',
+				\ 'active_filetypes': [],
+				\ 'passive_filetypes': ['cm', 'c'] }
+	let g:ycm_filetype_specific_completion_to_disable = {'c': 0}
+	set filetype=c
+endfunction
+
 " Automatically open, but do not go to (if there are errors) the quickfix /
 " location list window, or close it when is has become empty.
 "
