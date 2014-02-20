@@ -272,6 +272,9 @@ noremap <Leader>sn :set nospell<CR>
 noremap <Leader>v :tabnew ~/.vimrc
 noremap <Leader>alt :AT<CR>
 noremap <Leader>ca :Crunch<CR>
+noremap <Leader>n :lnext<CR>
+noremap <Leader>N :lprevious<CR>
+noremap <Leader>y :YcmRestartServer<CR>
 noremap <F5> :call g:CustomMake({})<CR>
 inoremap jk <Esc>
 
@@ -305,8 +308,12 @@ noremap <F9> :YRShow<CR>
 noremap <Leader>r :s///gc<Left><Left><Left><Left>
 " Sets up a global, file wide regex
 noremap <Leader>re :%s///gc<Left><Left><Left><Left>
-" Grabs the word under the cursor and sets up a regex to replace it
-noremap <Leader>rv :%s/<c-r><c-w>//gc<left><left><left>
+" Grabs the word under the cursor and sets up a regex to replace it (globally)
+nnoremap <Leader>rv :%s/\<<c-r><c-w>\>//gc<left><left><left>
+" Grabs the word under the cursor and sets up a regex to replace it (ranged)
+vnoremap <Leader>rv :s/\<<c-r><c-w>\>//gc<left><left><left>
+" Grabs the word under the cursor and sets up a regex to replace it (ranged)
+noremap <Leader>rvr :s/\<<c-r><c-w>\>//gc<left><left><left>
 " Removes any whitespace after each line
 noremap <Leader>rw :%s/\s*$//g
 " Can be used to remove whitespace after only certain lines
