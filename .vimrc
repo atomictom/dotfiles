@@ -217,6 +217,40 @@ function s:CMinusMinusAutocommands()
 	set filetype=c
 endfunction
 
+let g:custom_make_command = "make"
+let g:custom_make_args = ""
+let g:custom_make_run_command = "command time -v \"./%<\""
+let g:custom_make_run_args = ""
+function g:CustomMake(options)
+	" ------------------------------------------------------------
+	"  Emulate 'optional' arguments, where the g:* variables are the
+	"  default arguments
+	let l:make = get(a:options, 'make_command', g:custom_make_command)
+	let l:args = get(a:options, 'make_args', g:custom_make_args)
+	let l:run_command = get(a:options, 'run_command', g:custom_make_run_command)
+	let l:run_args = get(a:options, 'run_args', g:custom_make_run_args)
+
+	" echom " ----- Custom Make: ----- "
+	" echom l:make
+	" echom l:args
+	" echom l:run_command
+	" echom l:run_args
+	" ------------------------------------------------------------
+	" Save the file, clear the screen, make it with args as make's
+	" arguments, say that we're running and run it with run_command
+	write
+	execute 'silent !clear; ' l:make . " " . l:args
+	execute '!echo "--------------- Running ---------------"; echo; ' . l:run_command . " " . g:custom_make_run_args
+	" redraw!
+endfunction
+
+command -nargs=* Gcc let g:custom_make_command = "gcc" | let g:custom_make_args = " -o \"%<\" \"%\"" . " " . <q-args>
+command -nargs=* Make let g:custom_make_command = "make" | let g:custom_make_args = <q-args>
+command -nargs=* Args let g:custom_make_run_args = <q-args>
+command MakeWithSource let g:custom_make_command = "make" | let g:custom_make_args = "SOURCES=\"%\""
+command Time let g:custom_make_run_command = "command time -v \"./%<\""
+command NoTime let g:custom_make_run_command = "\"./%<\""
+
 " Automatically open, but do not go to (if there are errors) the quickfix /
 " location list window, or close it when is has become empty.
 "
@@ -238,6 +272,7 @@ noremap <Leader>sn :set nospell<CR>
 noremap <Leader>v :tabnew ~/.vimrc
 noremap <Leader>alt :AT<CR>
 noremap <Leader>ca :Crunch<CR>
+noremap <F5> :call g:CustomMake({})<CR>
 inoremap jk <Esc>
 
 " --------------------- Run things through filters or as commands ---------------------
