@@ -185,7 +185,7 @@ endfunction
 " At some point I will probably add some so this is just a place holder
 function s:CoffeeScriptAutocommands()
 	"Bundle 'AutoComplPop'
-	function Build()
+	function! Build()
 		write
 		silent !cake build
 		silent redraw!
