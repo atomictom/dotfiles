@@ -2,7 +2,7 @@
 
 # Thomas Manning's bashrc file!
 
-source .bashrc.private
+source "$HOME/.bashrc.private"
 
 stty -ixon
 shopt -s histappend
@@ -12,6 +12,13 @@ FIRST_SCREEN=~thomas/.main_screen
 
 export PATH="$HOME/.bin/tmp:$PATH"
 export TERM='xterm-256color'
+
+# Set the prompt
+if [[ ${EUID} == 0 ]] ; then
+	PS1='\[\033[0;31m\]$(returncode)\[\033[0;37m\]\[\033[0;35m\]${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
+else
+	PS1='\[\033[0;31m\]$(returncode)\[\033[0;37m\]\[\033[0;35m\]${debian_chroot:+($debian_chroot)}\[\033[0;35m\]\u@\h\[\033[0;37m\]:\[\033[0;36m\]\w >\[\033[0;00m\] '
+fi
 
 # Customize the ls colors
 eval `dircolors ~/.dircolors`
@@ -61,6 +68,9 @@ alias bl='sudo ~/.bin/bright'
 alias untar_all='for f in *; do tar xvfa $f; done'
 alias k='klink &'
 alias aps='apt-cache show'
+alias x='xrandr'
+alias c='xsel -b'
+alias su='sudo su'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened.
@@ -84,13 +94,29 @@ function backup-caeli(){
 	if [[ "$1" == "dry" ]]; then
 		dry='-n'
 	fi
-	#
+
+	# max_delete='--max_delete=100'
+	max_delete=''
+	# if [[ "$2" == "delete" ]]; then
+	# 	max_delete=''
+	# fi
+
+
 	for dir in Books Code Documents Games Music Other Pictures projects scratch Software Torrents Videos .icons .backups; do
 		echo
 		echo "-------------------- $dir --------------------"
 		echo
-		rsync -va --delete --max-delete=100 $dry "/home/thomas/Data/$dir/" "/media/thomas/Caeli/$dir/" || echo "Error on $dir" >> ~/rsync_error_log;
+		rsync -va --delete $max_delete $dry "/home/thomas/Data/$dir/" "/media/thomas/Caeli/$dir/" || echo "Error on $dir" >> ~/rsync_error_log;
 	done
+}
+
+function returncode {
+	returncode=$?
+	if [ $returncode != 0 ]; then
+		echo "[$returncode]"
+	else
+		echo ""
+	fi
 }
 
 function fortune_cookie(){
