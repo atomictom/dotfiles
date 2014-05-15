@@ -13,7 +13,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 " Monokai is the color theme I use with vim
 Bundle 'lsdr/monokai'
-" Uses ctags and shows various tags in a "tagbar" window, use F3 to activate
+" Uses ctags and shows various tags in a "tagbar" window, use <F2> to activate
 Bundle 'majutsushi/tagbar'
 " A set of nice defaults for vim, don't need to do anything to use
 Bundle 'tpope/vim-sensible'
@@ -69,7 +69,7 @@ Bundle 'chrisbra/improvedft'
 " calculation and put it in the default register
 Bundle 'arecarn/crunch'
 Bundle 'bling/vim-airline'
-" HTML5 syntax and omnicomplet
+" HTML5 syntax and omnicomplete
 Bundle 'othree/html5.vim'
 Bundle 'othree/html5-syntax.vim'
 " Auto closes a tag after the first '>' but not in comments
@@ -100,6 +100,29 @@ Bundle 'jpalardy/vim-slime'
 Bundle 'vim-voom/VOoM'
 " Shows the diff between a 'recovered' file and what's on disk
 Bundle 'chrisbra/Recover.vim'
+" Shows git diff status
+" Bundle 'airblade/vim-gitgutter'
+" Show relative positioning in search (like: match 10/55)
+Bundle 'IndexedSearch'
+" Syntax file for hy
+Bundle 'hylang/vim-hy'
+Bundle 'kovisoft/slimv'
+Bundle 'SaneCL'
+" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
+" highlighting, and hlint integration
+" Bundle 'dag/vim2hs'
+" Works with ghcmod for...ummm...type checking?
+" Bundle 'eagletmt/ghcmod-vim'
+" Allows executing another process outside vim I think?
+" It's a prerequisite for vimshell.vim and ghcmod-vim
+" Bundle 'Shougo/vimproc.vim'
+" A shell in vimscript to be run inside vim
+" Bundle 'Shougo/vimshell.vim'
+" Easy alignment
+" Bundle 'godlygeek/tabular'
+
+" Some bundles to seriously consider:
+" [ ] Ultisnips
 
 " Some Bundle's I'm considering but have not added:
 " Bundle 'SirVer/ultisnips'
@@ -117,6 +140,7 @@ colorscheme molokai
 
 set ignorecase
 set smartcase
+set virtualedit=block
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
@@ -150,15 +174,18 @@ augroup vimrc
 	autocmd BufNewFile,BufRead *.py call s:PythonAutocommands()
 	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
 	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
+	autocmd BufNewFile,BufRead *.hs call s:HaskellAutocommands()
+	autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
 augroup END
 
+let g:web_autosave = 1
 function s:WebAutoCommands()
 	" Auto save html, css, and js files whenever possible (for live.js)
 	" TODO: toggle this autocmd with a variable
 	" if g:web_autosave
 	augroup web_autosave
 		autocmd!
-		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' | update | endif
+		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
 	augroup END
 	let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
@@ -176,6 +203,7 @@ function s:PythonAutocommands()
 	set softtabstop=0
 	set tabstop=5
 	set shiftwidth=0
+	PyRun
 endfunction
 
 function s:JavaAutocommands()
@@ -217,18 +245,38 @@ function s:CMinusMinusAutocommands()
 	set filetype=c
 endfunction
 
-let g:custom_make_command = "make"
-let g:custom_make_args = ""
-let g:custom_make_run_command = "command time -v \"./%<\""
-let g:custom_make_run_args = ""
+function s:HaskellAutocommands()
+	augroup haskell_redraw
+		autocmd!
+		autocmd CursorMoved,CursorHold * redraw
+	augroup END
+	highlight clear Conceal
+	set nofoldenable
+endfunction
+
+function s:HyAutocommands()
+	HyRun
+endfunction
+
+let g:custom_build_command = "make"
+let g:custom_build_args = ""
+let g:custom_build_run_command = "command time -v \"./%<\""
+let g:custom_build_run_args = ""
+let g:custom_build_wait = 1
+let g:custom_build_run_header = '!echo "--------------- Running ---------------"; echo; '
 function g:CustomMake(options)
 	" ------------------------------------------------------------
 	"  Emulate 'optional' arguments, where the g:* variables are the
 	"  default arguments
-	let l:make = get(a:options, 'make_command', g:custom_make_command)
-	let l:args = get(a:options, 'make_args', g:custom_make_args)
-	let l:run_command = get(a:options, 'run_command', g:custom_make_run_command)
-	let l:run_args = get(a:options, 'run_args', g:custom_make_run_args)
+	let l:make = get(a:options, 'make_command', g:custom_build_command)
+	let l:args = get(a:options, 'make_args', g:custom_build_args)
+	let l:run_command = get(a:options, 'run_command', g:custom_build_run_command)
+	let l:run_args = get(a:options, 'run_args', g:custom_build_run_args)
+
+	let l:before_run = ''
+	if g:custom_build_wait == 0
+		let l:before_run = 'silent '
+	endif
 
 	" echom " ----- Custom Make: ----- "
 	" echom l:make
@@ -239,17 +287,23 @@ function g:CustomMake(options)
 	" Save the file, clear the screen, make it with args as make's
 	" arguments, say that we're running and run it with run_command
 	write
-	execute 'silent !clear; ' l:make . " " . l:args
-	execute '!echo "--------------- Running ---------------"; echo; ' . l:run_command . " " . g:custom_make_run_args
-	" redraw!
+	execute 'silent !clear; ' . l:make . " " . l:args
+	execute l:before_run . g:custom_build_run_header . l:run_command . " " . g:custom_build_run_args
+	redraw!
 endfunction
 
-command -nargs=* Gcc let g:custom_make_command = "gcc" | let g:custom_make_args = " -o \"%<\" \"%\"" . " " . <q-args>
-command -nargs=* Make let g:custom_make_command = "make" | let g:custom_make_args = <q-args>
-command -nargs=* Args let g:custom_make_run_args = <q-args>
-command MakeWithSource let g:custom_make_command = "make" | let g:custom_make_args = "SOURCES=\"%\""
-command Time let g:custom_make_run_command = "command time -v \"./%<\""
-command NoTime let g:custom_make_run_command = "\"./%<\""
+command -nargs=* PyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "python \"%:p\""
+command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "hy \"%:p\""
+command -nargs=* Gcc let g:custom_build_command = "gcc" | let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+command -nargs=* Make let g:custom_build_command = "make" | let g:custom_build_args = <q-args>
+command -nargs=* Args let g:custom_build_run_args = <q-args>
+command MakeWithSource let g:custom_build_command = "make" | let g:custom_build_args = "SOURCES=\"%\""
+command NoWait let g:custom_build_wait = 0
+command Wait let g:custom_build_wait = 1
+command Time let g:custom_build_run_command = "command time -v \"./%<\""
+command NoTime let g:custom_build_run_command = "\"./%<\""
+command NoAutosave let g:web_autosave = 0
+command Autosave let g:web_autosave = 1
 
 " Automatically open, but do not go to (if there are errors) the quickfix /
 " location list window, or close it when is has become empty.
@@ -275,8 +329,12 @@ noremap <Leader>ca :Crunch<CR>
 noremap <Leader>n :lnext<CR>
 noremap <Leader>N :lprevious<CR>
 noremap <Leader>y :YcmRestartServer<CR>
+noremap <Leader>nw :NoWait<CR>
+noremap <Leader>yw :Wait<CR>
 noremap <F5> :call g:CustomMake({})<CR>
 inoremap jk <Esc>
+nnoremap j gj
+nnoremap k gk
 
 " --------------------- Run things through filters or as commands ---------------------
 " Filters some range through a command
@@ -339,3 +397,5 @@ smap <c-j> <Plug>snipMateNextOrTrigger
 imap <c-k> <Plug>snipMateBack
 smap <c-k> <Plug>snipMateBack
 imap gsh <Plug>snipMateShow
+
+set vb t_vb=
