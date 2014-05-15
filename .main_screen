@@ -1,16 +1,13 @@
-#!/usr/bin/screen 
+#!/usr/bin/screen
 
 source ~thomas/.screenrc
 
 screen -t music bash -c 'cmus; bash'
 screen -t rtorrent bash -c 'rtorrent; bash'
-screen -t ssh
-screen -t water 
+screen -t water
 screen -t earth
 screen -t fire
 screen -t air
-screen -t man
-screen -t vim
 screen -t vimwiki bash -c 'vim; bash'
 
-select 0 
+select 0
