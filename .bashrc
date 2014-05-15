@@ -10,7 +10,10 @@ shopt -s histappend
 # Set globalish variables
 FIRST_SCREEN=~thomas/.main_screen
 
+export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/.packages/racket/racket/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
+export PATH="$HOME/.bin:$PATH"
 export TERM='xterm-256color'
 
 # Set the prompt
@@ -22,7 +25,6 @@ fi
 
 # Customize the ls colors
 eval `dircolors ~/.dircolors`
-alias ls="ls --color=auto"
 
 # If this session is interactive
 case $- in
@@ -37,6 +39,7 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias vi='vim'
+alias ls='ls -h --color=auto'
 #alias l='fc -s | less -r'
 alias to_rc='fc -ln -2 | xargs >> ~/.bashrc'
 alias sr='screen -r'
@@ -48,29 +51,37 @@ alias next='cmus-remote -C "player-next"'
 alias sagi='sudo apt-get install'
 alias cux='chmod u+x'
 alias less='less -r'
-alias uu='sudo apt-get update && sudo apt-get upgrade'
-alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/~Organized Music/Youtube/%(title)s.%(ext)s\""
+alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/organized/Youtube/%(title)s.%(ext)s\""
 alias silly-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/Other/Silly/%(title)s.%(ext)s\""
 alias ic="iced"
 alias fbs="files-by-size"
 alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
 alias xo='xdg-open'
-alias o='xdg-open'
+alias o='xdg-open 2>/dev/null '
 alias ..='cd ..'
 alias b='cd -'
 alias vb='vim ~/.bashrc'
+alias vp='vim ~/.profile'
 alias vv='vim ~/.vimrc'
 alias rv='unset DBUS_SESSION_BUS_ADDRESS SESSION_MANAGER'
 alias zzz='sudo pm-suspend'
 alias bright='sudo ~/.bin/bright'
 alias bl='sudo ~/.bin/bright'
+alias uu='sudo ~/.bin/uu'
 alias untar_all='for f in *; do tar xvfa $f; done'
 alias k='klink &'
 alias aps='apt-cache show'
 alias x='xrandr'
 alias c='xsel -b'
 alias su='sudo su'
+alias untar='tar xvfa'
+alias gs='git status'
+alias gl='git log'
+alias gr='git reflog'
+alias gd='git diff'
+alias gf='git fetch'
+alias rrl='rm Downloads/rtorrent/.session/rtorrent.lock'
 
 # Start cmus in a new window inside the bash screen instant
 # if it is not already opened.
@@ -84,6 +95,46 @@ function files-by-size-x(){ find $1 -xdev -type f -print0 | xargs -0 du -sh |sor
 function copy(){ echo -n "$*" | xsel -b; }
 function sf(){ echo -n $(pwd)/$1 | xsel -b; }
 function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
+
+function hr(){
+	for i in $(seq $1); do
+		echo -n '-'
+	done
+	echo
+}
+
+function list-ips(){
+	ifconfig | grep -Pzo '(wlan|eth).*\n.*inet\s.*?\s' | sed "N; s/\s*Link.*\n\s*/'s /; s/inet addr:/ip address is: /";
+}
+
+function pyserv(){
+	echo
+	list_ips
+	hr 40
+	echo
+	python -m SimpleHTTPServer
+}
+
+function search-files-from(){
+	dir=""
+	if [ -d "$1" ]; then
+		dir="$1"
+		shift 1
+	else
+		echo "The first argument should be a valid directory"
+		exit 2
+	fi
+
+	find "$dir" -type f -print0 | while read -d $'\0' f; do
+		grep $@ "$f"
+	done
+}
+
+function search-files(){
+	find -type f -print0 | while read -d $'\0' f; do
+		grep $@ "$f"
+	done
+}
 
 function backup-caeli(){
 	#echo >> ~/rsync_error_log
@@ -119,9 +170,8 @@ function returncode {
 	fi
 }
 
-function fortune_cookie(){
-	BOX_NAMES=( $(cat /etc/boxes/boxes-config
-		     |grep -Poz 'BOX \K(.*)'| grep -v test) )
+function fortune-cookie(){
+	BOX_NAMES=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
 	BOX_COUNT=${#BOX_NAMES[@]}
 	BOX_TO_USE=${BOX_NAMES[ (( $RANDOM % $BOX_COUNT )) ]}
 	fortune |boxes -d $BOX_TO_USE
