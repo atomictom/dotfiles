@@ -14,4 +14,4 @@ Cool Features
 	kind of a gimmick.
 
 	The status line looks like this:
-	![Scrolling through the status line](https://github.com/atomictom/dotfiles/wiki/Screenshots/hardstatusline.gif)
+	![Scrolling through the status line](https://github.com/atomictom/dotfiles/wiki/images/hardstatusline.gif)
