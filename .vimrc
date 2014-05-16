@@ -378,9 +378,9 @@ noremap <Leader>rw :%s/\s*$//g
 noremap <Leader>rwe :s/\s*$//g
 
 " --------------------- Save a file with Ctrl + S ---------------------
-nnoremap <C-s> <Esc>:w<CR>
-vnoremap <C-s> <Esc>:w<CR>gv
-inoremap <C-s> <Esc>:w<CR>a
+nnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>
+vnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>gv
+inoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>a
 
 " --------------------- Move between tabs ---------------------
 noremap <M-Right> gt
