@@ -1,16 +1,15 @@
-" Allow saving of files as sudo when I forgot to start vim using sudo.
 set nocompatible
 syntax on
 
-cmap w!! %!sudo tee > /dev/null %
-
+" Vundle {{{
 filetype off
-
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-
-" Vundle allows me to install new addons in vim using this "Bundle" syntax
+" Vundle allows me to install new addons in vim
 Bundle 'gmarik/vundle'
+" }}}
+
+" Bundles {{{
 " Monokai is the color theme I use with vim
 Bundle 'lsdr/monokai'
 " Uses ctags and shows various tags in a "tagbar" window, use <F2> to activate
@@ -101,7 +100,7 @@ Bundle 'vim-voom/VOoM'
 " Shows the diff between a 'recovered' file and what's on disk
 Bundle 'chrisbra/Recover.vim'
 " Shows git diff status
-" Bundle 'airblade/vim-gitgutter'
+Bundle 'airblade/vim-gitgutter'
 " Show relative positioning in search (like: match 10/55)
 Bundle 'IndexedSearch'
 " Syntax file for hy
@@ -110,37 +109,48 @@ Bundle 'kovisoft/slimv'
 Bundle 'SaneCL'
 " Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
 " highlighting, and hlint integration
-" Bundle 'dag/vim2hs'
+Bundle 'dag/vim2hs'
 " Works with ghcmod for...ummm...type checking?
-" Bundle 'eagletmt/ghcmod-vim'
+Bundle 'eagletmt/ghcmod-vim'
 " Allows executing another process outside vim I think?
 " It's a prerequisite for vimshell.vim and ghcmod-vim
-" Bundle 'Shougo/vimproc.vim'
+Bundle 'Shougo/vimproc.vim'
 " A shell in vimscript to be run inside vim
-" Bundle 'Shougo/vimshell.vim'
+Bundle 'Shougo/vimshell.vim'
 " Easy alignment
-" Bundle 'godlygeek/tabular'
+Bundle 'godlygeek/tabular'
 
 " Some bundles to seriously consider:
 " [ ] Ultisnips
 
 " Some Bundle's I'm considering but have not added:
-" Bundle 'SirVer/ultisnips'
 " Bundle 'vimoutliner/vimoutliner'
 " Doesn't work right now...but it should allow me to have a shell inside vim
 " Bundle 'vim-scripts/Conque-Shell'
 " Doesn't work right now...send text to running IPython instance
 " Bundle 'ivanov/vim-ipython'
+" }}}
 
-filetype plugin indent on
-
+" Looks {{{
 set term=xterm-256color
 set t_Co=256
 colorscheme molokai
+" }}}
+
+" Vim Settings {{{
+filetype plugin indent on
 
 set ignorecase
 set smartcase
 set virtualedit=block
+set undodir='/home/thomas/.vim/undo/'
+set undofile
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+" }}}
+
+" Plugin Settings {{{
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
@@ -156,13 +166,9 @@ let g:gist_update_on_write = 2
 let g:gist_open_browser_after_post = 1
 let g:syntastic_check_on_open=1
 let g:syntastic_always_populate_loc_list = 1
+" }}}
 
-set undodir='/home/thomas/.vim/undo/'
-set undofile
-set backup
-set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
-
+" Autocommands {{{
 augroup vimrc
 	" Delete all autocommands in this group (so we don't set them twice...)
 	autocmd!
@@ -257,19 +263,21 @@ endfunction
 function s:HyAutocommands()
 	HyRun
 endfunction
+" }}}
 
+" Custom Build {{{
 let g:custom_build_command = "make"
 let g:custom_build_args = ""
 let g:custom_build_run_command = "command time -v \"./%<\""
 let g:custom_build_run_args = ""
 let g:custom_build_wait = 1
 let g:custom_build_run_header = '!echo "--------------- Running ---------------"; echo; '
-function g:CustomMake(options)
+function g:CustomBuild(options)
 	" ------------------------------------------------------------
 	"  Emulate 'optional' arguments, where the g:* variables are the
 	"  default arguments
-	let l:make = get(a:options, 'make_command', g:custom_build_command)
-	let l:args = get(a:options, 'make_args', g:custom_build_args)
+	let l:build = get(a:options, 'build_command', g:custom_build_command)
+	let l:build_args = get(a:options, 'build_args', g:custom_build_args)
 	let l:run_command = get(a:options, 'run_command', g:custom_build_run_command)
 	let l:run_args = get(a:options, 'run_args', g:custom_build_run_args)
 
@@ -278,7 +286,7 @@ function g:CustomMake(options)
 		let l:before_run = 'silent '
 	endif
 
-	" echom " ----- Custom Make: ----- "
+	" echom " ----- Custom Build: ----- "
 	" echom l:make
 	" echom l:args
 	" echom l:run_command
@@ -287,13 +295,13 @@ function g:CustomMake(options)
 	" Save the file, clear the screen, make it with args as make's
 	" arguments, say that we're running and run it with run_command
 	write
-	execute 'silent !clear; ' . l:make . " " . l:args
-	execute l:before_run . g:custom_build_run_header . l:run_command . " " . g:custom_build_run_args
+	execute 'silent !clear; ' . l:build . " " . l:build_args
+	execute l:before_run . g:custom_build_run_header . l:run_command . " " . l:run_args
 	redraw!
 endfunction
 
-command -nargs=* PyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "python \"%:p\""
-command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "hy \"%:p\""
+command -nargs=* PyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "python \"%:p\"" <q-args>
+command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "hy \"%:p\"" <q-args>
 command -nargs=* Gcc let g:custom_build_command = "gcc" | let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* Make let g:custom_build_command = "make" | let g:custom_build_args = <q-args>
 command -nargs=* Args let g:custom_build_run_args = <q-args>
@@ -304,39 +312,34 @@ command Time let g:custom_build_run_command = "command time -v \"./%<\""
 command NoTime let g:custom_build_run_command = "\"./%<\""
 command NoAutosave let g:web_autosave = 0
 command Autosave let g:web_autosave = 1
+" }}}
 
-" Automatically open, but do not go to (if there are errors) the quickfix /
-" location list window, or close it when is has become empty.
-"
-" Note: Must allow nesting of autocmds to enable any customizations for
-" quickfix buffers.
-" Note: Normally, :cwindow jumps to the quickfix window if the command opens it
-" (but not if it's already open). However, as part of the autocmd, this doesn't
-" seem to happen.
-"autocmd QuickFixCmdPost [^l]* nested cwindow 4
-"autocmd QuickFixCmdPost    l* nested lwindow 4
+" Mappings {{{
 
-" Runs make, redraws the screen, opens and goes to the error window
-noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
-" Appends some text to any number of lines
-noremap <Leader>a :normal A
-noremap <Leader>t :tabnew<space>
-noremap <Leader>sc :set spell<CR>
-noremap <Leader>sn :set nospell<CR>
-noremap <Leader>v :tabnew ~/.vimrc
-noremap <Leader>alt :AT<CR>
-noremap <Leader>ca :Crunch<CR>
-noremap <Leader>n :lnext<CR>
-noremap <Leader>N :lprevious<CR>
-noremap <Leader>y :YcmRestartServer<CR>
-noremap <Leader>nw :NoWait<CR>
-noremap <Leader>yw :Wait<CR>
-noremap <F5> :call g:CustomMake({})<CR>
+" Miscellanious mappings {{{
 inoremap jk <Esc>
 nnoremap j gj
 nnoremap k gk
+" Appends some text to any number of lines
+noremap <Leader>a :normal A
+noremap <Leader>sc :set spell<CR>
+noremap <Leader>sn :set nospell<CR>
+noremap <Leader>alt :AT<CR>
+noremap <Leader>ca :Crunch<CR>
+noremap <Leader>y :YcmRestartServer<CR>
+" }}}
 
-" --------------------- Run things through filters or as commands ---------------------
+" Build mappings {{{
+" Runs make, redraws the screen, opens and goes to the error window
+noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
+noremap <F5> :call g:CustomBuild({})<CR>
+noremap <Leader>nw :NoWait<CR>
+noremap <Leader>yw :Wait<CR>
+noremap <Leader>n :lnext<CR>
+noremap <Leader>N :lprevious<CR>
+" }}}
+
+" External Filter mappings {{{
 " Filters some range through a command
 noremap <Leader>e :!
 " Filters the file through a command (like 'dos2unix')
@@ -349,19 +352,22 @@ noremap <Leader>rc :r !
 noremap <Leader>rls :r !ls<space>
 noremap <Leader>rda :r !date<CR>
 noremap <Leader>rpw :r !pwd<CR>
+" }}}
 
-" --------------------- Session Commands ---------------------
+" Session mappings {{{
 noremap <Leader>s :SaveSession<space>
 noremap <Leader>ss :SaveSession<space>
 noremap <Leader>so :OpenSession<space>
+" }}}
 
-" --------------------- Open various views in other windows ---------------------
+" View Window mappings {{{
 noremap <F2> :TagbarToggle<CR>
 noremap <F3> :UndotreeToggle<CR>
 noremap <F4> :NERDTreeToggle<CR>
 noremap <F9> :YRShow<CR>
+" }}}
 
-" --------------------- Regex Mappings ---------------------
+" Regex mappings {{{
 " Sets up a regex
 noremap <Leader>r :s///gc<Left><Left><Left><Left>
 " Sets up a global, file wide regex
@@ -376,20 +382,28 @@ noremap <Leader>rvr :s/\<<c-r><c-w>\>//gc<left><left><left>
 noremap <Leader>rw :%s/\s*$//g
 " Can be used to remove whitespace after only certain lines
 noremap <Leader>rwe :s/\s*$//g
+" }}}
 
-" --------------------- Save a file with Ctrl + S ---------------------
+" Saving Files mappings {{{
+" Save a file with Ctrl + S and remove trailing whitespace
 nnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>
 vnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>gv
 inoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>a
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
+" }}}
 
-" --------------------- Move between tabs ---------------------
+" Tab mappings {{{
+noremap <Leader>t :tabnew<space>
+noremap <Leader>v :tabnew ~/.vimrc<CR>
+" Move between tabs
 noremap <M-Right> gt
 noremap <M-Left> gT
 noremap <C-k> gt
 noremap <C-j> gT
+" }}}
 
-" --------------------- Activate and traverse snipMate suggestions ---------------------
-" I can add 'm' after 'gs' to fix it...
+" Snipmate mappings {{{
 imap gsm <Plug>snipMateNextOrTrigger
 smap gsm <Plug>snipMateNextOrTrigger
 imap <c-j> <Plug>snipMateNextOrTrigger
@@ -397,5 +411,9 @@ smap <c-j> <Plug>snipMateNextOrTrigger
 imap <c-k> <Plug>snipMateBack
 smap <c-k> <Plug>snipMateBack
 imap gsh <Plug>snipMateShow
+" }}}
 
+" }}}
+
+" Helps reduce weird flashing issues
 set vb t_vb=
