@@ -109,7 +109,7 @@ Bundle 'kovisoft/slimv'
 Bundle 'SaneCL'
 " Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
 " highlighting, and hlint integration
-Bundle 'dag/vim2hs'
+" Bundle 'dag/vim2hs'
 " Works with ghcmod for...ummm...type checking?
 Bundle 'eagletmt/ghcmod-vim'
 " Allows executing another process outside vim I think?
@@ -118,7 +118,7 @@ Bundle 'Shougo/vimproc.vim'
 " A shell in vimscript to be run inside vim
 Bundle 'Shougo/vimshell.vim'
 " Easy alignment
-Bundle 'godlygeek/tabular'
+" Bundle 'godlygeek/tabular'
 
 " Some bundles to seriously consider:
 " [ ] Ultisnips
@@ -140,6 +140,8 @@ colorscheme molokai
 " Vim Settings {{{
 filetype plugin indent on
 
+set cryptmethod=blowfish
+set foldmethod=marker
 set ignorecase
 set smartcase
 set virtualedit=block
@@ -305,11 +307,16 @@ command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args
 command -nargs=* Gcc let g:custom_build_command = "gcc" | let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* Make let g:custom_build_command = "make" | let g:custom_build_args = <q-args>
 command -nargs=* Args let g:custom_build_run_args = <q-args>
+command -nargs=1 -complete=dir SaveToDirectory execute "noremap <F5> :silent! w! " . <q-args> . "/%:t<CR>"
+command -nargs=1 -complete=dir CustomBuild noremap <F5> :call g:CustomBuild({})<CR>
 command MakeWithSource let g:custom_build_command = "make" | let g:custom_build_args = "SOURCES=\"%\""
 command NoWait let g:custom_build_wait = 0
 command Wait let g:custom_build_wait = 1
 command Time let g:custom_build_run_command = "command time -v \"./%<\""
 command NoTime let g:custom_build_run_command = "\"./%<\""
+" }}}
+
+" Commands {{{
 command NoAutosave let g:web_autosave = 0
 command Autosave let g:web_autosave = 1
 " }}}

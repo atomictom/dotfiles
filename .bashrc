@@ -2,19 +2,25 @@
 
 # Thomas Manning's bashrc file!
 
+# Personal Stuff {{{
 source "$HOME/.bashrc.private"
-
-stty -ixon
-shopt -s histappend
-
-# Set globalish variables
-FIRST_SCREEN=~thomas/.main_screen
-
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.packages/racket/racket/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
+first_screen=~thomas/.main_screen
+# }}}
+
+# Settings {{{
+stty -ixon
+shopt -s histappend
+# }}}
+
+# Looks {{{
 export TERM='xterm-256color'
+
+# Customize the ls colors
+eval `dircolors ~/.dircolors`
 
 # Set the prompt
 if [[ ${EUID} == 0 ]] ; then
@@ -22,26 +28,34 @@ if [[ ${EUID} == 0 ]] ; then
 else
 	PS1='\[\033[0;31m\]$(returncode)\[\033[0;37m\]\[\033[0;35m\]${debian_chroot:+($debian_chroot)}\[\033[0;35m\]\u@\h\[\033[0;37m\]:\[\033[0;36m\]\w >\[\033[0;00m\] '
 fi
+# }}}
 
-# Customize the ls colors
-eval `dircolors ~/.dircolors`
+# Autorun Inside Screen {{{
+if [ ! -e "$first_screen" ]; then
+	if [ -e "$HOME/.screenrc" ]; then
+		first_screen="$HOME/.screenrc"
+	else
+		first_screen="/dev/null"
+	fi
+fi
 
 # If this session is interactive
 case $- in
 	# If we are not running inside screen
 	*i*)	if [ -z "$STY" ]; then
-			screen '-xR' -S main -T linux -c $FIRST_SCREEN
+			# Start screen or connect to an existing session
+			screen '-xR' -S main -T linux -c $first_screen
 		fi
 		;;
 esac
+# }}}
 
+# Aliases {{{
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias vi='vim'
 alias ls='ls -h --color=auto'
-#alias l='fc -s | less -r'
-alias to_rc='fc -ln -2 | xargs >> ~/.bashrc'
 alias sr='screen -r'
 alias sx='screen -x'
 alias cr='cmus-remote'
@@ -51,9 +65,6 @@ alias next='cmus-remote -C "player-next"'
 alias sagi='sudo apt-get install'
 alias cux='chmod u+x'
 alias less='less -r'
-alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/organized/Youtube/%(title)s.%(ext)s\""
-alias silly-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/Other/Silly/%(title)s.%(ext)s\""
-alias ic="iced"
 alias fbs="files-by-size"
 alias sagusagu='sudo apt-get update && sudo apt-get upgrade'
 alias idle='idle-python2.7 -s &'
@@ -65,12 +76,7 @@ alias vb='vim ~/.bashrc'
 alias vp='vim ~/.profile'
 alias vv='vim ~/.vimrc'
 alias rv='unset DBUS_SESSION_BUS_ADDRESS SESSION_MANAGER'
-alias zzz='sudo pm-suspend'
-alias bright='sudo ~/.bin/bright'
-alias bl='sudo ~/.bin/bright'
-alias uu='sudo ~/.bin/uu'
 alias untar_all='for f in *; do tar xvfa $f; done'
-alias k='klink &'
 alias aps='apt-cache show'
 alias x='xrandr'
 alias c='xsel -b'
@@ -81,18 +87,25 @@ alias gl='git log'
 alias gr='git reflog'
 alias gd='git diff'
 alias gf='git fetch'
+# }}}
+
+# Personal Aliases {{{
+alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/organized/Youtube/%(title)s.%(ext)s\""
+alias silly-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/Other/Silly/%(title)s.%(ext)s\""
+alias ic="iced"
+alias zzz='sudo pm-suspend'
+alias bright='sudo ~/.bin/bright'
+alias bl='sudo ~/.bin/bright'
+alias uu='sudo ~/.bin/uu'
+alias k='klink &'
 alias rrl='rm Downloads/rtorrent/.session/rtorrent.lock'
+# }}}
 
-# Start cmus in a new window inside the bash screen instant
-# if it is not already opened.
-#if ! cmus-remote -C >/dev/null 2>&1 ; then
-#	screen -S main -p music -X eval cmus
-#	screen -S main -X 'select' shell
-#fi
-
+# Functions {{{
 function files-by-size(){ find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
 function files-by-size-x(){ find $1 -xdev -type f -print0 | xargs -0 du -sh |sort -hr; }
 function copy(){ echo -n "$*" | xsel -b; }
+# Select File (copy path to a file to the clipboard)
 function sf(){ echo -n $(pwd)/$1 | xsel -b; }
 function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
 
@@ -109,7 +122,7 @@ function list-ips(){
 
 function pyserv(){
 	echo
-	list_ips
+	list-ips
 	hr 40
 	echo
 	python -m SimpleHTTPServer
@@ -136,6 +149,25 @@ function search-files(){
 	done
 }
 
+function returncode {
+	returncode=$?
+	if [ $returncode != 0 ]; then
+		echo "[$returncode]"
+	else
+		echo ""
+	fi
+}
+
+function fortune-cookie(){
+	BOX_NAMES=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
+	BOX_COUNT=${#BOX_NAMES[@]}
+	BOX_TO_USE=${BOX_NAMES[ (( $RANDOM % $BOX_COUNT )) ]}
+	fortune |boxes -d $BOX_TO_USE
+	#echo $BOX_TO_USE
+}
+# }}}
+
+# Personal Functions {{{
 function backup-caeli(){
 	#echo >> ~/rsync_error_log
 	#echo "-------------------- Backup on $(date) --------------------" >> ~/rsync_error_log
@@ -160,20 +192,4 @@ function backup-caeli(){
 		rsync -va --delete $max_delete $dry "/home/thomas/Data/$dir/" "/media/thomas/Caeli/$dir/" || echo "Error on $dir" >> ~/rsync_error_log;
 	done
 }
-
-function returncode {
-	returncode=$?
-	if [ $returncode != 0 ]; then
-		echo "[$returncode]"
-	else
-		echo ""
-	fi
-}
-
-function fortune-cookie(){
-	BOX_NAMES=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
-	BOX_COUNT=${#BOX_NAMES[@]}
-	BOX_TO_USE=${BOX_NAMES[ (( $RANDOM % $BOX_COUNT )) ]}
-	fortune |boxes -d $BOX_TO_USE
-	#echo $BOX_TO_USE
-}
+# }}}
