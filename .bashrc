@@ -149,6 +149,24 @@ function search-files(){
 	done
 }
 
+function _gen-passwd(){
+	if [ -z "$2" ]; then
+		length=20
+	else
+		length="$2"
+	fi
+
+	tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
+}
+
+function gen-passwd-alnum(){
+	_gen-passwd '[:alnum:]' "$1"
+}
+
+function gen-passwd(){
+	_gen-passwd '[:graph:]' "$1"
+}
+
 function returncode {
 	returncode=$?
 	if [ $returncode != 0 ]; then
