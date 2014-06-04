@@ -3,132 +3,150 @@ syntax on
 
 " Vundle {{{
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 " Vundle allows me to install new addons in vim
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 " }}}
 
 " Bundles {{{
 " Monokai is the color theme I use with vim
-Bundle 'lsdr/monokai'
-" Uses ctags and shows various tags in a "tagbar" window, use <F2> to activate
-Bundle 'majutsushi/tagbar'
+Plugin 'lsdr/monokai'
+" Uses ctags and shows various tags in a 'tagbar' window, use <F2> to activate
+Plugin 'majutsushi/tagbar'
 " A set of nice defaults for vim, don't need to do anything to use
-Bundle 'tpope/vim-sensible'
+Plugin 'tpope/vim-sensible'
+" Smartly increment/decrement (C-A, C-X) with different types
+Plugin 'tpope/vim-speeddating'
+" Handle text a little more smartly
+" All of them use {a,b,c}word{x,y,z} syntax for options
+" :Abolish does iabbrevs, more or less
+" :Subvert does :%s///, more or less (replace s with Subvert, essentially)
+" cr{s,m,c,u} does coercion to {snake_case, MixedCase, camelCase, UPPER_CASE}
+Plugin 'tpope/vim-abolish'
 " Automatically closes delimiters like quotes, braces, and parenthesis
-Bundle 'Raimondi/delimitMate'
+Plugin 'Raimondi/delimitMate'
+" Adds rainbow parenthesis for things like LISP
+" Plugin 'luochen1990/rainbow'
+" Alternative rainbow parenthesis
+Plugin 'kien/rainbow_parentheses.vim'
 " Automatically opens omni completetion menu
-"Bundle 'AutoComplPop'
+"Plugin 'AutoComplPop'
 " Adds coffeescript syntax and a few convenience functions for compiling,
 " running, and viewing the JS output of a coffeescript file
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'vimwiki/vimwiki'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'vimwiki/vimwiki'
 " Use with <Leader>di to draw stuff
-Bundle 'vim-scripts/DrawIt'
+Plugin 'vim-scripts/DrawIt'
 " Also uses ctags to show a list of tags, not sure how it's different from tagbar
-Bundle 'vim-scripts/taglist.vim'
+Plugin 'vim-scripts/taglist.vim'
 " Automatically does a syntax check on various filetypes when saving
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 " A nice filesystem browser, use <F4> to open
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 " General functions for other plugins by 'xolox'
-Bundle 'xolox/vim-misc'
+Plugin 'xolox/vim-misc'
 " Gives Python reference for a given identifier using either <F1> or :PyRef
-Bundle 'xolox/vim-pyref'
+Plugin 'xolox/vim-pyref'
 " Open .pdf file with :Pdf
-Bundle 'vim-scripts/open-pdf.vim'
+Plugin 'vim-scripts/open-pdf.vim'
 " Fuzzy searching for files, buffers, and tags, use with :CtrlP
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 " C-Call-Tree...view the help to see how to use
-Bundle 'vim-scripts/CCTree'
+Plugin 'vim-scripts/CCTree'
 " Adds 'surround' commands such as vS, cs, ds, and ys
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 " A git wrapper for vim
-Bundle 'tpope/vim-fugitive'
-Bundle 'boras/gdbvim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'boras/gdbvim'
 " Opens a window showing vim's undo tree, use with <F3>
-Bundle 'mbbill/undotree'
+Plugin 'mbbill/undotree'
 " Includes a C language reference. <Leader>cr searches selected word/text, <Leader>cw prompts for what to search, <Leader>cc opens the reference
-Bundle 'vim-scripts/CRefVim'
+Plugin 'vim-scripts/CRefVim'
 " OpenSession and SaveSession with \s[s] (session save) \so (session open)
-Bundle 'xolox/vim-session'
+Plugin 'xolox/vim-session'
 " Syntax file for EBNF
-Bundle 'killphi/vim-ebnf'
+Plugin 'killphi/vim-ebnf'
 " gives 'ai', 'ii', 'iI', and 'aI' text objects for indent blocks
-Bundle 'michaeljsmith/vim-indent-object'
+Plugin 'michaeljsmith/vim-indent-object'
 " Use <F9> to show the yankring for previous yanks/deletes
-Bundle 'vim-scripts/YankRing.vim'
+Plugin 'vim-scripts/YankRing.vim'
 " Switch to alternate file (.h, for .c) with :A or :AT (<Leader>alt), file under cursor with
 " <Leader>ih or <Leader>is
-Bundle 'vim-scripts/a.vim'
+Plugin 'vim-scripts/a.vim'
 " Makes the 'f' and 't' mappings work better (multiline)
-Bundle 'chrisbra/improvedft'
+Plugin 'chrisbra/improvedft'
 " Do calculations, use <Leader>cl for a line, or <Leader>ca to do a
 " calculation and put it in the default register
-Bundle 'arecarn/crunch'
-Bundle 'bling/vim-airline'
+Plugin 'arecarn/crunch'
+Plugin 'bling/vim-airline'
 " HTML5 syntax and omnicomplete
-Bundle 'othree/html5.vim'
-Bundle 'othree/html5-syntax.vim'
+Plugin 'othree/html5.vim'
+Plugin 'othree/html5-syntax.vim'
 " Auto closes a tag after the first '>' but not in comments
-Bundle 'vim-scripts/HTML-AutoCloseTag'
-Bundle 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/HTML-AutoCloseTag'
+Plugin 'Valloric/YouCompleteMe'
 " comment stuff with 'gcc' or 'gc{motion}'
-Bundle 'tomtom/tcomment_vim'
+Plugin 'tomtom/tcomment_vim'
 " Needed for tcomment_vim
-Bundle 'tomtom/tlib_vim'
+Plugin 'tomtom/tlib_vim'
 " Small utilities, hides "press Enter..." and caches some stuff?
-Bundle 'MarcWeber/vim-addon-mw-utils'
+Plugin 'MarcWeber/vim-addon-mw-utils'
 " For pasting snippets for code/text, use "gsm" to activate
-Bundle 'garbas/vim-snipmate'
+Plugin 'garbas/vim-snipmate'
 " A set of common snippets for snipmate
-Bundle 'honza/vim-snippets'
+Plugin 'honza/vim-snippets'
 " Provides Tern for vim. Tern provides code analysis for javascript (might
 " need to bind some keys to leverage this)
-Bundle 'marijnh/tern_for_vim'
+Plugin 'marijnh/tern_for_vim'
 " Provides ":Gist" commands to post buffers to Github's gist
-Bundle 'mattn/gist-vim'
+Plugin 'mattn/gist-vim'
 " Needed for gist-vim (library for webapi functions)
-Bundle 'mattn/webapi-vim'
+Plugin 'mattn/webapi-vim'
 " Send text to screen. Put in the screen session ('main') and window
 " name/number and then use "[{visual}]ctrl-c ctrl-c" to send text
-Bundle 'jpalardy/vim-slime'
+Plugin 'jpalardy/vim-slime'
 " Shows and outline of the current file based on different arguments to the
 " initial 'Voom' call (ex. ':Voom vimwiki')
-Bundle 'vim-voom/VOoM'
+Plugin 'vim-voom/VOoM'
 " Shows the diff between a 'recovered' file and what's on disk
-Bundle 'chrisbra/Recover.vim'
+Plugin 'chrisbra/Recover.vim'
 " Shows git diff status
-Bundle 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'
 " Show relative positioning in search (like: match 10/55)
-Bundle 'IndexedSearch'
+Plugin 'IndexedSearch'
 " Syntax file for hy
-Bundle 'hylang/vim-hy'
-Bundle 'kovisoft/slimv'
-Bundle 'SaneCL'
-" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
-" highlighting, and hlint integration
-" Bundle 'dag/vim2hs'
+Plugin 'hylang/vim-hy'
+" Slime for vim
+Plugin 'kovisoft/slimv'
+" 'Sane' handling of Common Lisp
+Plugin 'SaneCL'
+" Zen Coding for HTML
+Plugin 'mattn/emmet-vim'
 " Works with ghcmod for...ummm...type checking?
-Bundle 'eagletmt/ghcmod-vim'
+" Plugin 'eagletmt/ghcmod-vim'
 " Allows executing another process outside vim I think?
 " It's a prerequisite for vimshell.vim and ghcmod-vim
-Bundle 'Shougo/vimproc.vim'
+" Plugin 'Shougo/vimproc.vim'
 " A shell in vimscript to be run inside vim
-Bundle 'Shougo/vimshell.vim'
+" Plugin 'Shougo/vimshell.vim'
+" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
+" highlighting, and hlint integration
+" Plugin 'dag/vim2hs'
 " Easy alignment
-" Bundle 'godlygeek/tabular'
+" Plugin 'godlygeek/tabular'
 
 " Some bundles to seriously consider:
 " [ ] Ultisnips
+" [ ] Ropevim
 
-" Some Bundle's I'm considering but have not added:
-" Bundle 'vimoutliner/vimoutliner'
+" Some Plugin's I'm considering but have not added:
+" Plugin 'vimoutliner/vimoutliner'
 " Doesn't work right now...but it should allow me to have a shell inside vim
-" Bundle 'vim-scripts/Conque-Shell'
+" Plugin 'vim-scripts/Conque-Shell'
 " Doesn't work right now...send text to running IPython instance
-" Bundle 'ivanov/vim-ipython'
+" Plugin 'ivanov/vim-ipython'
+call vundle#end()
 " }}}
 
 " Looks {{{
@@ -140,14 +158,27 @@ colorscheme molokai
 " Vim Settings {{{
 filetype plugin indent on
 
+set ttyfast
+set ttymouse=xterm2
 set cryptmethod=blowfish
 set foldmethod=marker
+set virtualedit=block
+set scrolloff=3
+set wildmode=full
+set backspace=indent,eol,start
+set wildmenu
+set cursorline
+set gdefault
+set incsearch
+set autoindent
+set ruler
+set showmode
+set showcmd
 set ignorecase
 set smartcase
-set virtualedit=block
-set undodir='/home/thomas/.vim/undo/'
 set undofile
 set backup
+set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 " }}}
@@ -220,7 +251,7 @@ endfunction
 
 " At some point I will probably add some so this is just a place holder
 function s:CoffeeScriptAutocommands()
-	"Bundle 'AutoComplPop'
+	"Plugin 'AutoComplPop'
 	function! Build()
 		write
 		silent !cake build
@@ -302,8 +333,8 @@ function g:CustomBuild(options)
 	redraw!
 endfunction
 
-command -nargs=* PyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "python \"%:p\"" <q-args>
-command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "hy \"%:p\"" <q-args>
+command -nargs=* PyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "python \"%:p\"" . " " . <q-args>
+command -nargs=* HyRun let g:custom_build_command = "" | let g:custom_build_args = "" | let g:custom_build_run_command = "hy \"%:p\"" . " " . <q-args>
 command -nargs=* Gcc let g:custom_build_command = "gcc" | let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* Make let g:custom_build_command = "make" | let g:custom_build_args = <q-args>
 command -nargs=* Args let g:custom_build_run_args = <q-args>
@@ -334,6 +365,9 @@ noremap <Leader>sn :set nospell<CR>
 noremap <Leader>alt :AT<CR>
 noremap <Leader>ca :Crunch<CR>
 noremap <Leader>y :YcmRestartServer<CR>
+noremap <Leader>1 yypVr=
+noremap <Leader>2 yypVr-
+noremap <Leader>rp :RainbowParenthesesLoadRound<CR>:RainbowParenthesesToggle<CR>
 " }}}
 
 " Build mappings {{{
@@ -375,20 +409,23 @@ noremap <F9> :YRShow<CR>
 " }}}
 
 " Regex mappings {{{
+" Auto 'very magic' mode
+nnoremap / /\v
+vnoremap / /\v
 " Sets up a regex
-noremap <Leader>r :s///gc<Left><Left><Left><Left>
+noremap <Leader>r :s///c<Left><Left><Left><Left>
 " Sets up a global, file wide regex
-noremap <Leader>re :%s///gc<Left><Left><Left><Left>
+noremap <Leader>re :%s///c<Left><Left><Left><Left>
 " Grabs the word under the cursor and sets up a regex to replace it (globally)
-nnoremap <Leader>rv :%s/\<<c-r><c-w>\>//gc<left><left><left>
+nnoremap <Leader>rv :%s/\<<c-r><c-w>\>//c<left><left>
 " Grabs the word under the cursor and sets up a regex to replace it (ranged)
-vnoremap <Leader>rv :s/\<<c-r><c-w>\>//gc<left><left><left>
+vnoremap <Leader>rv :s/\<<c-r><c-w>\>//c<left><left><left>
 " Grabs the word under the cursor and sets up a regex to replace it (ranged)
-noremap <Leader>rvr :s/\<<c-r><c-w>\>//gc<left><left><left>
+noremap <Leader>rvr :s/\<<c-r><c-w>\>//c<left><left><left>
 " Removes any whitespace after each line
-noremap <Leader>rw :%s/\s*$//g
+noremap <Leader>rw :%s/\s*$//
 " Can be used to remove whitespace after only certain lines
-noremap <Leader>rwe :s/\s*$//g
+noremap <Leader>rwe :s/\s*$//
 " }}}
 
 " Saving Files mappings {{{
