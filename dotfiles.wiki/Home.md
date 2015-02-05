@@ -1,0 +1,1 @@
+### Just the status line![img](images/hardstatusline.gif)### The whole terminal window![img](images/hardstatusline_terminal.gif)
