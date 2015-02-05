@@ -18,6 +18,9 @@ hardstatus alwayslastline
 # tab is always shown
 hardstatus string "%{Ck}%-w%{=b kR}%50>%n %t%{-}%+w%-15=%{=b kG}|%d/%m/%y %C"
 
+# Allows Screen to know when to automatically change the title
+shelltitle "> |bash"
+
 bind = resize =
 bind + resize +1
 bind - resize -1
