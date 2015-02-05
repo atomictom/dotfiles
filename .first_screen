@@ -4,10 +4,6 @@ source ~thomas/.screenrc
 
 screen -t music bash -c 'cmus; bash'
 screen -t rtorrent bash -c 'rtorrent; bash'
-screen -t water
-screen -t earth
-screen -t fire
-screen -t air
 screen -t vimwiki bash -c 'vim; bash'
 
 select 0
