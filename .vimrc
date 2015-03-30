@@ -67,7 +67,7 @@ Plugin 'Raimondi/delimitMate'
 " Use with :DoRainbowToggle
 Plugin 'kien/rainbow_parentheses.vim'
 " Automatically runs for specified filetypes (see :help)
-Plugin 'amdt/vim-niji'
+" Plugin 'amdt/vim-niji'
 " Automatically opens omni completetion menu
 "Plugin 'AutoComplPop'
 " Adds coffeescript syntax and a few convenience functions for compiling,
@@ -240,6 +240,8 @@ set undodir=~/.vim/undo/
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 set viminfo='1000,n$HOME/.vim/files/info/viminfo
+set sessionoptions-=options
+set viewoptions-=options
 " }}}
 
 " Plugin Settings {{{
@@ -346,9 +348,13 @@ endfunction
 " }}}
 
 " Commands {{{
+command Q q
+command W w
 command NoAutosave let g:web_autosave = 0
 command Autosave let g:web_autosave = 1
-command DoRainbowToggle call s:DoRainbowParenthesis(1)
+command DoRainbowToggle call s:DoRainbowParenthesis()
+command ReloadFiles call s:ReloadFiles()
+command -nargs=1 CopyRegister execute "let @" . <q-args> . "=@\""
 " }}}
 
 " Autocommands {{{
@@ -617,6 +623,8 @@ command Wait let g:custom_build_wait = 1
 " Mappings {{{
 
 " Miscellanious mappings {{{
+noremap <C-c> <Esc>
+inoremap <C-c> <Esc>
 inoremap jk <Esc>
 nnoremap j gj
 nnoremap k gk
@@ -626,8 +634,13 @@ noremap <Leader>O O<Esc>
 " Appends some text to any number of lines
 noremap <Leader>a :normal A
 noremap <Leader>mc :MultipleCursorsFind<space>
+" noremap <Leader>sc :set spell<CR> " Use 'cos' instead
+" noremap <Leader>sn :set nospell<CR>
+noremap <Leader>calc :Crunch<CR>
 noremap <Leader>y :YcmRestartServer<CR>
+" Put ='s under previous line with same length
 noremap <Leader>1 yypVr=
+" Put -'s under previous line with same lengtH
 noremap <Leader>2 yypVr-
 noremap <Leader>rp :RainbowParenthesesLoadRound<CR>:RainbowParenthesesToggle<CR>
 noremap <leader>p <Plug>yankstack_substitute_older_paste
@@ -640,6 +653,8 @@ nnoremap <Leader>b :Unite bookmark/async -toggle -start-insert<CR>
 inoremap <Leader>b <C-O>:Unite bookmark/async -toggle -start-insert<CR>
 nnoremap <Leader>l :ReloadFiles<CR>
 inoremap <Leader>l <C-O>:ReloadFiles<CR>
+noremap <Leader>" :CopyRegister<space>
+noremap <Leader>"a :CopyRegister a<CR>
 " }}}
 
 " EasyMotion mappings {{{
@@ -683,7 +698,8 @@ noremap <Leader>N :lprevious<CR>
 
 " External Filter mappings {{{
 " Filters current line as a bash command and replaces it with the output (`date`)
-noremap <Leader>b :.!bash<CR>
+noremap <Leader>bash :.!bash<CR>
+" Pull in the output of a command
 noremap <Leader>rc :r !
 noremap <Leader>rls :r !ls<space>
 noremap <Leader>rda :r !date<CR>
@@ -702,10 +718,10 @@ noremap <F2> :GundoToggle<CR>
 noremap <F3> :UndotreeToggle<CR>
 noremap <F4> :NERDTreeToggle<CR>
 noremap <F5> :call g:CustomBuild({})<CR>
-noremap <F6> :call g:CustomBuild({'run_command': '', 'run_args': ''})<CR>
+inoremap <F5> <C-O>:call g:CustomBuild({})<CR>
+noremap <F6> :w " . <q-args> . "/%:t<CR>
 noremap <F7> :AT<CR>
 noremap <F8> :TagbarToggle<CR>
-noremap <F9> :Yanks<CR>
 " noremap <F9> :Yanks<CR>
 noremap <F9> :Unite history/yank -buffer-name=yank -horizontal -auto-resize -toggle<CR>
 inoremap <F9> :Unite history/yank -buffer-name=yank -horizontal -auto-resize -toggle<CR>
@@ -734,9 +750,9 @@ noremap <Leader>rwe :s/\s*$//
 
 " Saving Files mappings {{{
 " Save a file with Ctrl + S and remove trailing whitespace
-nnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>
+nnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>i<Esc>:w<CR>
 vnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>gv
-inoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>a
+inoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>i<Esc>:w<CR>a
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 " }}}
