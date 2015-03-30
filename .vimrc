@@ -10,6 +10,8 @@ Plugin 'gmarik/Vundle.vim'
 " }}}
 
 " Plugins {{{
+" CSS3 highlighting
+Plugin 'hail2u/vim-css3-syntax'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'mitsuhiko/vim-jinja'
 " Mostly useful for 'co{}' things for 'change option'
@@ -194,6 +196,10 @@ Plugin 'SirVer/ultisnips'
 " Doesn't work yet, needs to be enabled with either a variable or with
 " :NeoCompleteEnable
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'tpope/vim-liquid'
+Plugin 'gorodinskiy/vim-coloresque'
+" Plugin 'chrisbra/Colorizer'
+" Plugin 'ap/vim-css-color'
 
 call vundle#end()
 " }}}
@@ -235,6 +241,7 @@ set viminfo='1000,n$HOME/.vim/files/info/viminfo
 " }}}
 
 " Plugin Settings {{{
+let g:htmljinja_disable_html_upgrade = 1
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
@@ -266,7 +273,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:ragtag_global_maps = 1
 let g:niji_matching_filetypes = ['lisp', 'scheme', 'racket', 'clojure', 'hy', 'haskell']
 let g:UltiSnipsExpandTrigger = "<c-l>"
-let g:UltiSnipsListSnippets = "<Leader>snip"
+let g:UltiSnipsListSnippets = "<Leader>u"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 let g:ycm_key_list_previous_completion = ['<Up>', '<c-k>']
@@ -314,6 +321,13 @@ function s:DoRainbowParenthesis()
 	RainbowParenthesesLoadSquare
 	RainbowParenthesesToggleAll
 endfunction
+
+function s:ReloadFiles()
+	let l:prev = &autoread
+	set autoread
+	checktime
+	let &autoread = l:prev
+endfunction
 " }}}
 
 " Commands {{{
@@ -327,12 +341,17 @@ augroup vimrc
 	" Delete all autocommands in this group (so we don't set them twice...)
 	autocmd!
 	" Call appropriate functions for each filetype to do multiple things
+	autocmd BufNewFile,BufRead *.md,*.markdown call s:MarkdownAutoCommands()
 	autocmd BufNewFile,BufRead *.html,*.css,*.js call s:WebAutoCommands()
-	autocmd FileType vimwiki call s:VimwikiAutocommands()
-	autocmd FileType coffee call s:CoffeeScriptAutocommands()
 	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
 	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
 	autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
+	autocmd FileType yaml call s:YamlAutoCommands()
+	autocmd FileType unite call s:UniteAutoCommands()
+	autocmd FileType css,scss call s:CssAutoCommands()
+	autocmd FileType html,htmljinja call s:HtmlAutoCommands()
+	autocmd FileType vimwiki call s:VimwikiAutocommands()
+	autocmd FileType coffee call s:CoffeeScriptAutocommands()
 	autocmd FileType haskell call s:HaskellAutocommands()
 	autocmd FileType java call s:JavaAutocommands()
 	autocmd FileType python call s:PythonAutocommands()
@@ -340,6 +359,31 @@ augroup vimrc
 	autocmd FileType scheme call s:SchemeAutocommands()
 	autocmd FileType prolog call s:PrologAutocommands()
 augroup END
+
+function s:YamlAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=2
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:MarkdownAutoCommands()
+	setl ft=markdown
+endfunction
+
+function s:CssAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=4
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:HtmlAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=2
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
 
 let g:web_autosave = 1
 function s:WebAutoCommands()
@@ -561,6 +605,8 @@ noremap <Leader>2 yypVr-
 noremap <Leader>rp :RainbowParenthesesLoadRound<CR>:RainbowParenthesesToggle<CR>
 noremap <leader>p <Plug>yankstack_substitute_older_paste
 noremap <leader>P <Plug>yankstack_substitute_newer_paste
+nnoremap <Leader>l :ReloadFiles<CR>
+inoremap <Leader>l <C-O>:ReloadFiles<CR>
 " }}}
 
 " EasyMotion mappings {{{
