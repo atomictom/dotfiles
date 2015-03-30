@@ -14,6 +14,8 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'mitsuhiko/vim-jinja'
+" Ctrl-p like functionality
+Plugin 'Shougo/unite.vim'
 " Mostly useful for 'co{}' things for 'change option'
 " But a few encoding things and ]\[ + <space>
 Plugin 'tpope/vim-unimpaired'
@@ -307,6 +309,19 @@ let g:startify_custom_footer = [
 	\ "Vim is charityware. Please read ':help uganda'."
 	\ ]
 
+let g:unite_source_history_yank_enable = 1
+call unite#custom#default_action('file', 'tabswitch')
+call unite#custom#profile('default', 'context', {
+	\ 'direction': 'botright',
+	\ })
+call unite#filters#matcher_default#use([
+	\ 'matcher_fuzzy',
+	\ 'matcher_project_ignore_files',
+	\ ])
+call unite#filters#sorter_default#use([
+	\ 'sorter_selecta',
+	\ 'sorter_ftimea',
+	\ ])
 " }}}
 
 " Functions {{{
@@ -365,6 +380,21 @@ function s:YamlAutoCommands()
 	setl tabstop=8
 	setl shiftwidth=2
 	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:UniteAutoCommands()
+	let b:SuperTabDisabled=1
+	imap <buffer> <C-j> <Plug>(unite_select_next_line)
+	imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+
+	nnoremap <silent><buffer><expr> <C-o> unite#do_action('open')
+	inoremap <silent><buffer><expr> <C-o> unite#do_action('open')
+	nnoremap <silent><buffer><expr> <C-x> unite#do_action('split')
+	inoremap <silent><buffer><expr> <C-x> unite#do_action('split')
+	nnoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+	inoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+	nnoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+	inoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
 endfunction
 
 function s:MarkdownAutoCommands()
@@ -596,15 +626,18 @@ noremap <Leader>O O<Esc>
 " Appends some text to any number of lines
 noremap <Leader>a :normal A
 noremap <Leader>mc :MultipleCursorsFind<space>
-noremap <Leader>sc :set spell<CR>
-noremap <Leader>sn :set nospell<CR>
-noremap <Leader>ca :Crunch<CR>
 noremap <Leader>y :YcmRestartServer<CR>
 noremap <Leader>1 yypVr=
 noremap <Leader>2 yypVr-
 noremap <Leader>rp :RainbowParenthesesLoadRound<CR>:RainbowParenthesesToggle<CR>
 noremap <leader>p <Plug>yankstack_substitute_older_paste
 noremap <leader>P <Plug>yankstack_substitute_newer_paste
+nnoremap <C-f> :Unite file_rec/async -toggle -start-insert<CR>
+inoremap <C-f> <C-O>:Unite file_rec/async -toggle -start-insert<CR>
+nnoremap <C-g> :Unite file_rec/async -keep-focus -no-quit -toggle -start-insert<CR>
+inoremap <C-g> <C-O>:Unite file_rec/async -keep-focus -no-quit -toggle -start-insert<CR>
+nnoremap <Leader>b :Unite bookmark/async -toggle -start-insert<CR>
+inoremap <Leader>b <C-O>:Unite bookmark/async -toggle -start-insert<CR>
 nnoremap <Leader>l :ReloadFiles<CR>
 inoremap <Leader>l <C-O>:ReloadFiles<CR>
 " }}}
@@ -673,6 +706,9 @@ noremap <F6> :call g:CustomBuild({'run_command': '', 'run_args': ''})<CR>
 noremap <F7> :AT<CR>
 noremap <F8> :TagbarToggle<CR>
 noremap <F9> :Yanks<CR>
+" noremap <F9> :Yanks<CR>
+noremap <F9> :Unite history/yank -buffer-name=yank -horizontal -auto-resize -toggle<CR>
+inoremap <F9> :Unite history/yank -buffer-name=yank -horizontal -auto-resize -toggle<CR>
 " }}}
 
 " Regex mappings {{{
