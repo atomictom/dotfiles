@@ -431,23 +431,27 @@ function s:WebAutoCommands()
 		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
 	augroup END
 	let g:airline#extensions#whitespace#checks = ['trailing']
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=2
+	setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 function s:VimwikiAutocommands()
 	nnoremap j gj
 	nnoremap k gk
-	set linebreak
-	set breakindent
-	set breakindentopt=shift:6
+	setl linebreak
+	setl breakindent
+	setl breakindentopt=shift:6
 	highlight Folded ctermbg=234
 	let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:PythonAutocommands()
-	set expandtab
-	set softtabstop=4
-	set tabstop=8
-	set shiftwidth=4
+	setl expandtab
+	setl softtabstop=4
+	setl tabstop=8
+	setl shiftwidth=4
 	" set noexpandtab
 	" set softtabstop=0
 	" set tabstop=5
@@ -492,21 +496,22 @@ function s:CMinusMinusAutocommands()
 				\ 'active_filetypes': [],
 				\ 'passive_filetypes': ['cm', 'c'] }
 	let g:ycm_filetype_specific_completion_to_disable = {'c': 0}
-	set filetype=c
+	setl filetype=c
 endfunction
 
 function s:HaskellAutocommands()
-	set expandtab
-	set softtabstop=2
-	set tabstop=8
-	set shiftwidth=2
+	setl expandtab
+	setl softtabstop=2
+	setl tabstop=8
+	setl shiftwidth=2
 	augroup haskell_redraw
 		autocmd!
 		autocmd CursorMoved,CursorHold * redraw
 	augroup END
 	highlight clear Conceal
-	set nofoldenable
+	setl nofoldenable
 	GhcRun
+	DoRainbowToggle
 endfunction
 
 function s:HyAutocommands()
@@ -530,23 +535,48 @@ endfunction
 " }}}
 
 " Custom Build {{{
-let g:custom_build_command = ""
-let g:custom_build_args = ""
-let g:custom_build_run_command = "\"./%<\""
-let g:custom_build_run_args = ""
+" Default values
+let g:custom_make_build_command = ""
+let g:custom_make_build_args = ""
+let g:custom_make_run_command = "\"./%<\""
+let g:custom_make_run_args = ""
 let g:custom_build_wait = 1
 let g:custom_build_run_header = '!echo "--------------- Running ---------------"; echo; '
-function g:CustomBuild(options)
+function g:CustomBuild()
 	" ------------------------------------------------------------
 	"  Emulate 'optional' arguments, where the g:* variables are the
 	"  default arguments
-	let l:build = get(a:options, 'build_command', g:custom_build_command)
-	let l:build_args = get(a:options, 'build_args', g:custom_build_args)
-	let l:run_command = get(a:options, 'run_command', g:custom_build_run_command)
-	let l:run_args = get(a:options, 'run_args', g:custom_build_run_args)
+
+	" Set local variables to their defaults first
+	let l:build = g:custom_make_build_command
+	let l:build_args = g:custom_make_build_args
+	let l:run_command = g:custom_make_run_command
+	let l:run_args = g:custom_make_run_args
+	let l:run_header = g:custom_build_run_header
+	let l:build_wait = g:custom_build_wait
+
+	" Use buffer local settings if they exist
+	if exists('b:custom_make_build_command')
+		let l:build = b:custom_make_build_command
+	endif
+	if exists('b:custom_make_build_args')
+		let l:build_args = b:custom_make_build_args
+	endif
+	if exists('b:custom_make_run_command')
+		let l:run_command = b:custom_make_run_command
+	endif
+	if exists('b:custom_make_run_args')
+		let l:run_args = b:custom_make_run_args
+	endif
+	if exists('b:custom_build_run_header')
+		let l:run_header = b:custom_build_run_header
+	endif
+	if exists('b:custom_build_wait')
+		let l:build_wait = b:custom_build_wait
+	endif
 
 	let l:before_run = ''
-	if g:custom_build_wait == 0
+	if l:build_wait == 0
 		let l:before_run = 'silent '
 	endif
 
@@ -560,64 +590,66 @@ function g:CustomBuild(options)
 	" arguments, say that we're running and run it with run_command
 	write
 	execute 'silent !clear; ' . l:build . " " . l:build_args
-	execute l:before_run . g:custom_build_run_header . l:run_command . " " . l:run_args
+	execute l:before_run . l:run_header . l:run_command . " " . l:run_args
 	redraw!
 endfunction
 
 command -nargs=* Interpret
-	\ let g:custom_build_command = "" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "\"%:p\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "\"%:p\"" . " " . <q-args>
 command -nargs=* JavaRun
-	\ let g:custom_build_command = "javac \"%:p\"" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "java -cp \"%:h\" \"%:r\"" . " " .  <q-args>
+	\ let b:custom_make_build_command = "javac \"%:p\"" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "java -cp \"%:h\" \"%:r\"" . " " .  <q-args>
 command -nargs=* PyRun
-	\ let g:custom_build_command = "" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "python \"%:p\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "python \"%:p\"" . " " . <q-args>
 command -nargs=* PrologRun
-	\ let g:custom_build_command = "" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "prolog -s \"%:p\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "prolog -s \"%:p\"" . " " . <q-args>
 command -nargs=* HyRun
-	\ let g:custom_build_command = "" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "hy \"%:p\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "hy \"%:p\"" . " " . <q-args>
 command -nargs=* RacketRun
-	\ let g:custom_build_command = "" |
-	\ let g:custom_build_args = "" |
-	\ let g:custom_build_run_command = "racket -t \"%:p\"" . " -i " . <q-args>
+	\ let b:custom_make_build_command = "" |
+	\ let b:custom_make_build_args = "" |
+	\ let b:custom_make_run_command = "racket -t \"%:p\"" . " -i " . <q-args>
 command -nargs=* RunWith
-	\ let g:custom_build_run_command = <q-args>
+	\ let b:custom_make_run_command = <q-args>
 command -nargs=* GhcRun
-	\ let g:custom_build_command = "ghc" |
-	\ let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "ghc" |
+	\ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+command -nargs=* BuildArgs
+	\ let b:custom_make_build_args = g:custom_make_build_args . " " . <q-args>
 command -nargs=* Gcc
-	\ let g:custom_build_command = "gcc" |
-	\ let g:custom_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+	\ let b:custom_make_build_command = "gcc" |
+	\ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* Make
-	\ let g:custom_build_command = "make" |
-	\ let g:custom_build_args = <q-args>
+	\ let b:custom_make_build_command = "make" |
+	\ let b:custom_make_build_args = <q-args>
 command -nargs=* Args
-	\ let g:custom_build_run_args = <q-args>
+	\ let b:custom_make_run_args = <q-args>
 command -nargs=* NoArgs
-	\ let g:custom_build_run_args = ""
+	\ let b:custom_make_run_args = ""
 command MakeWithSource
-	\ let g:custom_build_command = "make" |
-	\ let g:custom_build_args = "SOURCES=\"%\""
+	\ let b:custom_make_build_command = "make" |
+	\ let b:custom_make_build_args = "SOURCES=\"%\""
 command -nargs=1 -complete=dir SaveToDirectory
 	\ execute "noremap <F5> :silent! w! " . <q-args> . "/%:t<CR>"
-command -nargs=1 -complete=dir CustomBuild
-	\ noremap <F5> :call g:CustomBuild({})<CR>
+command -nargs=0 CustomBuild
+	\ noremap <F5> :call g:CustomBuild()<CR>
 command NoRun
-	\ let g:custom_build_run_command = "" |
-	\ let g:custom_build_run_args = ""
-command DoRun let g:custom_build_run_command = "\"./%<\""
-command NoTime let g:custom_build_run_command = "\"./%<\""
-command Time let g:custom_build_run_command = "command time -v \"./%<\""
-command NoWait let g:custom_build_wait = 0
-command Wait let g:custom_build_wait = 1
+	\ let b:custom_make_run_command = "" |
+	\ let b:custom_make_run_args = ""
+command DoRun let b:custom_make_run_command = "\"./%<\""
+command NoTime let b:custom_make_run_command = "\"./%<\""
+command Time let b:custom_make_run_command = "command time -v \"./%<\""
+command NoWait let b:custom_build_wait = 0
+command Wait let b:custom_build_wait = 1
 " }}}
 
 " Mappings {{{
