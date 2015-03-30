@@ -5,6 +5,10 @@
 # Personal Stuff {{{
 source "$HOME/.bashrc.private"
 source "/usr/local/bin/virtualenvwrapper.sh"
+export GEM_HOME="$HOME/.gems"
+export GEM_PATH="$HOME/.gems:$GEM_PATH"
+export RB_USER_INSTALL='true'
+export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.packages/racket/racket/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
@@ -201,7 +205,8 @@ function _gen-passwd(){
 		length="$2"
 	fi
 
-	tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
+	# tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
+	tr -dc "$1" < /dev/urandom | head -c "$length" | tee >(xsel -b)
 }
 
 function gen-passwd-alnum(){
