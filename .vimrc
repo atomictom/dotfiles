@@ -749,7 +749,7 @@ noremap <Leader>so :OpenSession<space>
 noremap <F2> :GundoToggle<CR>
 noremap <F3> :UndotreeToggle<CR>
 noremap <F4> :NERDTreeToggle<CR>
-noremap <F5> :call g:CustomBuild({})<CR>
+noremap <F5> :call g:CustomBuild()<CR>
 inoremap <F5> <C-O>:call g:CustomBuild({})<CR>
 noremap <F6> :w " . <q-args> . "/%:t<CR>
 noremap <F7> :AT<CR>
