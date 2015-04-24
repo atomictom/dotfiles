@@ -216,32 +216,33 @@ colorscheme molokai
 " Vim Settings {{{
 filetype plugin indent on
 
-set ttyfast
-set ttymouse=xterm2
-set cryptmethod=blowfish
-set foldmethod=marker
-set virtualedit=block
-set scrolloff=3
-set wildmode=full
-set backspace=indent,eol,start
-set wildmenu
-set cursorline
-set gdefault
-set incsearch
-set autoindent
-set ruler
-set showmode
-set showcmd
-set ignorecase
-set smartcase
-set undofile
-set backup
-set undodir=~/.vim/undo/
-set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
-set viminfo='1000,n$HOME/.vim/files/info/viminfo
-set sessionoptions-=options
-set viewoptions-=options
+setl ttyfast
+setl ttymouse=xterm2
+setl cryptmethod=blowfish
+setl foldmethod=marker
+setl virtualedit=block
+setl scrolloff=3
+setl wildmode=full
+setl backspace=indent,eol,start
+setl wildmenu
+setl cursorline
+setl gdefault
+setl incsearch
+setl autoindent
+setl ruler
+setl showmode
+setl linebreak
+setl showcmd
+setl ignorecase
+setl smartcase
+setl undofile
+setl backup
+setl undodir=~/.vim/undo/
+setl backupdir=~/.vim/backup
+setl directory=~/.vim/tmp
+setl viminfo='1000,n$HOME/.vim/files/info/viminfo
+setl sessionoptions-=options
+setl viewoptions-=options
 " }}}
 
 " Plugin Settings {{{
