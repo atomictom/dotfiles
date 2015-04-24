@@ -368,10 +368,11 @@ augroup vimrc
 	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
 	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
 	autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
-	autocmd FileType yaml call s:YamlAutoCommands()
 	autocmd FileType unite call s:UniteAutoCommands()
+	autocmd FileType js call s:JsAutoCommands()
 	autocmd FileType css,scss call s:CssAutoCommands()
-	autocmd FileType html,htmljinja call s:HtmlAutoCommands()
+	autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
+	autocmd FileType yaml call s:YamlAutoCommands()
 	autocmd FileType vimwiki call s:VimwikiAutocommands()
 	autocmd FileType coffee call s:CoffeeScriptAutocommands()
 	autocmd FileType haskell call s:HaskellAutocommands()
@@ -380,14 +381,9 @@ augroup vimrc
 	autocmd FileType racket call s:RacketAutocommands()
 	autocmd FileType scheme call s:SchemeAutocommands()
 	autocmd FileType prolog call s:PrologAutocommands()
+	" autocmd FileType htmljinja setf htmljinja.html
+	autocmd FileType liquid setf liquid.html
 augroup END
-
-function s:YamlAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=2
-	setl softtabstop=-1 " Make it the same as shiftwidth
-endfunction
 
 function s:UniteAutoCommands()
 	let b:SuperTabDisabled=1
@@ -408,6 +404,13 @@ function s:MarkdownAutoCommands()
 	setl ft=markdown
 endfunction
 
+function s:JsAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=4
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
 function s:CssAutoCommands()
 	setl expandtab
 	setl tabstop=8
@@ -416,6 +419,13 @@ function s:CssAutoCommands()
 endfunction
 
 function s:HtmlAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=2
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:YamlAutoCommands()
 	setl expandtab
 	setl tabstop=8
 	setl shiftwidth=2
@@ -431,11 +441,7 @@ function s:WebAutoCommands()
 		autocmd!
 		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
 	augroup END
-	let g:airline#extensions#whitespace#checks = ['trailing']
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=2
-	setl softtabstop=-1 " Make it the same as shiftwidth
+	" let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:VimwikiAutocommands()
