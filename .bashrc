@@ -114,6 +114,8 @@ case $- in
 	*i*)	if [ -z "$STY" ]; then
 			# Start screen or connect to an existing session
 			screen '-xR' -S main -T linux -c $first_screen
+                else
+                        export TERM='xterm-256color'
 		fi
 		;;
 esac
@@ -170,8 +172,10 @@ alias gl='git log'
 alias gr='git reflog'
 alias gd='git diff'
 alias gf='git fetch'
+alias gbv='git branch -v'
 alias hrd='history -r'
 alias hw='history -w'
+alias info='info --vi-keys'
 # }}}
 
 # Personal Aliases {{{
@@ -235,19 +239,19 @@ function search-files-from(){
 	fi
 
 	find "$dir" -type f -print0 | while read -d $'\0' f; do
-		grep $@ "$f"
+		grep "$@" "$f"
 	done
 }
 
 function search-files(){
 	find -type f -print0 | while read -d $'\0' f; do
-		grep $@ "$f"
+		grep "$@" "$f"
 	done
 }
 
 function search-files-x(){
 	find -xdev -type f -print0 | while read -d $'\0' f; do
-		grep $@ "$f"
+		grep "$@" "$f"
 	done
 }
 
