@@ -198,8 +198,15 @@ Plugin 'SirVer/ultisnips'
 " Doesn't work yet, needs to be enabled with either a variable or with
 " :NeoCompleteEnable
 Plugin 'Shougo/neocomplete.vim'
+" Liquid syntax highlighting for jekyll
 Plugin 'tpope/vim-liquid'
+" Highlight css colors as the color they are
 Plugin 'gorodinskiy/vim-coloresque'
+" Provides omnicomplete for haskell
+Plugin 'eagletmt/neco-ghc'
+" Call hoogle from inside vim. Use <leader>h{h,i,c} to search, get additional
+" info, or close the info box
+Plugin 'Twinside/vim-hoogle'
 " Plugin 'chrisbra/Colorizer'
 " Plugin 'ap/vim-css-color'
 
