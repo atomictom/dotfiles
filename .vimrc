@@ -242,7 +242,10 @@ setl linebreak
 setl showcmd
 setl ignorecase
 setl smartcase
+setl hidden
 setl undofile
+setl undolevels=10000
+setl undoreload=10000
 setl backup
 setl undodir=~/.vim/undo/
 setl backupdir=~/.vim/backup
@@ -367,8 +370,8 @@ endfunction
 " }}}
 
 " Commands {{{
-command Q q
-command W w
+command -bang Q q<bang>
+command -bang W w<bang>
 command NoAutosave let g:web_autosave = 0
 command Autosave let g:web_autosave = 1
 command DoRainbowToggle call s:DoRainbowParenthesis()
@@ -386,8 +389,9 @@ augroup vimrc
 	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
 	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
 	autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
+	autocmd FileType bash,sh call s:BashAutoCommands()
 	autocmd FileType unite call s:UniteAutoCommands()
-	autocmd FileType js call s:JsAutoCommands()
+	autocmd FileType js,javascript call s:JsAutoCommands()
 	autocmd FileType css,scss call s:CssAutoCommands()
 	autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
 	autocmd FileType yaml call s:YamlAutoCommands()
@@ -402,6 +406,13 @@ augroup vimrc
 	" autocmd FileType htmljinja setf htmljinja.html
 	autocmd FileType liquid setf liquid.html
 augroup END
+
+function s:BashAutoCommands()
+	setl expandtab
+	setl tabstop=8
+	setl shiftwidth=4
+	setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
 
 function s:UniteAutoCommands()
 	let b:SuperTabDisabled=1
@@ -420,6 +431,8 @@ endfunction
 
 function s:MarkdownAutoCommands()
 	setl ft=markdown
+	setl linebreak
+	setl textwidth=80
 endfunction
 
 function s:JsAutoCommands()
@@ -455,10 +468,10 @@ function s:WebAutoCommands()
 	" Auto save html, css, and js files whenever possible (for live.js)
 	" TODO: toggle this autocmd with a variable
 	" if g:web_autosave
-	augroup web_autosave
-		autocmd!
-		autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
-	augroup END
+	" augroup web_autosave
+	" 	autocmd!
+	" 	autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
+	" augroup END
 	" let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
@@ -477,10 +490,6 @@ function s:PythonAutocommands()
 	setl softtabstop=4
 	setl tabstop=8
 	setl shiftwidth=4
-	" set noexpandtab
-	" set softtabstop=0
-	" set tabstop=5
-	" set shiftwidth=0
 	PyRun
 endfunction
 
@@ -505,7 +514,11 @@ function s:CoffeeScriptAutocommands()
 endfunction
 
 function s:CAutocommands()
+	setl noexpandtab
+	setl tabstop=4
+	setl shiftwidth=4
 	let g:airline#extensions#whitespace#checks = ['trailing']
+	Gcc
 endfunction
 
 function s:CMinusMinusAutocommands()
@@ -529,12 +542,16 @@ function s:HaskellAutocommands()
 	setl softtabstop=2
 	setl tabstop=8
 	setl shiftwidth=2
-	augroup haskell_redraw
-		autocmd!
-		autocmd CursorMoved,CursorHold * redraw
-	augroup END
+	" augroup haskell_redraw
+	" 	autocmd!
+	" 	autocmd CursorMoved,CursorHold * redraw
+	" augroup END
 	highlight clear Conceal
 	setl nofoldenable
+	setl omnifunc=necoghc#omnifunc
+	noremap gt :GhcModType<CR>
+	noremap gT :GhcModTypeClear<CR>
+	let g:necoghc_enable_detailed_browse = 1
 	GhcRun
 	DoRainbowToggle
 endfunction
@@ -751,6 +768,10 @@ noremap <Leader>nw :NoWait<CR>
 noremap <Leader>yw :Wait<CR>
 noremap <Leader>n :lnext<CR>
 noremap <Leader>N :lprevious<CR>
+noremap <leader>er :Errors<CR>
+noremap <leader>hh :Hoogle<space>
+noremap <leader>hi :HoogleInfo<space>
+noremap <leader>hc :HoogleClose<CR>
 " }}}
 
 " External Filter mappings {{{
