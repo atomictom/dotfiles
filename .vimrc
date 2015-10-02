@@ -265,10 +265,6 @@ let g:airline#extensions#tabline#tab_min_count = 2
 let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:ycm_autoclose_preview_window_after_insertion=1
-let g:ycm_min_num_chars_for_completion=1
-let g:ycm_cache_omnifunc=0
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:yankring_history_dir = '~/.vim'
 let g:yankring_min_element_length = 2
 let g:yankring_replace_n_nkey = ','
@@ -288,8 +284,23 @@ let g:UltiSnipsExpandTrigger = "<c-l>"
 let g:UltiSnipsListSnippets = "<Leader>u"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_complete_in_comments = 1
+" ----------------------------------------
+" These variables are set to their defaults, but I'm listing them here because
+" at some point, I may wish to change them.
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
+let g:ycm_seed_identifiers_with_syntax = 0
+" ----------------------------------------
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_key_list_previous_completion = ['<Up>', '<c-k>']
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<c-j>']
+let g:ycm_cache_omnifunc = 1
+let g:ycm_semantic_triggers = {
+	\ 'haskell': ['.', ':: ', '-> '],
+	\ 'css': ['    ', 're!\s{4}', 're!^\t', 're!: (\S+ )*'],
+	\}
 let g:startify_session_dir = '~/.vim/sessions'
 let g:startify_enable_special = 0
 let g:startify_files_number = 10
