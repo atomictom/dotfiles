@@ -50,14 +50,53 @@ export TERM='xterm-256color'
 eval `dircolors ~/.dircolors`
 
 # Set the prompt
-prompt_start='\[\033[0;31m\]$(returncode)\[\033[0;37m\]\[\033[0;35m\]${debian_chroot:+($debian_chroot)}'
-if [[ ${EUID} == 0 ]] ; then
-	prompt_mid='\[\033[01;31m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
-else
-	prompt_mid='\[\033[0;35m\]\u@\h\[\033[0;37m\]:\[\033[0;36m\]\w >\[\033[0;00m\] '
-fi
-prompt_end='\[\033k\033\\\]'
-PS1="$prompt_start$prompt_mid$prompt_end"
+set_prompt_vars(){
+    ret=$?
+
+    # Forground Colors
+    black="\[$(tput setaf 0)\]"
+    red="\[$(tput setaf 1)\]"
+    green="\[$(tput setaf 2)\]"
+    yellow="\[$(tput setaf 3)\]"
+    blue="\[$(tput setaf 4)\]"
+    magenta="\[$(tput setaf 5)\]"
+    cyan="\[$(tput setaf 6)\]"
+    white="\[$(tput setaf 7)\]"
+
+    # Attributes
+    bold="\[$(tput bold)\]"
+    dim="\[$(tput sgr0)\]"
+
+    # Exit will set the return code for $(returncode) to read
+    # Without this, returncode will return the status of the line before it
+    $(exit $ret)
+    local return_code="$dim$red"$(returncode)
+    if git rev-parse --git-dir >/dev/null 2>&1; then
+        if ! git diff-index --quiet --cached HEAD 2>/dev/null || ! git diff-files --quiet; then
+            local git_branch_color="$dim$red"
+        elif git ls-files --other --exclude-standard --error-unmatch . >/dev/null 2>&1; then
+            local git_branch_color="$dim$yellow"
+        else
+            local git_branch_color="$dim$green"
+        fi
+    fi
+    local git_branch="$git_branch_color"$(__git_ps1|tr -d " ")
+    local chroot="$dim$magenta"${debian_chroot:+($debian_chroot)}
+    if [[ ${EUID} == 0 ]] ; then # If root
+        local username_host_dir="$bold$red\h$bold$blue \W"
+        local prompt="$dim$cyan\$ "
+    else
+        local username_host_dir="$dim$magenta\u@\h$dim$white:$dim$cyan\w"
+        local prompt="$dim$cyan> "
+    fi
+    local unmodify_color='\[\033[0;00m\]'
+    local screen_hack='\[\033k\033\\\]'
+    local end_prompt=$unmodify_color$screen_hack
+
+    export PS1="$return_code$chroot$username_host_dir$git_branch $prompt$end_prompt"
+    return $ret
+}
+export PROMPT_COMMAND="set_prompt_vars"
 # }}}
 
 # Autorun Inside Screen {{{
