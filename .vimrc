@@ -262,6 +262,11 @@ setl viewoptions-=options
 " }}}
 
 " Plugin Settings {{{
+let g:purescript_indent_if = 3
+let g:purescript_indent_case = 5
+let g:purescript_indent_let = 4
+let g:purescript_indent_do = 3
+let g:purescript_indent_where = 6
 let g:htmljinja_disable_html_upgrade = 1
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
