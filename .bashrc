@@ -71,6 +71,11 @@ set_prompt_vars(){
     # Without this, returncode will return the status of the line before it
     $(exit $ret)
     local return_code="$dim$red"$(returncode)
+    if [ -z "$VIRTUAL_ENV" ]; then
+        local virtualenv_name=""
+    else
+        local virtualenv_name="$bold$green($(basename "$VIRTUAL_ENV"))"
+    fi
     if git rev-parse --git-dir >/dev/null 2>&1; then
         if ! git diff-index --quiet --cached HEAD 2>/dev/null || ! git diff-files --quiet; then
             local git_branch_color="$dim$red"
@@ -93,7 +98,7 @@ set_prompt_vars(){
     local screen_hack='\[\033k\033\\\]'
     local end_prompt=$unmodify_color$screen_hack
 
-    export PS1="$return_code$chroot$username_host_dir$git_branch $prompt$end_prompt"
+    export PS1="$return_code$virtualenv_name$chroot$username_host_dir$git_branch $prompt$end_prompt"
     return $ret
 }
 export PROMPT_COMMAND="set_prompt_vars"
