@@ -13,6 +13,9 @@ export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.packages/racket/racket/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
+export EDITOR=vim
+export IDLESTARTUP="$HOME/.idle.py"
+export DISPLAY=:0.0
 first_screen=~thomas/.first_screen
 # }}}
 
