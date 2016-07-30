@@ -467,6 +467,7 @@ augroup vimrc
     autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
     autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
     autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
+    autocmd FileType vim call s:VimAutoCommands()
     autocmd FileType bash,sh call s:BashAutoCommands()
     autocmd FileType unite call s:UniteAutoCommands()
     autocmd FileType js,javascript call s:JsAutoCommands()
@@ -484,6 +485,13 @@ augroup vimrc
     " autocmd FileType htmljinja setf htmljinja.html
     autocmd FileType liquid setf liquid.html
 augroup END
+
+function s:VimAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
 
 function s:BashAutoCommands()
     setl expandtab
