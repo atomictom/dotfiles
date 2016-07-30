@@ -381,6 +381,66 @@ function s:ReloadFiles()
     checktime
     let &autoread = l:prev
 endfunction
+
+function s:ShowColumns()
+    if &colorcolumn
+        let &colorcolumn=""
+    else
+        let &colorcolumn="80,".join(range(120,999),",")
+    endif
+endfunction
+
+function s:GatherTests()
+    " Record cursor position
+    let cursor_info = RecordCursor()
+
+    " Search for 'CMUnitTest tests'
+    keepjumps execute "normal /CMUnitTest tests\<cr>"
+    " Delete everything inside the CMUnitTest array
+    keepjumps normal $di}k
+    " Process/generate the test functions to put into the CMUnitTest array
+    keepjumps read !./gen_tests.sh %
+    " Indent all generated test functions twice
+    keepjumps normal Vi}2>
+
+    " Restore cursor position
+    call FixCursor(cursor_info)
+endfunction
+
+function s:TrimTrailingWhitespace()
+    " Record cursor position
+    let cursor_info = RecordCursor()
+
+    keepjumps %s/\s*$//g
+
+    " Restore cursor position
+    call FixCursor(cursor_info)
+endfunction
+
+function RecordCursor()
+    return {
+	\     'lstart': line("w0"),
+    \     'pos': getpos("."),
+	\ }
+endfunction
+
+function FixCursor(cursor_info)
+    let lstart = a:cursor_info['lstart']
+    let pos = a:cursor_info['pos']
+
+    keepjumps execute "normal " . lstart . "G"
+    if lstart != 1
+        execute "normal " . Min(lstart - 1, 3) . "\<c-e>"
+    endif
+    keepjumps call setpos('.', pos)
+endfunction
+
+function Min(a, b)
+    return a:a < a:b ? a:a : a:b
+endfunction
+
+function Max(a, b)
+    return a:a > a:b ? a:a : a:b
 endfunction
 " }}}
 
@@ -391,6 +451,9 @@ command NoAutosave let g:web_autosave = 0
 command Autosave let g:web_autosave = 1
 command DoRainbowToggle call s:DoRainbowParenthesis()
 command ReloadFiles call s:ReloadFiles()
+command ShowColumns call s:ShowColumns()
+command GatherTests call s:GatherTests()
+command TrimTrailingWhitespace call s:TrimTrailingWhitespace()
 command -nargs=1 CopyRegister execute "let @" . <q-args> . "=@\""
 " }}}
 
@@ -734,6 +797,7 @@ noremap <Leader>2 yypVr-
 noremap <Leader>rp :RainbowParenthesesLoadRound<CR>:RainbowParenthesesToggle<CR>
 noremap <leader>p <Plug>yankstack_substitute_older_paste
 noremap <leader>P <Plug>yankstack_substitute_newer_paste
+noremap <Leader>s :ShowColumns<CR>
 nnoremap <C-f> :Unite file_rec/async -toggle -start-insert<CR>
 inoremap <C-f> <C-O>:Unite file_rec/async -toggle -start-insert<CR>
 nnoremap <C-g> :Unite file_rec/async -keep-focus -no-quit -toggle -start-insert<CR>
@@ -842,9 +906,9 @@ noremap <Leader>rwe :s/\s*$//
 
 " Saving Files mappings {{{
 " Save a file with Ctrl + S and remove trailing whitespace
-nnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>i<Esc>:w<CR>
-vnoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>:w<CR>gv
-inoremap <C-s> <Esc>:%s/\s*$//g<CR><C-o>i<Esc>:w<CR>a
+nnoremap <C-s> <Esc>:TrimTrailingWhitespace<CR><Esc>:w<CR>
+vnoremap <C-s> <Esc>:TrimTrailingWhitespace<CR><Esc>:w<CR>gv
+inoremap <C-s> <Esc>:TrimTrailingWhitespace<CR><Esc>:w<CR>a
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 " }}}
