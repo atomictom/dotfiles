@@ -138,11 +138,11 @@ Plugin 'restore_view.vim'
 " <C-X><space> turn word into inline tag
 " <C-X><CR> turn word into tag then indent
 " <C-X>:
-" 	/ -- Last tag closed
-"	! -- Doctype
-"	# -- Meta content-type
-"	@ -- Stylesheet
-"	$ -- Script
+"     / -- Last tag closed
+"    ! -- Doctype
+"    # -- Meta content-type
+"    @ -- Stylesheet
+"    $ -- Script
 " + Others
 Plugin 'tpope/vim-ragtag'
 " Automatically highlight matching tags
@@ -312,71 +312,72 @@ let g:ycm_key_list_previous_completion = ['<Up>', '<c-k>']
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<c-j>']
 let g:ycm_cache_omnifunc = 1
 let g:ycm_semantic_triggers = {
-	\ 'haskell': ['.', ':: ', '-> '],
-	\ 'css': ['    ', 're!\s{4}', 're!^\t', 're!: (\S+ )*'],
-	\}
+    \ 'haskell': ['.', ':: ', '-> '],
+    \ 'css': ['    ', 're!\s{4}', 're!^\t', 're!: (\S+ )*'],
+    \}
 let g:startify_session_dir = '~/.vim/sessions'
 let g:startify_enable_special = 0
 let g:startify_files_number = 10
 let g:startify_relative_path = 1
 let g:startify_custom_header =
-	\ map(split(system('cat ~/.vim/startify_header.txt'), '\n'), '"   ". v:val') + ['','']
+    \ map(split(system('cat ~/.vim/startify_header.txt'), '\n'), '"   ". v:val') + ['','']
 let g:startify_skiplist = [
-	\ 'COMMIT_EDITMSG',
-	\ $VIMRUNTIME .'/doc',
-	\ 'bundle/.*/doc',
-	\ '\.DS_Store'
-	\ ]
+    \ 'COMMIT_EDITMSG',
+    \ $VIMRUNTIME .'/doc',
+    \ 'bundle/.*/doc',
+    \ '\.DS_Store'
+    \ ]
 let g:startify_list_order = [
-	\ ['    MRU in this directory:'],
-	\ 'dir',
-	\ ['    Bookmarks:'],
-	\ 'bookmarks',
-	\ ['    Sessions:'],
-	\ 'sessions',
-	\ ['    MRU:'],
-	\ 'files'
-	\ ]
+    \ ['    MRU in this directory:'],
+    \ 'dir',
+    \ ['    Bookmarks:'],
+    \ 'bookmarks',
+    \ ['    Sessions:'],
+    \ 'sessions',
+    \ ['    MRU:'],
+    \ 'files'
+    \ ]
 let g:startify_custom_footer = [
-	\ '',
-	\ '-----------------------------------------------',
-	\ '',
-	\ "Vim is charityware. Please read ':help uganda'."
-	\ ]
+    \ '',
+    \ '-----------------------------------------------',
+    \ '',
+    \ "Vim is charityware. Please read ':help uganda'."
+    \ ]
 
 let g:unite_source_history_yank_enable = 1
 call unite#custom#default_action('file', 'tabswitch')
 call unite#custom#profile('default', 'context', {
-	\ 'direction': 'botright',
-	\ })
+    \ 'direction': 'botright',
+    \ })
 call unite#filters#matcher_default#use([
-	\ 'matcher_fuzzy',
-	\ 'matcher_project_ignore_files',
-	\ ])
+    \ 'matcher_fuzzy',
+    \ 'matcher_project_ignore_files',
+    \ ])
 call unite#filters#sorter_default#use([
-	\ 'sorter_selecta',
-	\ 'sorter_ftimea',
-	\ ])
+    \ 'sorter_selecta',
+    \ 'sorter_ftimea',
+    \ ])
 " }}}
 
 " Functions {{{
 
 " A function to customize YankRing
 function! YRRunAfterMaps()
-	nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
+    nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
 endfunction
 
 function s:DoRainbowParenthesis()
-	RainbowParenthesesLoadRound
-	RainbowParenthesesLoadSquare
-	RainbowParenthesesToggleAll
+    RainbowParenthesesLoadRound
+    RainbowParenthesesLoadSquare
+    RainbowParenthesesToggleAll
 endfunction
 
 function s:ReloadFiles()
-	let l:prev = &autoread
-	set autoread
-	checktime
-	let &autoread = l:prev
+    let l:prev = &autoread
+    set autoread
+    checktime
+    let &autoread = l:prev
+endfunction
 endfunction
 " }}}
 
@@ -392,189 +393,191 @@ command -nargs=1 CopyRegister execute "let @" . <q-args> . "=@\""
 
 " Autocommands {{{
 augroup vimrc
-	" Delete all autocommands in this group (so we don't set them twice...)
-	autocmd!
-	" Call appropriate functions for each filetype to do multiple things
-	autocmd BufNewFile,BufRead *.md,*.markdown call s:MarkdownAutoCommands()
-	autocmd BufNewFile,BufRead *.html,*.css,*.js call s:WebAutoCommands()
-	autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
-	autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
-	autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
-	autocmd FileType bash,sh call s:BashAutoCommands()
-	autocmd FileType unite call s:UniteAutoCommands()
-	autocmd FileType js,javascript call s:JsAutoCommands()
-	autocmd FileType css,scss call s:CssAutoCommands()
-	autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
-	autocmd FileType yaml call s:YamlAutoCommands()
-	autocmd FileType vimwiki call s:VimwikiAutocommands()
-	autocmd FileType coffee call s:CoffeeScriptAutocommands()
-	autocmd FileType haskell call s:HaskellAutocommands()
-	autocmd FileType java call s:JavaAutocommands()
-	autocmd FileType python call s:PythonAutocommands()
-	autocmd FileType racket call s:RacketAutocommands()
-	autocmd FileType scheme call s:SchemeAutocommands()
-	autocmd FileType prolog call s:PrologAutocommands()
-	" autocmd FileType htmljinja setf htmljinja.html
-	autocmd FileType liquid setf liquid.html
+    " Delete all autocommands in this group (so we don't set them twice...)
+    autocmd!
+    " Call appropriate functions for each filetype to do multiple things
+    autocmd BufNewFile,BufRead *.md,*.markdown call s:MarkdownAutoCommands()
+    autocmd BufNewFile,BufRead *.html,*.css,*.js call s:WebAutoCommands()
+    autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
+    autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
+    autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
+    autocmd FileType bash,sh call s:BashAutoCommands()
+    autocmd FileType unite call s:UniteAutoCommands()
+    autocmd FileType js,javascript call s:JsAutoCommands()
+    autocmd FileType css,scss call s:CssAutoCommands()
+    autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
+    autocmd FileType yaml call s:YamlAutoCommands()
+    autocmd FileType vimwiki call s:VimwikiAutocommands()
+    autocmd FileType coffee call s:CoffeeScriptAutocommands()
+    autocmd FileType haskell call s:HaskellAutocommands()
+    autocmd FileType java call s:JavaAutocommands()
+    autocmd FileType python call s:PythonAutocommands()
+    autocmd FileType racket call s:RacketAutocommands()
+    autocmd FileType scheme call s:SchemeAutocommands()
+    autocmd FileType prolog call s:PrologAutocommands()
+    " autocmd FileType htmljinja setf htmljinja.html
+    autocmd FileType liquid setf liquid.html
 augroup END
 
 function s:BashAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=4
-	setl softtabstop=-1 " Make it the same as shiftwidth
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 function s:UniteAutoCommands()
-	let b:SuperTabDisabled=1
-	imap <buffer> <C-j> <Plug>(unite_select_next_line)
-	imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+    let b:SuperTabDisabled=1
+    imap <buffer> <C-j> <Plug>(unite_select_next_line)
+    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
 
-	nnoremap <silent><buffer><expr> <C-o> unite#do_action('open')
-	inoremap <silent><buffer><expr> <C-o> unite#do_action('open')
-	nnoremap <silent><buffer><expr> <C-x> unite#do_action('split')
-	inoremap <silent><buffer><expr> <C-x> unite#do_action('split')
-	nnoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-	inoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-	nnoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
-	inoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+    nnoremap <silent><buffer><expr> <C-o> unite#do_action('open')
+    inoremap <silent><buffer><expr> <C-o> unite#do_action('open')
+    nnoremap <silent><buffer><expr> <C-x> unite#do_action('split')
+    inoremap <silent><buffer><expr> <C-x> unite#do_action('split')
+    nnoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+    inoremap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+    nnoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+    inoremap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
 endfunction
 
 function s:MarkdownAutoCommands()
-	setl ft=markdown
-	setl linebreak
-	setl textwidth=80
+    setl ft=markdown
+    setl linebreak
+    setl textwidth=80
+    let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:JsAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=4
-	setl softtabstop=-1 " Make it the same as shiftwidth
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 function s:CssAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=4
-	setl softtabstop=-1 " Make it the same as shiftwidth
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 function s:HtmlAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=2
-	setl softtabstop=-1 " Make it the same as shiftwidth
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=2
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 function s:YamlAutoCommands()
-	setl expandtab
-	setl tabstop=8
-	setl shiftwidth=2
-	setl softtabstop=-1 " Make it the same as shiftwidth
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=2
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
 let g:web_autosave = 1
 function s:WebAutoCommands()
-	" Auto save html, css, and js files whenever possible (for live.js)
-	" TODO: toggle this autocmd with a variable
-	" if g:web_autosave
-	" augroup web_autosave
-	" 	autocmd!
-	" 	autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
-	" augroup END
-	" let g:airline#extensions#whitespace#checks = ['trailing']
+    " Auto save html, css, and js files whenever possible (for live.js)
+    " TODO: toggle this autocmd with a variable
+    " if g:web_autosave
+    " augroup web_autosave
+    "     autocmd!
+    "     autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
+    " augroup END
+    " let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:VimwikiAutocommands()
-	nnoremap j gj
-	nnoremap k gk
-	setl linebreak
-	setl breakindent
-	setl breakindentopt=shift:6
-	highlight Folded ctermbg=234
-	let g:airline#extensions#whitespace#checks = ['trailing']
+    nnoremap j gj
+    nnoremap k gk
+    setl linebreak
+    setl breakindent
+    setl breakindentopt=shift:6
+    highlight Folded ctermbg=234
+    let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:PythonAutocommands()
-	setl expandtab
-	setl softtabstop=4
-	setl tabstop=8
-	setl shiftwidth=4
-	PyRun
+    setl expandtab
+    setl softtabstop=4
+    setl tabstop=8
+    setl shiftwidth=4
+    let g:syntastic_python_pylint_post_args='-d invalid-name,broad-except,logging-format-interpolation'
+    PyRun
 endfunction
 
 function s:JavaAutocommands()
-	abbreviate print System.out.println(
-	JavaRun
+    abbreviate print System.out.println(
+    JavaRun
 endfunction
 
 " At some point I will probably add some so this is just a place holder
 function s:CoffeeScriptAutocommands()
-	"Plugin 'AutoComplPop'
-	function! Build()
-		write
-		silent !cake build
-		silent redraw!
-	endfunction
-	let coffee_cake_options='build'
-	let coffee_make_options='build'
-	compiler cake
-	"autocmd CursorHold *.coffee call Build()
-	noremap <F5> :call Build()<CR>
+    "Plugin 'AutoComplPop'
+    function! Build()
+        write
+        silent !cake build
+        silent redraw!
+    endfunction
+    let coffee_cake_options='build'
+    let coffee_make_options='build'
+    compiler cake
+    "autocmd CursorHold *.coffee call Build()
+    noremap <F5> :call Build()<CR>
 endfunction
 
 function s:CAutocommands()
-	setl noexpandtab
-	setl tabstop=4
-	setl shiftwidth=4
-	let g:airline#extensions#whitespace#checks = ['trailing']
-	Gcc
+    setl noexpandtab
+    setl tabstop=4
+    setl shiftwidth=4
+    let g:airline#extensions#whitespace#checks = ['trailing']
+    Gcc
 endfunction
 
 function s:CMinusMinusAutocommands()
-	" I guess these would affect non C-- buffers, but I don't feel like
-	" fixing this now since it's probably a non-issue.
-	let g:syntastic_disabled_filetypes=['c', 'cm']
-	" I thought syntastic was throwing warnings and this wasn't working,
-	" but it was YouCompleteMe...oh well
-	let g:syntastic_ignore_files = ['\v.*\.cm$', '.*\.cm', '\.*.cm', '\.\*.cm', '\v.*\.c', '.*\.c', '\.*.c']
-	let g:syntastic_check_on_open = 0
-	let g:syntastic_check_on_wq = 0
-	let g:syntastic_mode_map = {'mode': 'active',
-				\ 'active_filetypes': [],
-				\ 'passive_filetypes': ['cm', 'c'] }
-	let g:ycm_filetype_specific_completion_to_disable = {'c': 0}
-	setl filetype=c
+    " I guess these would affect non C-- buffers, but I don't feel like
+    " fixing this now since it's probably a non-issue.
+    let g:syntastic_disabled_filetypes=['c', 'cm']
+    " I thought syntastic was throwing warnings and this wasn't working,
+    " but it was YouCompleteMe...oh well
+    let g:syntastic_ignore_files = ['\v.*\.cm$', '.*\.cm', '\.*.cm', '\.\*.cm', '\v.*\.c', '.*\.c', '\.*.c']
+    let g:syntastic_check_on_open = 0
+    let g:syntastic_check_on_wq = 0
+    let g:syntastic_mode_map = {'mode': 'active',
+                \ 'active_filetypes': [],
+                \ 'passive_filetypes': ['cm', 'c'] }
+    let g:ycm_filetype_specific_completion_to_disable = {'c': 0}
+    setl filetype=c
 endfunction
 
 function s:HaskellAutocommands()
-	setl expandtab
-	setl softtabstop=2
-	setl tabstop=8
-	setl shiftwidth=2
-	" augroup haskell_redraw
-	" 	autocmd!
-	" 	autocmd CursorMoved,CursorHold * redraw
-	" augroup END
-	highlight clear Conceal
-	setl nofoldenable
-	setl omnifunc=necoghc#omnifunc
-	noremap gt :GhcModType<CR>
-	noremap gT :GhcModTypeClear<CR>
-	let g:necoghc_enable_detailed_browse = 1
-	GhcRun
-	DoRainbowToggle
+    setl expandtab
+    setl softtabstop=2
+    setl tabstop=8
+    setl shiftwidth=2
+    " augroup haskell_redraw
+    "     autocmd!
+    "     autocmd CursorMoved,CursorHold * redraw
+    " augroup END
+    highlight clear Conceal
+    setl nofoldenable
+    setl omnifunc=necoghc#omnifunc
+    noremap gt :GhcModType<CR>
+    noremap gT :GhcModTypeClear<CR>
+    let g:necoghc_enable_detailed_browse = 1
+    GhcRun
+    DoRainbowToggle
 endfunction
 
 function s:HyAutocommands()
-	HyRun
+    HyRun
 endfunction
 
 function s:RacketAutocommands()
         let b:delimitMate_quotes = "\" ` *"
-	NoWait
-	RacketRun
+    NoWait
+    RacketRun
 endfunction
 
 function s:SchemeAutocommands()
@@ -582,8 +585,8 @@ function s:SchemeAutocommands()
 endfunction
 
 function s:PrologAutocommands()
-	NoWait
-	PrologRun
+    NoWait
+    PrologRun
 endfunction
 " }}}
 
@@ -596,108 +599,108 @@ let g:custom_make_run_args = ""
 let g:custom_build_wait = 1
 let g:custom_build_run_header = '!echo "--------------- Running ---------------"; echo; '
 function g:CustomBuild()
-	" ------------------------------------------------------------
-	"  Emulate 'optional' arguments, where the g:* variables are the
-	"  default arguments
+    " ------------------------------------------------------------
+    "  Emulate 'optional' arguments, where the g:* variables are the
+    "  default arguments
 
-	" Set local variables to their defaults first
-	let l:build = g:custom_make_build_command
-	let l:build_args = g:custom_make_build_args
-	let l:run_command = g:custom_make_run_command
-	let l:run_args = g:custom_make_run_args
-	let l:run_header = g:custom_build_run_header
-	let l:build_wait = g:custom_build_wait
+    " Set local variables to their defaults first
+    let l:build = g:custom_make_build_command
+    let l:build_args = g:custom_make_build_args
+    let l:run_command = g:custom_make_run_command
+    let l:run_args = g:custom_make_run_args
+    let l:run_header = g:custom_build_run_header
+    let l:build_wait = g:custom_build_wait
 
-	" Use buffer local settings if they exist
-	if exists('b:custom_make_build_command')
-		let l:build = b:custom_make_build_command
-	endif
-	if exists('b:custom_make_build_args')
-		let l:build_args = b:custom_make_build_args
-	endif
-	if exists('b:custom_make_run_command')
-		let l:run_command = b:custom_make_run_command
-	endif
-	if exists('b:custom_make_run_args')
-		let l:run_args = b:custom_make_run_args
-	endif
-	if exists('b:custom_build_run_header')
-		let l:run_header = b:custom_build_run_header
-	endif
-	if exists('b:custom_build_wait')
-		let l:build_wait = b:custom_build_wait
-	endif
+    " Use buffer local settings if they exist
+    if exists('b:custom_make_build_command')
+        let l:build = b:custom_make_build_command
+    endif
+    if exists('b:custom_make_build_args')
+        let l:build_args = b:custom_make_build_args
+    endif
+    if exists('b:custom_make_run_command')
+        let l:run_command = b:custom_make_run_command
+    endif
+    if exists('b:custom_make_run_args')
+        let l:run_args = b:custom_make_run_args
+    endif
+    if exists('b:custom_build_run_header')
+        let l:run_header = b:custom_build_run_header
+    endif
+    if exists('b:custom_build_wait')
+        let l:build_wait = b:custom_build_wait
+    endif
 
-	let l:before_run = ''
-	if l:build_wait == 0
-		let l:before_run = 'silent '
-	endif
+    let l:before_run = ''
+    if l:build_wait == 0
+        let l:before_run = 'silent '
+    endif
 
-	" echom " ----- Custom Build: ----- "
-	" echom l:make
-	" echom l:args
-	" echom expand(l:run_command)
-	" echom l:run_args
-	" ------------------------------------------------------------
-	" Save the file, clear the screen, make it with args as make's
-	" arguments, say that we're running and run it with run_command
-	write
-	execute 'silent !clear; ' . l:build . " " . l:build_args
-	execute l:before_run . l:run_header . l:run_command . " " . l:run_args
-	redraw!
+    " echom " ----- Custom Build: ----- "
+    " echom l:make
+    " echom l:args
+    " echom expand(l:run_command)
+    " echom l:run_args
+    " ------------------------------------------------------------
+    " Save the file, clear the screen, make it with args as make's
+    " arguments, say that we're running and run it with run_command
+    write
+    execute 'silent !clear; ' . l:build . " " . l:build_args
+    execute l:before_run . l:run_header . l:run_command . " " . l:run_args
+    redraw!
 endfunction
 
 command -nargs=* Interpret
-	\ let b:custom_make_build_command = "" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "\"%:p\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "\"%:p\"" . " " . <q-args>
 command -nargs=* JavaRun
-	\ let b:custom_make_build_command = "javac \"%:p\"" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "java -cp \"%:h\" \"%:r\"" . " " .  <q-args>
+    \ let b:custom_make_build_command = "javac \"%:p\"" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "java -cp \"%:h\" \"%:r\"" . " " .  <q-args>
 command -nargs=* PyRun
-	\ let b:custom_make_build_command = "" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "python \"%:p\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "python \"%:p\"" . " " . <q-args>
 command -nargs=* PrologRun
-	\ let b:custom_make_build_command = "" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "prolog -s \"%:p\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "prolog -s \"%:p\"" . " " . <q-args>
 command -nargs=* HyRun
-	\ let b:custom_make_build_command = "" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "hy \"%:p\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "hy \"%:p\"" . " " . <q-args>
 command -nargs=* RacketRun
-	\ let b:custom_make_build_command = "" |
-	\ let b:custom_make_build_args = "" |
-	\ let b:custom_make_run_command = "racket -t \"%:p\"" . " -i " . <q-args>
+    \ let b:custom_make_build_command = "" |
+    \ let b:custom_make_build_args = "" |
+    \ let b:custom_make_run_command = "racket -t \"%:p\"" . " -i " . <q-args>
 command -nargs=* RunWith
-	\ let b:custom_make_run_command = <q-args>
+    \ let b:custom_make_run_command = <q-args>
 command -nargs=* GhcRun
-	\ let b:custom_make_build_command = "ghc" |
-	\ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "ghc" |
+    \ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* BuildArgs
-	\ let b:custom_make_build_args = g:custom_make_build_args . " " . <q-args>
+    \ let b:custom_make_build_args = g:custom_make_build_args . " " . <q-args>
 command -nargs=* Gcc
-	\ let b:custom_make_build_command = "gcc" |
-	\ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
+    \ let b:custom_make_build_command = "gcc" |
+    \ let b:custom_make_build_args = " -o \"%<\" \"%\"" . " " . <q-args>
 command -nargs=* Make
-	\ let b:custom_make_build_command = "make" |
-	\ let b:custom_make_build_args = <q-args>
+    \ let b:custom_make_build_command = "make" |
+    \ let b:custom_make_build_args = <q-args>
 command -nargs=* Args
-	\ let b:custom_make_run_args = <q-args>
+    \ let b:custom_make_run_args = <q-args>
 command -nargs=* NoArgs
-	\ let b:custom_make_run_args = ""
+    \ let b:custom_make_run_args = ""
 command MakeWithSource
-	\ let b:custom_make_build_command = "make" |
-	\ let b:custom_make_build_args = "SOURCES=\"%\""
+    \ let b:custom_make_build_command = "make" |
+    \ let b:custom_make_build_args = "SOURCES=\"%\""
 command -nargs=1 -complete=dir SaveToDirectory
-	\ execute "noremap <F5> :silent! w! " . <q-args> . "/%:t<CR>"
+    \ execute "noremap <F5> :silent! w! " . <q-args> . "/%:t<CR>"
 command -nargs=0 CustomBuild
-	\ noremap <F5> :call g:CustomBuild()<CR>
+    \ noremap <F5> :call g:CustomBuild()<CR>
 command NoRun
-	\ let b:custom_make_run_command = "" |
-	\ let b:custom_make_run_args = ""
+    \ let b:custom_make_run_command = "" |
+    \ let b:custom_make_run_args = ""
 command DoRun let b:custom_make_run_command = "\"./%<\""
 command NoTime let b:custom_make_run_command = "\"./%<\""
 command Time let b:custom_make_run_command = "command time -v \"./%<\""
