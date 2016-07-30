@@ -302,53 +302,5 @@ function fortune-cookie(){
 }
 # }}}
 
-# Personal Functions {{{
-function backup-caeli(){
-	# Locations
-	error_file="$HOME/rsync_error_log"
-	data_dir="$HOME/Data"
-	caeli_dir='/media/Caeli'
-	backup_dirs='Books Code Documents Games Music Other Pictures projects scratch Software Torrents Videos .icons .backups'
-
-	# Default options
-	dry=''
-	max_delete='--max-delete=100'
-
-	# Print error log header
-	echo >> "$error_file"
-	echo "-------------------- Backup on $(date) --------------------" >> "$error_file"
-	echo >> "$error_file"
-
-	# Parse options
-	while [ $# -gt 0 ]; do
-		case "$1" in
-			"dry")
-				dry='-n'
-				;;
-			"delete")
-				max_delete=''
-				;;
-			*)
-				echo unrecognized argument: $1
-				;;
-		esac
-		shift 1
-	done
-
-	# Backup each directory
-	for dir in $backup_dirs; do
-		echo
-		echo "-------------------- $dir --------------------"
-		echo
-		rsync -vaH --delete $max_delete $dry "$data_dir/$dir/" "$caeli_dir/$dir/" || echo "Error on $dir" >> "$error_file";
-	done
-
-	# Delete the error file if it only contains the header
-	if [ $(wc -l "$error_file" | cut -d ' ' -f 1) -eq 3 ]; then
-		rm -f "$error_file";
-		echo "Done! Removed error file because there were no errors."
-	else
-		echo "Process has completed, however there are errors logged in $error_file"
-	fi
-}
-# }}}
+# Source the functions in .bash_lib
+. "$HOME/.bash_lib"
