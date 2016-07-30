@@ -248,6 +248,7 @@ setl linebreak
 setl showcmd
 setl ignorecase
 setl smartcase
+setl laststatus=2
 setl hidden
 setl undofile
 setl undolevels=10000
@@ -298,6 +299,8 @@ let g:UltiSnipsExpandTrigger = "<c-l>"
 let g:UltiSnipsListSnippets = "<Leader>u"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_server_log_level = 'debug'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_complete_in_comments = 1
@@ -722,8 +725,6 @@ noremap <Leader>O O<Esc>
 " Appends some text to any number of lines
 noremap <Leader>a :normal A
 noremap <Leader>mc :MultipleCursorsFind<space>
-" noremap <Leader>sc :set spell<CR> " Use 'cos' instead
-" noremap <Leader>sn :set nospell<CR>
 noremap <Leader>calc :Crunch<CR>
 noremap <Leader>y :YcmRestartServer<CR>
 " Put ='s under previous line with same length
@@ -799,7 +800,6 @@ noremap <Leader>rpw :r !pwd<CR>
 " }}}
 
 " Session mappings {{{
-noremap <Leader>s :SaveSession<space>
 noremap <Leader>ss :SaveSession<space>
 noremap <Leader>so :OpenSession<space>
 " }}}
