@@ -106,23 +106,23 @@ export PROMPT_COMMAND="set_prompt_vars"
 
 # Autorun Inside Screen {{{
 if [ ! -e "$first_screen" ]; then
-	if [ -e "$HOME/.screenrc" ]; then
-		first_screen="$HOME/.screenrc"
-	else
-		first_screen="/dev/null"
-	fi
+    if [ -e "$HOME/.screenrc" ]; then
+        first_screen="$HOME/.screenrc"
+    else
+        first_screen="/dev/null"
+    fi
 fi
 
 # If this session is interactive
 case $- in
-	# If we are not running inside screen
-	*i*)	if [ -z "$STY" ]; then
-			# Start screen or connect to an existing session
-			screen '-xR' -S main -T linux -c $first_screen
+    # If we are not running inside screen
+    *i*)    if [ -z "$STY" ]; then
+            # Start screen or connect to an existing session
+            screen '-xR' -S main -T linux -c $first_screen
                 else
                         export TERM='xterm-256color'
-		fi
-		;;
+        fi
+        ;;
 esac
 # }}}
 
@@ -210,91 +210,91 @@ function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
 function yy(){ yes "$@" | eval "$( history 2 | head -n1 | sed -e 's/^\s*[0-9]*\s*//')" ; echo ;}
 
 function capitalize(){
-	for i in *; do
-		mv "$i" "$(echo "${i,,}" | sed -e 's/\(-\|\s\)\(\w\)/\1\U\2/g')"
-	done
+    for i in *; do
+        mv "$i" "$(echo "${i,,}" | sed -e 's/\(-\|\s\)\(\w\)/\1\U\2/g')"
+    done
 }
 
 function hr(){
-	for i in $(seq $1); do
-		echo -n '-'
-	done
-	echo
+    for i in $(seq $1); do
+        echo -n '-'
+    done
+    echo
 }
 
 function list-ips(){
-	ifconfig | grep -Pzo '(wlan|eth).*\n.*inet\s.*?\s' | sed "N; s/\s*Link.*\n\s*/'s /; s/inet addr:/ip address is: /";
+    ifconfig | grep -Pzo '(wlan|eth).*\n.*inet\s.*?\s' | sed "N; s/\s*Link.*\n\s*/'s /; s/inet addr:/ip address is: /";
 }
 
 function pyserv(){
-	echo
-	list-ips
-	hr 40
-	echo
-	python -m SimpleHTTPServer
+    echo
+    list-ips
+    hr 40
+    echo
+    python -m SimpleHTTPServer
 }
 
 function search-files-from(){
-	dir=""
-	if [ -d "$1" ]; then
-		dir="$1"
-		shift 1
-	else
-		echo "The first argument should be a valid directory"
-		exit 2
-	fi
+    dir=""
+    if [ -d "$1" ]; then
+        dir="$1"
+        shift 1
+    else
+        echo "The first argument should be a valid directory"
+        exit 2
+    fi
 
-	find "$dir" -type f -print0 | while read -d $'\0' f; do
-		grep "$@" "$f"
-	done
+    find "$dir" -type f -print0 | while read -d $'\0' f; do
+        grep "$@" "$f"
+    done
 }
 
 function search-files(){
-	find -type f -print0 | while read -d $'\0' f; do
-		grep "$@" "$f"
-	done
+    find -type f -print0 | while read -d $'\0' f; do
+        grep "$@" "$f"
+    done
 }
 
 function search-files-x(){
-	find -xdev -type f -print0 | while read -d $'\0' f; do
-		grep "$@" "$f"
-	done
+    find -xdev -type f -print0 | while read -d $'\0' f; do
+        grep "$@" "$f"
+    done
 }
 
 function _gen-passwd(){
-	if [ -z "$2" ]; then
-		length=20
-	else
-		length="$2"
-	fi
+    if [ -z "$2" ]; then
+        length=20
+    else
+        length="$2"
+    fi
 
-	# tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
-	tr -dc "$1" < /dev/urandom | head -c "$length" | tee >(xsel -b)
+    # tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
+    tr -dc "$1" < /dev/urandom | head -c "$length" | tee >(xsel -b)
 }
 
 function gen-passwd-alnum(){
-	_gen-passwd '[:alnum:]' "$1"
+    _gen-passwd '[:alnum:]' "$1"
 }
 
 function gen-passwd(){
-	_gen-passwd '[:graph:]' "$1"
+    _gen-passwd '[:graph:]' "$1"
 }
 
 function returncode {
-	returncode=$?
-	if [ $returncode != 0 ]; then
-		echo "[$returncode]"
-	else
-		echo ""
-	fi
+    returncode=$?
+    if [ $returncode != 0 ]; then
+        echo "[$returncode]"
+    else
+        echo ""
+    fi
 }
 
 function fortune-cookie(){
-	BOX_NAMES=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
-	BOX_COUNT=${#BOX_NAMES[@]}
-	BOX_TO_USE=${BOX_NAMES[ (( $RANDOM % $BOX_COUNT )) ]}
-	fortune |boxes -d $BOX_TO_USE
-	#echo $BOX_TO_USE
+    box_names=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
+    box_count=${#box_names[@]}
+    box_to_use=${box_names[ (( $RANDOM % $box_count )) ]}
+    fortune | boxes -d $box_to_use
+    #echo $box_to_use
 }
 # }}}
 
