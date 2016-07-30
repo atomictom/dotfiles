@@ -185,6 +185,7 @@ alias gbv='git branch -v'
 alias hrd='history -r'
 alias hw='history -w'
 alias info='info --vi-keys'
+alias bumpidle='kill -INT $(ps aux | grep '"'"'/usr/bin/i[d]le'"'"' | sed '"'"'s/thomas\s*\([0-9]*\).*/\1/'"'"')'
 # }}}
 
 # Personal Aliases {{{
