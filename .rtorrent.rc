@@ -7,9 +7,9 @@
 # 5 - Purple
 # 6 - Light Blue
 # 7 - White
-done_fg_color = 4
+# done_fg_color = 4 # -- deprecated by new rtorrent?
 #done_bg_color = 2
-active_fg_color = 1
+# active_fg_color = 1 # -- deprecated by new rtorrent?
 #active_bg_color = 4
 
 # ------------------------------------------------------------------------------
@@ -29,17 +29,17 @@ port_random = yes
 check_hash = yes
 
 encryption = allow_incoming,enable_retry,try_outgoing
-use_udp_trackers = yes
+# use_udp_trackers = yes # -- deprecated by new rtorrent?
 
 dht=on
-peer_exchange = yes
+# peer_exchange = yes # -- deprecated by new rtorrent?
 
 session = ~/Downloads/rtorrent/.session
 directory = ~/Data/Torrents/
 
 schedule = low_diskspace,5,60,close_low_diskspace=2048M
 
-schedule = watch_directory,5,5,"load=~/Downloads/*.torrent"
+schedule = watch_directory,5,5,"load.start=~/Downloads/*.torrent"
 
-system.method.set_key = event.download.finished,make_torrent_link,"create_link=base_filename,~/Data/Torrents/,"
+# system.method.set_key = event.download.finished,make_torrent_link,"create_link=base_filename,~/Data/Torrents/," # -- deprecated by new rtorrent?
 
