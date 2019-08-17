@@ -303,16 +303,36 @@ function _gen-passwd {
         length="$2"
     fi
 
-    # tr -dc "$1" < /dev/urandom | fold -w "$length" | head -n 1 | tee >(xsel -b)
     tr -dc "$1" < /dev/urandom | head -c "$length" | tee >(xsel -b)
+    echo
 }
 
 function gen-passwd-alnum {
     _gen-passwd '[:alnum:]' "$1"
 }
 
-function gen-passwd(){
+function gen-passwd-pin {
+    local pin=4
+    if [ -n "$1" ]; then
+        pin="$1"
+    fi
+    _gen-passwd '[:digit:]' "$pin"
+}
+
+function gen-passwd-sym {
     _gen-passwd '[:graph:]' "$1"
+}
+
+function write-random-data {
+    if [[ -z "$1" ]]; then
+        echo "You must specify a destination, e.g. /dev/sdc" >2
+        return 127
+    fi
+
+    local dest="$1"
+    readonly pass="$(dd if=/dev/random bs=128 count=1 2>/dev/null | base64)"
+    readonly blocksize="$(sudo blockdev --getsize64 ${dest})"
+    sudo bash -c "openssl enc -aes-256-ctr -pass pass:${pass} -nosalt < /dev/zero | pv -pterb -s ${blocksize} >${dest}"
 }
 
 function returncode {
