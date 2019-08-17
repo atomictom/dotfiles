@@ -577,9 +577,11 @@ endfunction
 function s:VimwikiAutocommands()
     nnoremap j gj
     nnoremap k gk
+    setl shiftwidth=4
+    setl tabstop=4
     setl linebreak
     setl breakindent
-    setl breakindentopt=shift:6
+    " setl breakindentopt=shift:6
     highlight Folded ctermbg=234
     let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
