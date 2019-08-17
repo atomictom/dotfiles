@@ -1,4 +1,5 @@
 set status_display_program=/home/thomas/.cmus/status_display_program.sh
+set output_plugin=pulse
 cd /home/thomas/.cmus/
 
 # I use 'unbind' since the autosave file remembers all the bindings by default
