@@ -344,6 +344,10 @@ function returncode {
     fi
 }
 
+function regexkill {
+    kill $(ps aux | grep -P $1 | awk '{print $2}')
+}
+
 function fortune-cookie {
     box_names=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
     box_count=${#box_names[@]}
