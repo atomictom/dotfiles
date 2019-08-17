@@ -63,9 +63,12 @@ export HISTTIMEFORMAT="[%F %T] "
 # Change the file location because certain bash sessions truncate .bash_history file upon close.
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
 export HISTFILE=~/.bash_eternal_history
-# Force prompt to write history after every command.
+# Force prompt to write history after every command with -a.
+# Force prompt to read any new commands after every command with -n.
 # http://superuser.com/questions/20900/bash-history-loss
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+if ! [[ "$PROMT_COMMAND" =~ "history -a; history -n;" ]]; then
+    PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+fi
 # }}}
 
 # Looks {{{
@@ -75,7 +78,7 @@ export TERM='xterm-256color'
 eval `dircolors ~/.dircolors`
 
 # Set the prompt
-set_prompt_vars(){
+function generate_prompt {
     ret=$?
 
     # Forground Colors
@@ -126,7 +129,9 @@ set_prompt_vars(){
     export PS1="$return_code$virtualenv_name$chroot$username_host_dir$git_branch $prompt$end_prompt"
     return $ret
 }
-export PROMPT_COMMAND="set_prompt_vars"
+if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt;" ]]; then
+    export PROMPT_COMMAND="generate_prompt; $PROMPT_COMMAND"
+fi
 # }}}
 
 # Autorun Inside Screen {{{
