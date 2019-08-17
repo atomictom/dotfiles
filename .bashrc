@@ -146,11 +146,12 @@ fi
 # If this session is interactive
 case $- in
     # If we are not running inside screen
-    *i*)    if [ -z "$STY" ]; then
+    *i*)
+        if [ -z "$STY" ]; then
             # Start screen or connect to an existing session
             screen '-xR' -S main -T linux -c $first_screen
-                else
-                        export TERM='xterm-256color'
+        else
+            export TERM='xterm-256color'
         fi
         ;;
 esac
