@@ -215,6 +215,7 @@ Plugin 'pangloss/vim-javascript'
 " CSS3 highlighting
 Plugin 'hail2u/vim-css3-syntax'
 " Plugin 'gcmt/taboo.vim'
+Plugin 'w0rp/ale'
 " }}}
 
 call vundle#end()
@@ -347,6 +348,13 @@ let g:startify_custom_footer = [
     \ '',
     \ "Vim is charityware. Please read ':help uganda'."
     \ ]
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+    \   'python': [
+    \       'yapf',
+    \       'isort',
+    \   ],
+    \}
 
 let g:unite_source_history_yank_enable = 1
 call unite#custom#default_action('file', 'tabswitch')
