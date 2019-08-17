@@ -790,6 +790,7 @@ command NoRun
     \ let b:custom_make_run_command = "" |
     \ let b:custom_make_run_args = ""
 command DoRun let b:custom_make_run_command = "\"./%<\""
+command DoRunOnMakeSuccess let b:custom_make_run_command = "make && \"./%<\""
 command NoTime let b:custom_make_run_command = "\"./%<\""
 command Time let b:custom_make_run_command = "command time -v \"./%<\""
 command NoWait let b:custom_build_wait = 0
