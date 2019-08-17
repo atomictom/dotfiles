@@ -226,6 +226,9 @@ set term=xterm-256color
 set t_Co=256
 set title
 colorscheme molokai
+" Make matching brackets look a little less like the cursor jumped
+" See https://github.com/tomasr/molokai/pull/44
+highlight MatchParen ctermfg=208 ctermbg=233 cterm=bold
 " }}}
 
 " Vim Settings {{{
