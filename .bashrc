@@ -236,32 +236,32 @@ alias rrl='rm Downloads/rtorrent/.session/rtorrent.lock'
 # }}}
 
 # Functions {{{
-function files-by-size(){ find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
-function files-by-size-x(){ find $1 -xdev -type f -print0 | xargs -0 du -sh |sort -hr; }
-function copy(){ echo -n "$*" | xsel -b; }
+function files-by-size { find $1 -type f -print0 | xargs -0 du -sh |sort -hr; }
+function files-by-size-x { find $1 -xdev -type f -print0 | xargs -0 du -sh |sort -hr; }
+function copy { echo -n "$*" | xsel -b; }
 # Select File (copy path to a file to the clipboard)
-function sf(){ echo -n $(pwd)/$1 | xsel -b; }
-function sfw(){ echo -n "file://$(pwd)/$1" | xsel -b; }
-function yy(){ yes "$@" | eval "$( history 2 | head -n1 | sed -e 's/^\s*[0-9]*\s*//')" ; echo ;}
+function sf { echo -n $(pwd)/$1 | xsel -b; }
+function sfw { echo -n "file://$(pwd)/$1" | xsel -b; }
+function yy { yes "$@" | eval "$( history 2 | head -n1 | sed -e 's/^\s*[0-9]*\s*//')" ; echo ;}
 
-function capitalize(){
+function capitalize {
     for i in *; do
         mv "$i" "$(echo "${i,,}" | sed -e 's/\(-\|\s\)\(\w\)/\1\U\2/g')"
     done
 }
 
-function hr(){
+function hr {
     for i in $(seq $1); do
         echo -n '-'
     done
     echo
 }
 
-function list-ips(){
+function list-ips {
     ifconfig | grep -Pzo '(wlan|eth).*\n.*inet\s.*?\s' | sed "N; s/\s*Link.*\n\s*/'s /; s/inet addr:/ip address is: /";
 }
 
-function pyserv(){
+function pyserv {
     echo
     list-ips
     hr 40
@@ -269,7 +269,7 @@ function pyserv(){
     python -m SimpleHTTPServer
 }
 
-function search-files-from(){
+function search-files-from {
     dir=""
     if [ -d "$1" ]; then
         dir="$1"
@@ -284,19 +284,19 @@ function search-files-from(){
     done
 }
 
-function search-files(){
+function search-files {
     find -type f -print0 | while read -d $'\0' f; do
         grep "$@" "$f"
     done
 }
 
-function search-files-x(){
+function search-files-x {
     find -xdev -type f -print0 | while read -d $'\0' f; do
         grep "$@" "$f"
     done
 }
 
-function _gen-passwd(){
+function _gen-passwd {
     if [ -z "$2" ]; then
         length=20
     else
@@ -307,7 +307,7 @@ function _gen-passwd(){
     tr -dc "$1" < /dev/urandom | head -c "$length" | tee >(xsel -b)
 }
 
-function gen-passwd-alnum(){
+function gen-passwd-alnum {
     _gen-passwd '[:alnum:]' "$1"
 }
 
@@ -324,7 +324,7 @@ function returncode {
     fi
 }
 
-function fortune-cookie(){
+function fortune-cookie {
     box_names=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
     box_count=${#box_names[@]}
     box_to_use=${box_names[ (( $RANDOM % $box_count )) ]}
