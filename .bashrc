@@ -2,27 +2,10 @@
 
 # Thomas Manning's bashrc file!
 
-# Personal Stuff {{{
-source "$HOME/.bashrc.private"
-source "/usr/local/bin/virtualenvwrapper.sh"
-export GEM_HOME="$HOME/.gems"
-export GEM_PATH="$HOME/.gems:$GEM_PATH"
-export RB_USER_INSTALL='true'
-export PATH="$HOME/.gems/bin:$PATH"
-export PATH="$HOME/.cabal/bin:$PATH"
-export PATH="$HOME/.packages/racket/racket/bin:$PATH"
-export PATH="$HOME/.bin/tmp:$PATH"
-export PATH="$HOME/.bin:$PATH"
-export EDITOR=vim
-export IDLESTARTUP="$HOME/.idle.py"
-export DISPLAY=:0.0
-first_screen=~thomas/.first_screen
-# }}}
-
 # Settings {{{
 stty -ixon
 shopt -s histappend
-export PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
+shopt -s checkwinsize
 export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
 export LESS_TERMCAP_me=$'\E[0m'           # end mode
@@ -30,6 +13,45 @@ export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
 export LESS_TERMCAP_so=$'\E[38;5;016m\E[48;5;220m'    # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+
+# Personal variables
+source "$HOME/.bashrc.private"
+source "/usr/local/bin/virtualenvwrapper.sh"
+export GEM_HOME="$HOME/.gems"
+export GEM_PATH="$HOME/.gems:$GEM_PATH"
+export RB_USER_INSTALL='true'
+export GOPATH="$HOME/.golang/packages"
+export PATH="/usr/local/lib/nodejs/node-v10.16.0-linux-x64/bin:$PATH"
+export PATH="/usr/lib/go-1.10/bin:$PATH"
+export PATH="$HOME/.gems/bin:$PATH"
+export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/.packages/racket/racket/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bin/tmp:$PATH"
+export PATH="$HOME/.bin:$PATH"
+export VIMRUNTIME="/usr/local/share/vim/vim81"
+export EDITOR=vim
+export IDLESTARTUP="$HOME/.idle.py"
+export DISPLAY=:0.0
+PROMPT_COMMAND=""
+first_screen=~thomas/.first_screen
+
+# Google Cloud Stuff:
+# The next line updates PATH for the Google Cloud SDK.
+source '/home/thomas/.packages/google-cloud-sdk/path.bash.inc'
+# The next line enables shell command completion for gcloud.
+source '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc'
+export PATH="$PATH:/home/thomas/.packages/google_appengine/"
+
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
 
 # Eternal bash history.
 # ---------------------
