@@ -431,9 +431,9 @@ endfunction
 
 function RecordCursor()
     return {
-	\     'lstart': line("w0"),
-    \     'pos': getpos("."),
-	\ }
+\     'lstart': line("w0"),
+\     'pos': getpos("."),
+\ }
 endfunction
 
 function FixCursor(cursor_info)
