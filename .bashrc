@@ -357,5 +357,152 @@ function fortune-cookie {
 }
 # }}}
 
-# Source the functions in .bash_lib
-. "$HOME/.bash_lib"
+# Setup Functions {{{
+function setup-vim {
+    # Install dependencies
+    sudo apt-get install -y libncurses5-dev python2.7-dev libxtst-dev \
+                            libxt-dev libxpm-dev libsm-dev libX11-dev
+    sudo apt-get build-dep vim vim-gnome
+
+    # Download
+    cd ~/.packages
+    if ! [ -e 'vim' ]; then
+        git clone https://github.com/vim/vim.git
+    fi
+
+    # Update
+    cd ~/.packages/vim/
+    git pull
+    if [ ! "$?" ]; then
+        echo "Update failed"
+        exit 1
+    fi
+
+    # Configure
+    make distclean
+    ./configure --with-features=huge --with-lua --enable-luainterp=yes \
+                --with-x --enable-gui=auto --enable-cscope \
+                --enable-pythoninterp --enable-rubyinterp  --enable-fontset
+    if [ ! "$?" ]; then
+        echo "Configure failed"
+        exit 2
+    fi
+
+    # Build
+    make
+    if [ ! "$?" ]; then
+        echo "Build failed"
+        exit 3
+    fi
+
+    # Install
+    ln -f src/vim ~/.bin
+    if [ ! "$?" ]; then
+        echo "Install failed"
+        exit 4
+    fi
+
+    echo Vim has been successfully updated!
+}
+
+function setup-cmus {
+    # Install dependencies
+    sudo apt-get build-dep cmus
+
+    # Download
+    cd ~/.packages/
+    if ! [ -e "cmus" ]; then
+        git clone -b pu https://github.com/cmus/cmus.git
+    fi
+
+    # Update
+    cd cmus
+    git pull
+
+    # Install
+    ./configure && make && sudo make install
+}
+
+function setup-libtorrent {
+    # Install dependencies
+    sudo apt-get install libssl-dev libcppunit-dev libtool
+
+    # Download
+    cd ~/.packages/
+    if ! [ -e "libtorrent" ]; then
+        git clone https://github.com/rakshasa/libtorrent/
+    fi
+
+    # Update
+    cd libtorrent
+    git pull
+
+    # Install
+    ./autogen.sh && make && sudo make install && sudo ldconfig
+}
+
+function setup-rtorrent {
+    # Install dependencies
+    sudo apt-get build-dep rtorrent
+
+    # Download
+    cd ~/.packages/
+    if ! [ -e "rtorrent" ]; then
+        git clone https://github.com/rakshasa/rtorrent
+    fi
+
+    # Update
+    cd rtorrent
+    git pull
+
+    # Add beautiful colors
+    # cp ../patches/rtorrent-0.9.3_canvas_color.patch .
+    # patch -Nlp1 -F3 < rtorrent-0.9.3_canvas_color.patch
+
+    # Install
+    ./configure && make && sudo make install && sudo ldconfig
+}
+
+function setup-rtorrent-ps {
+    # Install dependencies
+    sudo apt-get build-dep rtorrent
+
+    # Download
+    cd ~/.packages/
+    if ! [ -e "rtorrent-ps" ]; then
+        git clone https://github.com/pyroscope/rtorrent-ps
+    fi
+
+    # Update
+    cd rtorrent-ps
+    git pull
+
+    # Install
+    ./autogen.sh && make && sudo make install && sudo ldconfig
+}
+
+function setup-linuxmint {
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get dist-upgrade
+    sudo apt-get install -y git screen htop guake cmus dos2unix apcalc idle \
+                            chromium-browser mercurial wallch gparted whois \
+                            laptop-mode-tools youtube-dl libfuse-dev tree curl \
+                            excuberant-ctags glibc-doc manpages-posix-dev \
+                            build-essential gcc make automake npm weechat \
+                            ttyrec imagemagick sl boxes xscreensaver pm-utils \
+                            hibernate uswsusp python-pip xsel ghc irssi ffmpeg \
+                            xscreensaver-gl-extra xscreensaver-data-extra \
+                            keepassx dropbox subversion detox vlc p7zip-full \
+                            cmake python-dev python3-dev
+    sudo -H pip install --upgrade pip
+    sudo -H pip install virtualenv virtualenvwrapper fusepy future
+    pip install --upgrade pip
+
+    # Build software
+    setup-vim
+    setup-cmus
+    setup-libtorrent
+    setup-rtorrent
+}
+# }}}
