@@ -91,7 +91,8 @@ Plugin 'chrisbra/improvedft'
 " Do calculations, use <Leader>cl for a line, or <Leader>ca to do a
 " calculation and put it in the default register
 Plugin 'arecarn/crunch'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Valloric/YouCompleteMe'
 " comment stuff with 'gcc' or 'gc{motion}'
 Plugin 'tomtom/tcomment_vim'
