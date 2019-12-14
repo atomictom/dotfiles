@@ -324,6 +324,7 @@ function gen-passwd-sym {
 }
 
 function write-random-data {
+    set -x
     if [[ -z "$1" ]]; then
         echo "You must specify a destination, e.g. /dev/sdc" >2
         return 127
@@ -333,6 +334,8 @@ function write-random-data {
     readonly pass="$(dd if=/dev/random bs=128 count=1 2>/dev/null | base64)"
     readonly blocksize="$(sudo blockdev --getsize64 ${dest})"
     sudo bash -c "openssl enc -aes-256-ctr -pass pass:${pass} -nosalt < /dev/zero | pv -pterb -s ${blocksize} >${dest}"
+    set +x
+    return 0
 }
 
 function returncode {
