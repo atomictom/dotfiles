@@ -1,8 +1,0 @@
-#!/bin/bash
-
-cd "/home/thomas/.cmus/"
-for f in *.pl; do
-	if [ $f != "history.pl" ]; then
-		cp -f "$f" m3u/"${f%.pl}.m3u"
-	fi
-done
