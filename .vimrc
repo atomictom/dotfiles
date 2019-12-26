@@ -1,3 +1,4 @@
+" Enable modern Vim features not compatible with Vi spec.
 set nocompatible
 syntax on
 
@@ -10,32 +11,15 @@ Plugin 'gmarik/Vundle.vim'
 " }}}
 
 " Plugins {{{
-Plugin 'jamessan/vim-gnupg'
-" Ctrl-p like functionality
-Plugin 'Shougo/unite.vim'
+
+" Quality of life plugins {{{
+" Use with alt + motion (like alt+j)
+Plugin 'Lokaltog/vim-easymotion'
 " Mostly useful for 'co{}' things for 'change option'
 " But a few encoding things and ]\[ + <space>
 Plugin 'tpope/vim-unimpaired'
-" Use with alt + motion (like alt+j)
-Plugin 'Lokaltog/vim-easymotion'
-" Use with :Open{Interpreter} (e.g. :OpenPython)
-" <Leader>e to send lines or visual selection & <c-j/k> to navigate
-Plugin 'khorser/vim-repl'
 " Don't have to do anything to use, repeats plugin commands
 Plugin 'tpope/vim-repeat'
-" Use with :MRU
-Plugin 'yegappan/mru'
-" Access through plain 'vim' in bash, provides a fancy start screen
-Plugin 'mhinz/vim-startify'
-" Multiple cursors by highlighting in visual mode and pressing <c-n>
-" <c-n> goes forward, <c-p> back, and <c-x> skips
-Plugin 'terryma/vim-multiple-cursors'
-" Use with :GundoToggle or <F3>
-Plugin 'sjl/gundo.vim'
-" Monokai is the color theme I use with vim
-Plugin 'lsdr/monokai'
-" Uses ctags and shows various tags in a 'tagbar' window, use <F8> to activate
-Plugin 'majutsushi/tagbar'
 " A set of nice defaults for vim, don't need to do anything to use
 Plugin 'tpope/vim-sensible'
 " Smartly increment/decrement (C-A, C-X) with different types
@@ -46,94 +30,217 @@ Plugin 'tpope/vim-speeddating'
 " :Subvert does :%s///, more or less (replace s with Subvert, essentially)
 " cr{s,m,c,u} does coercion to {snake_case, MixedCase, camelCase, UPPER_CASE}
 Plugin 'tpope/vim-abolish'
+" Adds 'surround' commands such as vS, cs, ds, and ys
+Plugin 'tpope/vim-surround'
+" gives 'ai', 'ii', 'iI', and 'aI' text objects for indent blocks
+Plugin 'michaeljsmith/vim-indent-object'
+" Makes the 'f' and 't' mappings work better (multiline)
+Plugin 'chrisbra/improvedft'
+" Needed for tcomment_vim
+Plugin 'tomtom/tlib_vim'
+" comment stuff with 'gcc' or 'gc{motion}'
+Plugin 'tomtom/tcomment_vim'
 " Automatically closes delimiters like quotes, braces, and parenthesis
 " You can use <s-tab> to jump out of one level of delimiters
 " and <c-g>g to jump out of all
 Plugin 'Raimondi/delimitMate'
+" Automatically highlight matching tags
+Plugin 'Valloric/MatchTagAlways'
+" Shows the diff between a 'recovered' file and what's on disk
+Plugin 'chrisbra/Recover.vim'
+" Show relative positioning in search (like: match 10/55)
+Plugin 'IndexedSearch'
+" Automatically restore file cursor position and folding information
+Plugin 'restore_view.vim'
+" }}}
+
+" Theme {{{
+" Monokai is the color theme I use with vim
+Plugin 'lsdr/monokai'
+" Makes Vim look nice
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+" Shows git diff status
+Plugin 'airblade/vim-gitgutter'
 " Alternative rainbow parenthesis
 " Use with :DoRainbowToggle
 Plugin 'kien/rainbow_parentheses.vim'
-" Automatically runs for specified filetypes (see :help)
-" Plugin 'amdt/vim-niji'
-" Automatically opens omni completetion menu
-"Plugin 'AutoComplPop'
-Plugin 'vimwiki/vimwiki'
-" Use with <Leader>di to draw stuff
-Plugin 'vim-scripts/DrawIt'
-" Also uses ctags to show a list of tags, not sure how it's different from tagbar
-" Plugin 'vim-scripts/taglist.vim'
-" Automatically does a syntax check on various filetypes when saving
-Plugin 'scrooloose/syntastic'
-" A nice filesystem browser, use <F4> to open
-Plugin 'scrooloose/nerdtree'
-" General functions for other plugins by 'xolox'
-Plugin 'xolox/vim-misc'
-" Fuzzy searching for files, buffers, and tags, use with :CtrlP
-" Plugin 'kien/ctrlp.vim'
-" C-Call-Tree...view the help to see how to use
-Plugin 'hari-rangarajan/CCTree'
-" Adds 'surround' commands such as vS, cs, ds, and ys
-Plugin 'tpope/vim-surround'
-" A git wrapper for vim
-Plugin 'tpope/vim-fugitive'
+" Use with :MRU
+Plugin 'yegappan/mru'
+" Access through plain 'vim' in bash, provides a fancy start screen
+Plugin 'mhinz/vim-startify'
+" }}}
+
+" Sidebars and Windows {{{
+" Use with :GundoToggle or <F3>
+Plugin 'sjl/gundo.vim'
 " Opens a window showing vim's undo tree, use with <F4>
 Plugin 'mbbill/undotree'
-" OpenSession and SaveSession with \s[s] (session save) \so (session open)
-Plugin 'xolox/vim-session'
-" gives 'ai', 'ii', 'iI', and 'aI' text objects for indent blocks
-Plugin 'michaeljsmith/vim-indent-object'
+" Uses ctags and shows various tags in a 'tagbar' window, use <F8> to activate
+Plugin 'majutsushi/tagbar'
+" Also uses ctags to show a list of tags, not sure how it's different from tagbar
+" Plugin 'vim-scripts/taglist.vim'
+" A nice filesystem browser, use <F4> to open
+Plugin 'scrooloose/nerdtree'
 " Use <F9> to show the yankring for previous yanks/deletes
 " Plugin 'vim-scripts/YankRing.vim'
 " Use :Yanks or (shift+)Meta+p
 Plugin 'maxbrunsfeld/vim-yankstack'
-" Makes the 'f' and 't' mappings work better (multiline)
-Plugin 'chrisbra/improvedft'
-" Do calculations, use <Leader>cl for a line, or <Leader>ca to do a
-" calculation and put it in the default register
-Plugin 'arecarn/crunch'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'Valloric/YouCompleteMe'
-" comment stuff with 'gcc' or 'gc{motion}'
-Plugin 'tomtom/tcomment_vim'
-" Needed for tcomment_vim
-Plugin 'tomtom/tlib_vim'
-" Small utilities, hides 'press Enter...' and caches some stuff?
-" Plugin 'MarcWeber/vim-addon-mw-utils'
-" For pasting snippets for code/text, use "gsm" to activate
-" Plugin 'garbas/vim-snipmate'
-" A set of common snippets for snipmate
-Plugin 'honza/vim-snippets'
-" Provides ":Gist" commands to post buffers to Github's gist
-Plugin 'mattn/gist-vim'
-" Needed for gist-vim (library for webapi functions)
-Plugin 'mattn/webapi-vim'
-" Just use with (visual)<c-c><c-c>, the first time it'll ask for config stuff
-Plugin 'jpalardy/vim-slime'
 " Shows and outline of the current file based on different arguments to the
 " initial 'Voom' call (ex. ':Voom vimwiki')
 Plugin 'vim-voom/VOoM'
-" Shows the diff between a 'recovered' file and what's on disk
-Plugin 'chrisbra/Recover.vim'
-" Shows git diff status
-Plugin 'airblade/vim-gitgutter'
-" Show relative positioning in search (like: match 10/55)
-Plugin 'IndexedSearch'
-" Slime for vim
-" Doesn't work very well right now, at least for racket
-Plugin 'kovisoft/slimv'
-" Allows executing another process outside vim I think?
-" It's a prerequisite for vimshell.vim and ghcmod-vim
-Plugin 'Shougo/vimproc.vim'
-" A shell in vimscript to be run inside vim
-" Can be run with :VimShell{Options}
-Plugin 'Shougo/vimshell.vim'
+" }}}
+
+" Automatically does a syntax check on various filetypes when saving
+" Syntax and AutoComplete {{{
+Plugin 'scrooloose/syntastic'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'w0rp/ale'
+" }}}
+
+" Vim Applications {{{
+Plugin 'vimwiki/vimwiki'
+" Use with <Leader>di to draw stuff (with arrow keys and more).
+Plugin 'vim-scripts/DrawIt'
+" Use "g=" on a selection/movement or "g==" on a line to evaluate some
+" mathematical calculation. Can use variables and works with math inside
+" comments.
+Plugin 'arecarn/crunch'
 " Easy alignment use with :Tab /{pat}/[{r,l,c}{num}]+
 " Where {pat} is what to match, r, l, and c are alignment,
 " and num is number of spaces
 Plugin 'godlygeek/tabular'
-" Automatically restore file cursor position and folding information
-Plugin 'restore_view.vim'
+" A calendar plugin that supposedly works with Google Calendar / Task
+" Plugin 'itchyny/calendar.vim'
+" A calendar plugin that supposedly works with vimwiki
+" Plugin 'mattn/calendar-vim'
+" }}}
+
+" Session management {{{
+" General functions for other plugins by 'xolox'
+Plugin 'xolox/vim-misc'
+" OpenSession and SaveSession with \s[s] (session save) \so (session open)
+Plugin 'xolox/vim-session'
+" }}}
+
+" Ctrl-P / Fuzzy search {{{
+" All of these are disabled because I currently don't really use them.
+"
+" Fuzzy searching for files, buffers, and tags, use with :CtrlP
+" Plugin 'kien/ctrlp.vim'
+" Uses ag for fast file searching (works with ctrlp??)
+" Plugin 'rking/ag.vim'
+" Faster ctrlp matching?
+" Plugin 'FelikZ/ctrlp-py-matcher'
+" Interface for showing things like files, buffers, registers, yanks, etc.
+Plugin 'Shougo/unite.vim'
+" Similar to unite.vim, but newer?
+" Plugin 'Shougo/denite.nvim'
+" }}}
+
+" Snippets {{{
+" For pasting snippets for code/text, use "gsm" to activate
+" Plugin 'garbas/vim-snipmate'
+" A set of common snippets for snipmate
+Plugin 'honza/vim-snippets'
+" Use YCM to list snips, then <c-l> to activate them and
+" <c-j/k> to navigate the snippets
+" Plugin 'SirVer/ultisnips'
+" }}}
+
+" Gist commands {{{
+" Needed for gist-vim (library for webapi functions)
+Plugin 'mattn/webapi-vim'
+" Provides ":Gist" commands to post buffers to Github's gist
+Plugin 'mattn/gist-vim'
+" }}}
+
+" Remote Execution {{{
+" Allows executing another process outside vim I think?
+" It's a prerequisite for vimshell.vim and ghcmod-vim
+Plugin 'Shougo/vimproc.vim'
+" }}}
+
+" Strange file types {{{
+" Open .pdf file with :Pdf
+Plugin 'vim-scripts/open-pdf.vim'
+Plugin 'jamessan/vim-gnupg'
+" }}}
+
+" Language Plugins {{{
+
+" Syntax and commands for go
+Plugin 'fatih/vim-go'
+
+" Syntax file for EBNF
+Plugin 'killphi/vim-ebnf'
+
+" Haskell {{{
+" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
+" highlighting, and hlint integration
+" Provides omnicomplete for haskell
+Plugin 'eagletmt/neco-ghc'
+" Call hoogle from inside vim. Use <leader>h{h,i,c} to search, get additional
+" info, or close the info box
+Plugin 'Twinside/vim-hoogle'
+Plugin 'dag/vim2hs'
+" Works with ghcmod for...ummm...type checking?
+Plugin 'eagletmt/ghcmod-vim'
+" }}}
+
+" Lisp {{{
+" 'Sane' handling of Common Lisp
+Plugin 'SaneCL'
+" Indent Lisp-y code
+Plugin 'ds26gte/scmindent'
+" Racket syntax
+Plugin 'wlangstroth/vim-racket'
+" Syntax file for hy
+Plugin 'hylang/vim-hy'
+" }}}
+
+" Python {{{
+" Python syntax
+Plugin 'hdima/python-syntax'
+" Gives Python reference for a given identifier using either <F1> or :PyRef
+Plugin 'xolox/vim-pyref'
+" }}}
+
+" C/C++ {{{
+" Switch to alternate file (.h, for .c) with :A or :AT (<Leader>alt), file under cursor with
+" <Leader>ih or <Leader>is
+Plugin 'vim-scripts/a.vim'
+" Includes a C language reference. <Leader>cr searches selected word/text, <Leader>cw prompts for what to search, <Leader>cc opens the reference
+Plugin 'vim-scripts/CRefVim'
+" C-Call-Tree...view the help to see how to use
+Plugin 'hari-rangarajan/CCTree'
+" }}}
+
+" JavaScript and Friends {{{
+" Syntax highlighting, and the like, w/ a few options that can customize it
+Plugin 'pangloss/vim-javascript'
+" Provides Tern for vim. Tern provides code analysis for javascript (might
+" need to bind some keys to leverage this)
+Plugin 'marijnh/tern_for_vim'
+" Syntax and highlighting for purescript
+Plugin 'raichoo/purescript-vim'
+" Adds coffeescript syntax and a few convenience functions for compiling,
+" running, and viewing the JS output of a coffeescript file
+Plugin 'kchmck/vim-coffee-script'
+" }}}
+
+" HTML and HTML templating languages {{{
+" Zen Coding for HTML
+Plugin 'mattn/emmet-vim'
+" HTML5 syntax and omnicomplete
+Plugin 'othree/xml.vim'
+Plugin 'othree/html5.vim'
+Plugin 'othree/html5-syntax.vim'
+" Automatically close html tags
+Plugin 'ypid/HTML-AutoCloseTag'
+" Liquid syntax highlighting for jekyll
+Plugin 'tpope/vim-liquid'
+Plugin 'mitsuhiko/vim-jinja'
 " Some commands for working with tags like HTML, XML, PHP, etc.
 " All start with <C-X>
 " <C-X><space> turn word into inline tag
@@ -146,76 +253,33 @@ Plugin 'restore_view.vim'
 "    $ -- Script
 " + Others
 Plugin 'tpope/vim-ragtag'
-" Automatically highlight matching tags
-Plugin 'Valloric/MatchTagAlways'
-" Use YCM to list snips, then <c-l> to activate them and
-" <c-j/k> to navigate the snippets
-Plugin 'SirVer/ultisnips'
-" Doesn't work yet, needs to be enabled with either a variable or with
-" :NeoCompleteEnable
-Plugin 'Shougo/neocomplete.vim'
+" }}}
+
+" CSS {{{
+" CSS3 highlighting
+Plugin 'hail2u/vim-css3-syntax'
 " Highlight css colors as the color they are
 Plugin 'gorodinskiy/vim-coloresque'
 " Plugin 'chrisbra/Colorizer'
 " Plugin 'ap/vim-css-color'
+" }}}
 
-" Language Plugins {{{
-" Syntax and highlighting for purescript
-Plugin 'raichoo/purescript-vim'
-" Liquid syntax highlighting for jekyll
-Plugin 'tpope/vim-liquid'
-Plugin 'mitsuhiko/vim-jinja'
-" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
-" highlighting, and hlint integration
-" Provides omnicomplete for haskell
-Plugin 'eagletmt/neco-ghc'
-" Call hoogle from inside vim. Use <leader>h{h,i,c} to search, get additional
-" info, or close the info box
-Plugin 'Twinside/vim-hoogle'
-Plugin 'dag/vim2hs'
-" 'Sane' handling of Common Lisp
-Plugin 'SaneCL'
-" Zen Coding for HTML
-Plugin 'mattn/emmet-vim'
-" Works with ghcmod for...ummm...type checking?
-Plugin 'eagletmt/ghcmod-vim'
-" Syntax file for hy
-Plugin 'hylang/vim-hy'
-" Provides Tern for vim. Tern provides code analysis for javascript (might
-" need to bind some keys to leverage this)
-Plugin 'marijnh/tern_for_vim'
-" HTML5 syntax and omnicomplete
-Plugin 'othree/xml.vim'
-Plugin 'othree/html5.vim'
-Plugin 'othree/html5-syntax.vim'
-" Switch to alternate file (.h, for .c) with :A or :AT (<Leader>alt), file under cursor with
-" <Leader>ih or <Leader>is
-Plugin 'vim-scripts/a.vim'
-" Syntax file for EBNF
-Plugin 'killphi/vim-ebnf'
-" Includes a C language reference. <Leader>cr searches selected word/text, <Leader>cw prompts for what to search, <Leader>cc opens the reference
-Plugin 'vim-scripts/CRefVim'
-" Gives Python reference for a given identifier using either <F1> or :PyRef
-Plugin 'xolox/vim-pyref'
-" Open .pdf file with :Pdf
-Plugin 'vim-scripts/open-pdf.vim'
-" Adds coffeescript syntax and a few convenience functions for compiling,
-" running, and viewing the JS output of a coffeescript file
-Plugin 'kchmck/vim-coffee-script'
-" Python syntax
-Plugin 'hdima/python-syntax'
-" Automatically close html tags
-Plugin 'ypid/HTML-AutoCloseTag'
-" Indent Lisp-y code
-Plugin 'ds26gte/scmindent'
-" Racket syntax
-Plugin 'wlangstroth/vim-racket'
-" Syntax highlighting, and the like, w/ a few options that can customize it
-Plugin 'pangloss/vim-javascript'
-" CSS3 highlighting
-Plugin 'hail2u/vim-css3-syntax'
-" Plugin 'gcmt/taboo.vim'
-Plugin 'w0rp/ale'
+" }}}
+
+" Disabled {{{
+
+" Just use with (visual)<c-c><c-c>, the first time it'll ask for config stuff.
+" Disabled because I don't really use it.
+" Plugin 'jpalardy/vim-slime'
+
+" Slime for vim. Doesn't work very well right now, at least for racket.
+" Disabled because I don't really use it.
+" Plugin 'kovisoft/slimv'
+
+" Provides commands for interacting with Git from Vim. Disabled because I
+" don't really use it.
+" Plugin 'tpope/vim-fugitive'
+
 " }}}
 
 call vundle#end()
@@ -265,6 +329,7 @@ setl directory=~/.vim/tmp
 setl viminfo='1000,n$HOME/.vim/files/info/viminfo
 setl sessionoptions-=options
 setl viewoptions-=options
+setl pastetoggle=<F10>
 " }}}
 
 " Plugin Settings {{{
@@ -358,20 +423,6 @@ let g:ale_fixers = {
     \       'isort',
     \   ],
     \}
-
-let g:unite_source_history_yank_enable = 1
-call unite#custom#default_action('file', 'tabswitch')
-call unite#custom#profile('default', 'context', {
-    \ 'direction': 'botright',
-    \ })
-call unite#filters#matcher_default#use([
-    \ 'matcher_fuzzy',
-    \ 'matcher_project_ignore_files',
-    \ ])
-call unite#filters#sorter_default#use([
-    \ 'sorter_selecta',
-    \ 'sorter_ftimea',
-    \ ])
 " }}}
 
 " Functions {{{
@@ -379,6 +430,11 @@ call unite#filters#sorter_default#use([
 " A function to customize YankRing
 function! YRRunAfterMaps()
     nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
+endfunction
+
+function! ExecuteMacroOverVisualRange()
+  echo "@".getcmdline()
+  execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
 function s:DoRainbowParenthesis()
@@ -494,6 +550,7 @@ augroup vimrc
     autocmd FileType racket call s:RacketAutocommands()
     autocmd FileType scheme call s:SchemeAutocommands()
     autocmd FileType prolog call s:PrologAutocommands()
+    autocmd FileType go call s:GoAutocommands()
     " autocmd FileType htmljinja setf htmljinja.html
     autocmd FileType liquid setf liquid.html
 augroup END
@@ -672,6 +729,9 @@ function s:SchemeAutocommands()
         let b:delimitMate_quotes = "\" ` *"
 endfunction
 
+function s:GoAutocommands()
+endfunction
+
 function s:PrologAutocommands()
     NoWait
     PrologRun
@@ -810,8 +870,6 @@ noremap <Leader>o o<Esc>
 noremap <Leader>O O<Esc>
 " Appends some text to any number of lines
 noremap <Leader>a :normal A
-noremap <Leader>mc :MultipleCursorsFind<space>
-noremap <Leader>calc :Crunch<CR>
 noremap <Leader>y :YcmRestartServer<CR>
 " Put ='s under previous line with same length
 noremap <Leader>1 yypVr=
@@ -831,6 +889,8 @@ nnoremap <Leader>l :ReloadFiles<CR>
 inoremap <Leader>l <C-O>:ReloadFiles<CR>
 noremap <Leader>" :CopyRegister<space>
 noremap <Leader>"a :CopyRegister a<CR>
+xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+
 " }}}
 
 " EasyMotion mappings {{{
@@ -938,7 +998,6 @@ cmap w!! %!sudo tee > /dev/null %
 
 " Tab mappings {{{
 noremap <Leader>t :tabnew<space>
-noremap <Leader>v :tabnew ~/.vimrc<CR>
 " Move between tabs
 noremap <M-Right> gt
 noremap <M-Left> gT
