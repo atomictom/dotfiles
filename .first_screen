@@ -4,6 +4,7 @@ source ~thomas/.screenrc
 
 screen -t music bash -c 'cmus; bash'
 screen -t rtorrent bash -c 'rtorrent; bash'
+screen -t weechat bash -c 'weechat; bash'
 screen -t vimwiki bash -c 'vim; bash'
 
 select 0
