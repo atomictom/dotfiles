@@ -2,6 +2,12 @@
 
 # Thomas Manning's bashrc file!
 
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # Settings {{{
 stty -ixon
 shopt -s histappend
@@ -14,15 +20,27 @@ export LESS_TERMCAP_so=$'\E[38;5;016m\E[48;5;220m'    # begin standout-mode - in
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
+# Source some helper scripts
+if [[ -e "$HOME/.bashrc.private" ]]; then
+    source "$HOME/.bashrc.private"
+fi
+
+if [[ -e "$HOME/.bashrc.setup" ]]; then
+    source "$HOME/.bashrc.setup"
+fi
+
+if [[ -e "/usr/local/bin/virtualenvwrapper.sh" ]]; then
+    source "/usr/local/bin/virtualenvwrapper.sh"
+fi
+
 # Personal variables
-source "$HOME/.bashrc.private"
-source "/usr/local/bin/virtualenvwrapper.sh"
+# This should be filled in by setup-vimruntime (from Vim source)
+export VIMRUNTIME="/usr/share/vim/runtime"
 export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
 export RB_USER_INSTALL='true'
 export GOPATH="$HOME/.golang/packages"
-export PATH="/usr/local/lib/nodejs/node-v10.16.0-linux-x64/bin:$PATH"
-export PATH="/usr/lib/go-1.10/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.packages/racket/racket/bin:$PATH"
@@ -30,18 +48,23 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
-export VIMRUNTIME="/usr/local/share/vim/vim81"
 export EDITOR=vim
 export IDLESTARTUP="$HOME/.idle.py"
 export DISPLAY=:0.0
 PROMPT_COMMAND=""
-first_screen=~thomas/.first_screen
+first_screen="$HOME/.first_screen"
 
 # Google Cloud Stuff:
 # The next line updates PATH for the Google Cloud SDK.
-source '/home/thomas/.packages/google-cloud-sdk/path.bash.inc'
+if [[ -e '/home/thomas/.packages/google-cloud-sdk/path.bash.inc' ]]; then
+    source '/home/thomas/.packages/google-cloud-sdk/path.bash.inc'
+fi
+
 # The next line enables shell command completion for gcloud.
-source '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc'
+if [[ -e '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc' ]]; then
+    source '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc'
+fi
+
 export PATH="$PATH:/home/thomas/.packages/google_appengine/"
 
 # enable bash completion in interactive shells
@@ -66,16 +89,54 @@ export HISTFILE=~/.bash_eternal_history
 # Force prompt to write history after every command with -a.
 # Force prompt to read any new commands after every command with -n.
 # http://superuser.com/questions/20900/bash-history-loss
-if ! [[ "$PROMT_COMMAND" =~ "history -a; history -n;" ]]; then
-    PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+function reload_history {
+    history -a
+    history -c
+    history -r
+}
+if ! [[ "$PROMT_COMMAND" =~ "reload_history" ]]; then
+    precmd_functions+=(reload_history)
+    PROMPT_COMMAND="reload_history; $PROMPT_COMMAND"
 fi
 # }}}
 
 # Looks {{{
-export TERM='xterm-256color'
-
 # Customize the ls colors
 eval `dircolors ~/.dircolors`
+
+# Set the prompt
+function wrap {
+    prompt_path_wrap=$1
+}
+wrap 50
+
+function promptstyle {
+    prompt_ps1_style=$1
+}
+promptstyle 0
+
+function screenautoname {
+    screen_auto_name=$1
+}
+screenautoname 1
+
+function toggleprompt {
+    if [ "$prompt_ps1_style" -eq 1 ]; then
+        prompt_ps1_style=0
+    else
+        prompt_ps1_style=1
+    fi
+}
+alias tp='toggleprompt'
+
+function toggleautoname {
+    if [ "$screen_auto_name" -eq 1 ]; then
+        screen_auto_name=0
+    else
+        screen_auto_name=1
+    fi
+}
+alias ta='toggleautoname'
 
 # Set the prompt
 function generate_prompt {
@@ -94,16 +155,19 @@ function generate_prompt {
     # Attributes
     bold="\[$(tput bold)\]"
     dim="\[$(tput sgr0)\]"
+    local unmodify_color='\[\033[0;00m\]'
 
-    # Exit will set the return code for $(returncode) to read
-    # Without this, returncode will return the status of the line before it
+    # Exit will set the return code for $(returncode) to read.  Without this,
+    # returncode will return the status of the line before it
     $(exit $ret)
     local return_code="$dim$red"$(returncode)
+
     if [ -z "$VIRTUAL_ENV" ]; then
         local virtualenv_name=""
     else
         local virtualenv_name="$bold$green($(basename "$VIRTUAL_ENV"))"
     fi
+
     if git rev-parse --git-dir >/dev/null 2>&1; then
         if ! git diff-index --quiet --cached HEAD 2>/dev/null || ! git diff-files --quiet; then
             local git_branch_color="$dim$red"
@@ -114,19 +178,52 @@ function generate_prompt {
         fi
     fi
     local git_branch="$git_branch_color"$(__git_ps1|tr -d " ")
+    if ! [[ -z "$git_branch" ]]; then
+        local git_branch=" $git_branch"
+    fi
+
+    local datetime="$dim$cyan$(date +'[%H:%M:%S %d/%m/%y]')"
+
     local chroot="$dim$magenta"${debian_chroot:+($debian_chroot)}
+
     if [[ ${EUID} == 0 ]] ; then # If root
+        local username_host="$bold$red\h"
+        local dir="$bold$blue \W"
         local username_host_dir="$bold$red\h$bold$blue \W"
         local prompt="$dim$cyan\$ "
     else
+        local username_host="$dim$magenta\u@\h"
+        local dir="$bold$cyan\w"
         local username_host_dir="$dim$magenta\u@\h$dim$white:$dim$cyan\w"
         local prompt="$dim$cyan> "
     fi
-    local unmodify_color='\[\033[0;00m\]'
-    local screen_hack='\[\033k\033\\\]'
+
+    # Put screen hack to set the screen name to the program in if we're running
+    # in screen and it's enabled
+    if [[ -z "$STY" ]] || [[ "$screen_auto_name" -eq 0 ]]; then
+        local screen_hack=''
+    else
+        local screen_hack='\[\033k\033\\\]'
+    fi
+
     local end_prompt=$unmodify_color$screen_hack
 
-    export PS1="$return_code$virtualenv_name$chroot$username_host_dir$git_branch $prompt$end_prompt"
+    # Single line style (with wrapping).
+    local prelude="$return_code$virtualenv_name$chroot$username_host_dir$git_branch"
+    if expr \( length "$directory" \) \> $prompt_path_wrap > /dev/null 2>&1; then
+        export PS1="$prelude \n-- $prompt$end_prompt"
+    else
+        export PS1="$prelude$prompt$end_prompt"
+    fi
+
+    # Two line style
+    if [ "$prompt_ps1_style" -eq 1 ]; then
+        local directory="$(pwd)"
+        local directory="${directory/$HOME/\~}"
+        local directory="$bold$cyan$directory"
+        export PS1="$return_code$virtualenv_name$chroot$directory$git_branch$dim$white:$username_host\n$datetime $prompt$end_prompt"
+    fi
+
     return $ret
 }
 if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt;" ]]; then
@@ -143,21 +240,19 @@ if [ ! -e "$first_screen" ]; then
     fi
 fi
 
-# If this session is interactive
-case $- in
-    # If we are not running inside screen
-    *i*)
-        if [ -z "$STY" ]; then
-            # Start screen or connect to an existing session
-            screen '-xR' -S main -T linux -c $first_screen
-        else
-            export TERM='xterm-256color'
-        fi
-        ;;
-esac
+# If we are not running inside screen
+if [ -z "$STY" ]; then
+    export TERM='xterm-256color'
+    # Start screen or connect to an existing session
+    # screen '-xR' -S main -T linux -c $first_screen
+else
+    export TERM='screen-256color'
+fi
 # }}}
 
 # Aliases {{{
+alias irssi='TERM=screen-256color irssi'
+alias weechat='TERM=screen-256color weechat'
 alias lla='ls -la'
 alias ll='ls -l'
 alias la='ls -a'
@@ -175,13 +270,13 @@ alias next='cmus-remote -C "player-next"'
 alias cux='chmod u+x'
 alias less='less -r'
 alias fbs="files-by-size"
-alias a='sudo apt-get '
-alias sag='sudo apt-get '
-alias u='sudo apt-get update '
-alias apt='sudo apt-get '
-alias sagu='sudo apt-get update '
-alias i='sudo apt-get install '
-alias sagi='sudo apt-get install '
+alias a='sudo apt '
+alias sag='sudo apt '
+alias u='sudo apt update '
+alias apt='sudo apt '
+alias sagu='sudo apt update '
+alias i='sudo apt install '
+alias sagi='sudo apt install '
 alias acs='apt-cache show '
 alias s='apt-cache show '
 alias idle='idle-python2.7 -s &'
@@ -357,155 +452,5 @@ function fortune-cookie {
     box_to_use=${box_names[ (( $RANDOM % $box_count )) ]}
     fortune | boxes -d $box_to_use
     #echo $box_to_use
-}
-# }}}
-
-# Setup Functions {{{
-function setup-vim {
-    # Install dependencies
-    sudo apt-get install -y libncurses5-dev python2.7-dev libxtst-dev \
-                            libxt-dev libxpm-dev libsm-dev libX11-dev
-    sudo apt-get build-dep vim vim-gnome
-
-    # Download
-    cd ~/.packages
-    if ! [ -e 'vim' ]; then
-        git clone https://github.com/vim/vim.git
-    fi
-
-    # Update
-    cd ~/.packages/vim/
-    git pull
-    if [ ! "$?" ]; then
-        echo "Update failed"
-        exit 1
-    fi
-
-    # Configure
-    make distclean
-    ./configure --with-features=huge --with-lua --enable-luainterp=yes \
-                --with-x --enable-gui=auto --enable-cscope \
-                --enable-pythoninterp --enable-rubyinterp  --enable-fontset
-    if [ ! "$?" ]; then
-        echo "Configure failed"
-        exit 2
-    fi
-
-    # Build
-    make
-    if [ ! "$?" ]; then
-        echo "Build failed"
-        exit 3
-    fi
-
-    # Install
-    ln -f src/vim ~/.bin
-    if [ ! "$?" ]; then
-        echo "Install failed"
-        exit 4
-    fi
-
-    echo Vim has been successfully updated!
-}
-
-function setup-cmus {
-    # Install dependencies
-    sudo apt-get build-dep cmus
-
-    # Download
-    cd ~/.packages/
-    if ! [ -e "cmus" ]; then
-        git clone -b pu https://github.com/cmus/cmus.git
-    fi
-
-    # Update
-    cd cmus
-    git pull
-
-    # Install
-    ./configure && make && sudo make install
-}
-
-function setup-libtorrent {
-    # Install dependencies
-    sudo apt-get install libssl-dev libcppunit-dev libtool
-
-    # Download
-    cd ~/.packages/
-    if ! [ -e "libtorrent" ]; then
-        git clone https://github.com/rakshasa/libtorrent/
-    fi
-
-    # Update
-    cd libtorrent
-    git pull
-
-    # Install
-    ./autogen.sh && make && sudo make install && sudo ldconfig
-}
-
-function setup-rtorrent {
-    # Install dependencies
-    sudo apt-get build-dep rtorrent
-
-    # Download
-    cd ~/.packages/
-    if ! [ -e "rtorrent" ]; then
-        git clone https://github.com/rakshasa/rtorrent
-    fi
-
-    # Update
-    cd rtorrent
-    git pull
-
-    # Add beautiful colors
-    # cp ../patches/rtorrent-0.9.3_canvas_color.patch .
-    # patch -Nlp1 -F3 < rtorrent-0.9.3_canvas_color.patch
-
-    # Install
-    ./configure && make && sudo make install && sudo ldconfig
-}
-
-function setup-rtorrent-ps {
-    # Install dependencies
-    sudo apt-get build-dep rtorrent
-
-    # Download
-    cd ~/.packages/
-    if ! [ -e "rtorrent-ps" ]; then
-        git clone https://github.com/pyroscope/rtorrent-ps
-    fi
-
-    # Update
-    cd rtorrent-ps
-    git pull
-
-    # Install
-    ./autogen.sh && make && sudo make install && sudo ldconfig
-}
-
-function setup-linuxmint {
-    sudo apt-get update
-    sudo apt-get upgrade
-    sudo apt-get dist-upgrade
-    sudo apt-get install -y git screen htop guake cmus dos2unix apcalc idle \
-                            chromium-browser mercurial wallch gparted whois \
-                            laptop-mode-tools youtube-dl libfuse-dev tree curl \
-                            excuberant-ctags glibc-doc manpages-posix-dev \
-                            build-essential gcc make automake npm weechat \
-                            ttyrec imagemagick sl boxes xscreensaver pm-utils \
-                            hibernate uswsusp python-pip xsel ghc irssi ffmpeg \
-                            xscreensaver-gl-extra xscreensaver-data-extra \
-                            keepassx dropbox subversion detox vlc p7zip-full \
-                            cmake python-dev python3-dev
-    sudo -H pip install --upgrade pip
-    sudo -H pip install virtualenv virtualenvwrapper fusepy future
-    pip install --upgrade pip
-
-    # Build software
-    setup-vim
-    setup-cmus
-    setup-libtorrent
-    setup-rtorrent
 }
 # }}}
