@@ -7,10 +7,16 @@
 # 5 - Purple
 # 6 - Light Blue
 # 7 - White
-# done_fg_color = 4 # -- deprecated by new rtorrent?
-#done_bg_color = 2
-# active_fg_color = 1 # -- deprecated by new rtorrent?
-#active_bg_color = 4
+
+# Color patch needs to be applied (see .bashrc.setup).
+color_dead_fg = 1
+color_dead_bg = 0
+color_inactive_fg = 3
+color_inactive_bg = 0
+color_finished_fg = 6
+color_finished_bg = 0
+color_active_fg = 5
+color_active_bg = 0
 
 # ------------------------------------------------------------------------------
 
