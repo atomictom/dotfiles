@@ -17,10 +17,15 @@ fi
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+        . "$HOME/.bashrc"
     fi
 fi
 
 export STEAM_FRAME_FORCE_CLOSE=1
-export EDITOR=vim
-export IDLESTARTUP="$HOME/.idle.py"
+
+# Disable some keys (to save my pinkies).
+# I obtained the keycode with `xev -event keyboard`
+xmodmap -e 'keycode 62='  # Shift_R
+# xmodmap -e 'keycode 37='  # Control_L
+xmodmap -e 'keycode 105=' # Control_R
+# Undo the overrides with `setxkbmap`
