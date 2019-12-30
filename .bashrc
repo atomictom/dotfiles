@@ -20,6 +20,14 @@ export LESS_TERMCAP_so=$'\E[38;5;016m\E[48;5;220m'    # begin standout-mode - in
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
+# Note: All of the below are specified in .profile instead to make bash startup
+# faster: Disable some keys (to save my pinkies).
+# I obtained the keycode with `xev -event keyboard`
+# xmodmap -e 'keycode 62='  # Shift_R
+# xmodmap -e 'keycode 37='  # Control_L
+# xmodmap -e 'keycode 105=' # Control_R
+# Undo the overrides with `setxkbmap`
+
 # Source some helper scripts
 if [[ -e "$HOME/.bashrc.private" ]]; then
     source "$HOME/.bashrc.private"
