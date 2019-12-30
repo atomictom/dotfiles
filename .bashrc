@@ -60,7 +60,6 @@ export EDITOR=vim
 export IDLESTARTUP="$HOME/.idle.py"
 export DISPLAY=:0.0
 PROMPT_COMMAND=""
-first_screen="$HOME/.first_screen"
 
 # Google Cloud Stuff:
 # The next line updates PATH for the Google Cloud SDK.
@@ -239,7 +238,8 @@ if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt;" ]]; then
 fi
 # }}}
 
-# Autorun Inside Screen {{{
+# Start first screen session {{{
+first_screen="$HOME/.first_screen"
 if [ ! -e "$first_screen" ]; then
     if [ -e "$HOME/.screenrc" ]; then
         first_screen="$HOME/.screenrc"
@@ -248,11 +248,23 @@ if [ ! -e "$first_screen" ]; then
     fi
 fi
 
+# Convenience to make the first screen session based on $first_screen, but then
+# all subsequent screens normally.
+function screen {
+    if [[ $($(which screen) -ls) =~ "No Sockets" ]]; then
+        $(which screen) '-xR' -S main -T linux -c $first_screen
+    else
+        $(which screen)
+    fi
+}
+# }}}
+
+# Autorun Inside Screen {{{
 # If we are not running inside screen
 if [ -z "$STY" ]; then
     export TERM='xterm-256color'
     # Start screen or connect to an existing session
-    # screen '-xR' -S main -T linux -c $first_screen
+    # $(which screen) '-xR' -S main -T linux -c $first_screen
 else
     export TERM='screen-256color'
 fi
