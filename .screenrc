@@ -1,6 +1,7 @@
 defscrollback 50000
 
 term "screen-256color"
+truecolor on # I think this needs a newer version (5?) :\
 
 attrcolor b ".I"    # allow bold colors - necessary for some reason
 ## tell screen how to set colors. AB = background, AF=foreground
@@ -34,3 +35,4 @@ bindkey "^[[1;5D" prev  # change window with ctrl-left
 bindkey "^[[C" next
 bindkey "^[[1;5C" next  # change window with ctrl-right
 
+startup_message off
