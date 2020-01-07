@@ -220,11 +220,12 @@ Plug 'dhruvasagar/vim-zoom'
 
 " Syntax and AutoComplete {{{
 " Automatically does a syntax check on various filetypes when saving
-Plug 'scrooloose/syntastic'
-" Semantic autocompletion.
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --clang-completer --cs-completer --go-completer --ts-completer --rust-completer --java-completer' }
+" Plug 'scrooloose/syntastic'
 " Same as syntastic, but async. The plan is to move entirely to Ale.
 Plug 'dense-analysis/ale'
+" Semantic autocompletion.
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --clang-completer --cs-completer --go-completer --ts-completer --rust-completer --java-completer' }
 " }}}
 
 " Vim Applications {{{
@@ -642,10 +643,16 @@ let g:startify_custom_footer = [
     \ '',
     \ "Vim is charityware. Please read ':help uganda'."
     \ ]
-" I'm not sure about this, just saw it on the interwebs but never tried it.
-" let g:ale_completion_enabled = 1
+let g:vista_default_executive = 'ale'
+" let g:vista#renderer#enable_icon = 1
+" Open a preview window when the cursor is on a line with an error.
+" let g:ale_cursor_detail = 1
 let g:ale_sign_error = "✗"
+let g:ycm_error_symbol = "✗"
 let g:ale_sign_warning = "⚠"
+let g:ycm_warning_symbol = "⚠"
+let g:ale_sign_style_error = "😠"
+let g:ale_sign_style_warning = "😡"
 let g:ale_linters = {'rust': ['rls']}
 let g:ale_fixers = {
     \ 'rust': [
@@ -1183,12 +1190,15 @@ map g] /^$<CR><c-o><Plug>(easymotion-bd-n)
 noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
 noremap <Leader>nw :NoWait<CR>
 noremap <Leader>yw :Wait<CR>
-noremap <Leader>n :lnext<CR>
-noremap <Leader>N :lprevious<CR>
 noremap <leader>er :Errors<CR>
 noremap <leader>hh :Hoogle<space>
 noremap <leader>hi :HoogleInfo<space>
 noremap <leader>hc :HoogleClose<CR>
+" }}}
+
+" Location list mappings {{{
+noremap ]g <esc>:lnext<CR>
+noremap [g <esc>:lprevious<CR>
 " }}}
 
 " External Filter mappings {{{
@@ -1276,12 +1286,6 @@ omap ia <Plug>SidewaysArgumentTextobjI
 xmap ia <Plug>SidewaysArgumentTextobjI
 " }}}
 
-" ALE mappings {{{
-noremap gd <Esc>:ALEGoToDefinition<CR>
-noremap gr <Esc>:ALEFindReferences<CR>
-noremap gs <Esc>:ALESymbolSearch<CR>
-" }}}
-
 " Signify mappings {{{
 " This adds a text object which allows selecting some arbitrary block
 " surrounded by some char or bracket-type.
@@ -1325,6 +1329,124 @@ omap id <plug>(signify-motion-inner-pending)
 xmap id <plug>(signify-motion-inner-visual)
 omap ad <plug>(signify-motion-outer-pending)
 xmap ad <plug>(signify-motion-outer-visual)
+" }}}
+
+function! PlugLoaded(name)
+    return (
+        \ has_key(g:plugs, a:name) &&
+        \ isdirectory(g:plugs[a:name].dir))
+endfunction
+
+if PlugLoaded('coc.nvim')
+
+" CoC mappings {{{
+    function! s:is_previous_char_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    " Use <c-j> and <c-k> for trigger navigation. It only "activates" with the
+    " completion menu is active, otherwise it defaults to whatever else <c-j> and
+    " <c-k> are supposed to do.
+    imap <silent><expr> <c-j>
+          \ pumvisible() ? "\<c-n>" :
+          \ <SID>is_previous_char_space() ? "\<c-j>" :
+          \ coc#refresh()
+    imap <expr><c-k> pumvisible() ? "\<c-p>" : "\<c-k>"
+
+    " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+    " Coc only does snippet and additional edit on confirm.
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    " Or use `complete_info` if your vim support it, like:
+    " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    " Use `[g` and `]g` to navigate diagnostics
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+    " Remap keys for gotos
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    " Use K to show documentation in preview window
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+    " Remap for rename current word
+    nmap <leader>rn <Plug>(coc-rename)
+
+    augroup cocgroup
+      autocmd!
+      " Setup formatexpr specified filetype(s).
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+      " Update signature help on jump placeholder
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
+
+    " Create mappings for function text object, requires document symbols feature of languageserver.
+    xmap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap if <Plug>(coc-funcobj-i)
+    omap af <Plug>(coc-funcobj-a)
+
+    " Use <TAB> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+    nmap <silent> <TAB> <Plug>(coc-range-select)
+    xmap <silent> <TAB> <Plug>(coc-range-select)
+
+    xmap <leader>action <Plug>(coc-codeaction-selected)
+    nmap <leader>action <Plug>(coc-codeaction-selected)
+    nmap <leader>action <Plug>(coc-codeaction)
+    nmap <leader>fix <Plug>(coc-fix-current)
+    nnoremap <leader>gq :call CocAction('format')<cr>
+    xmap <leader>gq <Plug>(coc-format-selected)
+    nmap <leader>gq <Plug>(coc-format-selected)
+    nnoremap <leader>format :call CocAction('format')<cr>
+    xmap <leader>format <Plug>(coc-format-selected)
+    nmap <leader>format <Plug>(coc-format-selected)
+    nnoremap <leader>fold :call CocAction('fold')<cr>
+    nnoremap <leader>imports :call CocAction('runCommand', 'editor.action.organizeImport')<cr>
+
+    " Add status line support, for integration with other plugin, checkout `:h coc-status`
+    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" }}}
+
+else
+
+    set statusline+=%{NearestMethodOrFunction()}
+" YCM mappings {{{
+    nnoremap go :YcmCompleter GoTo<cr>
+    nnoremap gd :YcmCompleter GoToDefinition<cr>
+    nnoremap g1 :YcmCompleter GoToDeclaration<cr>
+    nnoremap gy :YcmCompleter GoToType<cr>
+    nnoremap gi :YcmCompleter GoToImplementation<cr>
+    nnoremap gr :YcmCompleter GoToReferences<cr>
+    nnoremap gv :YcmCompleter GetType<cr>
+    nnoremap gh :YcmCompleter GetDoc<cr>
+
+    nnoremap K :YcmCompleter GetDoc<cr>
+    nnoremap L :YcmCompleter GetType<cr>
+
+    nmap <leader>rn :YcmCompleter RefactorRename<space><c-r><c-w>
+
+    nnoremap <Leader>fix :<C-u>YcmCompleter FixIt<cr>
+    nnoremap <Leader>format :YcmCompleter Format<cr>
+    nnoremap <Leader>imports :<C-u>YcmCompleter OrganizeImports<cr>
+" }}}
+
+endif
+
+" ALE mappings {{{
+nnoremap gh :ALEHover<CR>
+nnoremap gs :ALESymbolSearch<space><c-r><c-w><CR>
 " }}}
 
 " Pasting Mappings {{{
