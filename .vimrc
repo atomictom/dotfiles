@@ -147,8 +147,6 @@ Plug 'RRethy/vim-illuminate'
 " Highlight css (and other?) colors as the color they are. Automatic for CSS
 " and HTML (see settings below), but can be enabled via {y,c}ok (k for kolor).
 Plug 'chrisbra/Colorizer'
-" Automatically highlight matching tags
-Plug 'Valloric/MatchTagAlways'
 " Use with :DoRainbowToggle
 Plug 'kien/rainbow_parentheses.vim'
 " Press - to give the current identifier a random highlight and _ to clear it
@@ -382,6 +380,8 @@ Plug 'kchmck/vim-coffee-script'
 " }}}
 
 " HTML and HTML templating languages {{{
+" Automatically highlight matching tags
+Plug 'Valloric/MatchTagAlways'
 " Zen Coding for HTML
 Plug 'mattn/emmet-vim'
 " HTML5 syntax and omnicomplete
