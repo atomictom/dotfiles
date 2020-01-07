@@ -137,8 +137,6 @@ Plug 'vim-airline/vim-airline-themes'
 " Plug 'cadadr/vim-sunflower'
 " Smooth scrolling
 Plug 'psliwka/vim-smoothie'
-" Show relative positioning in search (like: match 10/55)
-Plug 'vim-scripts/IndexedSearch'
 " Make indentation levels when using spaces more obvious
 Plug 'Yggdroot/indentLine'
 " }}}
@@ -482,6 +480,8 @@ setl viewoptions-=options
 setl pastetoggle=<F10>
 " More aggressive updating for with async updates in vim8
 setl updatetime=100
+" Show the index of the search (i.e. X/Total).
+setl shortmess-=S
 " }}}
 
 " Plugin Settings {{{
