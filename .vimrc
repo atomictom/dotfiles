@@ -505,6 +505,9 @@ let g:hardtime_timeout = 1000
 let g:list_of_normal_keys = ["h", "j", "k", "l", "gj", "gk", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_visual_keys = ["h", "j", "k", "l", "gj", "gk", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+" Don't hide closing brackets after pressing <CR>, but make it so dot-repeat
+" is broken.
+let g:pear_tree_repeatable_expand = 0
 let g:pear_tree_pairs = {
     \ '<!--': {'closer': ' -->'},
     \ '/\*': {'closer': '\*/'},
@@ -886,6 +889,7 @@ endfunction
 function s:VimwikiAutocommands()
     nnoremap j gj
     nnoremap k gk
+    setl expandtab
     setl shiftwidth=4
     setl tabstop=4
     setl linebreak
@@ -1182,6 +1186,8 @@ map zs <Plug>(easymotion-s2)
 
 map g} /^$<CR><c-o><Plug>(easymotion-bd-n)
 map g] /^$<CR><c-o><Plug>(easymotion-bd-n)
+map g[ /^$<CR><c-o><Plug>(easymotion-bd-n)
+map g{ /^$<CR><c-o><Plug>(easymotion-bd-n)
 " }}}
 
 " Build mappings {{{
@@ -1224,6 +1230,7 @@ noremap <F4> :NERDTreeToggle<CR>
 noremap <F5> :call g:CustomBuild()<CR>
 inoremap <F5> <C-O>:call g:CustomBuild({})<CR>
 noremap <F6> :w " . <q-args> . "/%:t<CR>
+noremap <F7> :Vista!!<CR>
 noremap <F8> :TagbarToggle<CR>
 " noremap <F9> :YRShow<CR>
 noremap <F9> :Yanks<CR>
