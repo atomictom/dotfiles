@@ -280,13 +280,12 @@ Plug 'xolox/vim-session'
 " }}}
 
 " Snippets {{{
-" For pasting snippets for code/text, use "gsm" to activate
-" Plug 'garbas/vim-snipmate'
-" A set of common snippets for snipmate
+" A set of common snippets for UltiSnip.
 Plug 'honza/vim-snippets'
-" Use YCM to list snips, then <c-l> to activate them and
-" <c-j/k> to navigate the snippets
-" Plug 'SirVer/ultisnips'
+" Use YCM to list snips, then <c-l> to activate them and <c-j/k> to navigate
+" the snippets. Disabled because it appears broken (Unknown function:
+" "UltiSnips#TrackChange").
+Plug 'SirVer/ultisnips'
 " }}}
 
 " Gist commands {{{
@@ -593,7 +592,7 @@ let g:ragtag_global_maps = 1
 let g:niji_matching_filetypes = ['lisp', 'scheme', 'racket', 'clojure', 'hy', 'haskell']
 let g:haskellmode_completion_ghc = 0
 let g:UltiSnipsExpandTrigger = "<c-l>"
-let g:UltiSnipsListSnippets = "<Leader>u"
+let g:UltiSnipsListSnippets = "<Leader>snip"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 let g:ycm_server_keep_logfiles = 1
