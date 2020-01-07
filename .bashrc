@@ -271,6 +271,8 @@ fi
 # }}}
 
 # Aliases {{{
+alias vhere='vim +"e ."'
+alias vimwiki='vim +VimwikiIndex'
 alias irssi='TERM=screen-256color irssi'
 alias weechat='TERM=screen-256color weechat'
 alias lla='ls -la'
