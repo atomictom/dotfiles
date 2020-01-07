@@ -198,10 +198,11 @@ Plug 'simnalamburt/vim-mundo'
 " Plug 'mbbill/undotree'
 " Uses ctags and shows various tags in a 'tagbar' window, use <F8> to activate
 Plug 'majutsushi/tagbar'
+Plug 'liuchengxu/vista.vim'
 " Also uses ctags to show a list of tags, not sure how it's different from tagbar
 " Plug 'vim-scripts/taglist.vim'
 " A nice filesystem browser, use <F4> to open
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
 " Use :YRShow (<F9>) to show the yankring for previous yanks/deletes. Press \p
 " and \P to move through previous entries after pasting something.
 " Disabled because it doesn't play nice with other plugins. It remaps a ton of
