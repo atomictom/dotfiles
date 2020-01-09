@@ -275,7 +275,6 @@ fi
 
 # Aliases {{{
 alias ofzf='o $(fzf)'
-alias vfzf='vim $(fzf)'
 alias vhere='vim +"e ."'
 alias vimwiki='vim +VimwikiIndex'
 alias irssi='TERM=screen-256color irssi'
@@ -498,4 +497,36 @@ function fortune-cookie {
     fortune | boxes -d $box_to_use
     #echo $box_to_use
 }
+
+fo() {
+    local key
+    local out
+    local file
+
+    readarray -d $'\0' -t out < <(fzf --exit-0 --multi --print0 --expect=ctrl-o,ctrl-e,ctrl-l,ctrl-v)
+    # IFS=$'\n' out=($(fzf --exit-0 --multi --expect=ctrl-o,ctrl-e,ctrl-l,ctrl-v))
+    key="${out[0]}"
+    file="${out[1]}"
+
+    if [[ -n "${file}" ]] ; then
+        cmd="echo ${file}"
+        case "${key}" in
+            ctrl-o)
+                cmd="xdg-open ${file}"
+                ;;
+            ctrl-l)
+                cmd="less ${file}"
+                ;;
+            ctrl-v)
+                cmd="vim -- ${file}"
+                ;;
+            ctrl-e)
+                cmd="${EDITOR} ${file}"
+                ;;
+        esac
+        history -s "${cmd}"
+        eval ${cmd}
+    fi
+}
+
 # }}}

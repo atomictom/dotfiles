@@ -1428,7 +1428,6 @@ else
     nnoremap gy :YcmCompleter GoToType<cr>
     nnoremap gi :YcmCompleter GoToImplementation<cr>
     nnoremap gr :YcmCompleter GoToReferences<cr>
-    nnoremap gv :YcmCompleter GetType<cr>
     nnoremap gh :YcmCompleter GetDoc<cr>
 
     nnoremap K :YcmCompleter GetDoc<cr>
