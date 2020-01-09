@@ -275,6 +275,7 @@ fi
 
 # Aliases {{{
 alias ofzf='o $(fzf)'
+alias vfzf='vim $(fzf)'
 alias vhere='vim +"e ."'
 alias vimwiki='vim +VimwikiIndex'
 alias irssi='TERM=screen-256color irssi'

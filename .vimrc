@@ -264,7 +264,7 @@ Plug 'xolox/vim-session'
 
 " Fuzzy search {{{
 " In-buffer fuzzy searching. Use c-/ to activate.
-" Plug 'ggvgc/vim-fuzzysearch'
+Plug 'ggvgc/vim-fuzzysearch'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " }}}
@@ -476,6 +476,10 @@ setl shortmess-=S
 " }}}
 
 " Plugin Settings {{{
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R'
 let g:sneak#label = 1
 " I create my own mappings.
 let g:skip_default_textobj_word_column_mappings = 1
@@ -585,7 +589,6 @@ let g:ragtag_global_maps = 1
 let g:niji_matching_filetypes = ['lisp', 'scheme', 'racket', 'clojure', 'hy', 'haskell']
 let g:haskellmode_completion_ghc = 0
 let g:UltiSnipsExpandTrigger = "<c-l>"
-let g:UltiSnipsListSnippets = "<Leader>snip"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 let g:ycm_server_keep_logfiles = 1
@@ -1443,6 +1446,16 @@ endif
 " ALE mappings {{{
 nnoremap gh :ALEHover<CR>
 nnoremap gs :ALESymbolSearch<space><c-r><c-w><CR>
+" }}}
+
+" FZF mappings {{{
+nnoremap <leader>snip :Snippets<CR>
+nnoremap <leader>mark :Marks<CR>
+nnoremap <leader>h: :History:<CR>
+nnoremap <leader>h/ :History/<CR>
+nnoremap <leader>h_ :History<CR>
+nnoremap <c-t> :Files<CR>
+nnoremap <c-p> :Lines<CR>
 " }}}
 
 " Pasting Mappings {{{
