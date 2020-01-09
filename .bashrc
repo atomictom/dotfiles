@@ -498,7 +498,7 @@ function fortune-cookie {
     #echo $box_to_use
 }
 
-fo() {
+function fo {
     local key
     local out
     local file
@@ -527,6 +527,10 @@ fo() {
         history -s "${cmd}"
         eval ${cmd}
     fi
+}
+
+function fp {
+    fzf --preview='head -$LINES {}'
 }
 
 # }}}
