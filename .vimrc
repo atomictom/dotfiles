@@ -263,7 +263,7 @@ Plug 'xolox/vim-session'
 " }}}
 
 " Fuzzy search {{{
-" In-buffer fuzzy searching. Use c-/ to activate.
+" In-buffer fuzzy searching. Use g/ to activate.
 Plug 'ggvgc/vim-fuzzysearch'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -1445,6 +1445,11 @@ endif
 " ALE mappings {{{
 nnoremap gh :ALEHover<CR>
 nnoremap gs :ALESymbolSearch<space><c-r><c-w><CR>
+" }}}
+
+" Fuzzy search mappings {{{
+nnoremap g/ :FuzzySearch<cr>
+vnoremap g/ :FuzzySearch<cr>
 " }}}
 
 " FZF mappings {{{
