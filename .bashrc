@@ -41,6 +41,9 @@ if [[ -e "/usr/local/bin/virtualenvwrapper.sh" ]]; then
     source "/usr/local/bin/virtualenvwrapper.sh"
 fi
 
+export FZF_DEFAULT_OPTS="--bind 'alt-o:execute(xdg-open {})'"
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 # Personal variables
 # This should be filled in by setup-vimruntime (from Vim source)
 export VIMRUNTIME="/usr/share/vim/runtime"
@@ -271,6 +274,7 @@ fi
 # }}}
 
 # Aliases {{{
+alias ofzf='o $(fzf)'
 alias vhere='vim +"e ."'
 alias vimwiki='vim +VimwikiIndex'
 alias irssi='TERM=screen-256color irssi'

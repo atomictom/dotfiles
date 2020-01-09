@@ -262,21 +262,11 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 " }}}
 
-" Ctrl-P / Fuzzy search {{{
-" All of these are disabled because I currently don't really use them.
-"
-" Fuzzy searching for files, buffers, and tags, use with :CtrlP
-" Plug 'kien/ctrlp.vim'
-" Uses ag for fast file searching (works with ctrlp??)
-" Plug 'rking/ag.vim'
-" Faster ctrlp matching?
-" Plug 'FelikZ/ctrlp-py-matcher'
-" Interface for showing things like files, buffers, registers, yanks, etc.
-" Plug 'Shougo/unite.vim'
-" Similar to unite.vim, but newer?
-" Plug 'Shougo/denite.nvim'
-" Yank history in Unite
-" Plug 'Shougo/neoyank.vim'
+" Fuzzy search {{{
+" In-buffer fuzzy searching. Use c-/ to activate.
+" Plug 'ggvgc/vim-fuzzysearch'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 " }}}
 
 " Snippets {{{
