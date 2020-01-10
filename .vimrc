@@ -58,14 +58,12 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
 " Smartly increment/decrement (C-A, C-X) with different numeric/date types.
 Plug 'tpope/vim-speeddating'
-" Adds 'surround' commands such as vS, cs, ds, and ys
-" Plug 'tpope/vim-surround'
 " Similar to vim-surround, but slightly more functionality. Has variants for
 " auto-selecting the closest brackets (css, dss). Allows counts (must type the
 " surrounding each time though, so "2ysiw))") on the outside for multiple
 " surroundings and on the inside for multiple textobjects (e.g. "ys2w)"). Has
-" text objects for surroundings (ib for manually selected block, ibb for auto
-" selected block, im for manually selected literal surroundings).
+" text objects for surroundings (ibb for auto selected block and im for
+" manually selected literal surroundings).
 Plug 'machakann/vim-sandwich'
 " Comment stuff with 'gcc' or 'gc{motion}'. tlib_vim is a dependency of
 " tcomment_vim.
@@ -91,7 +89,7 @@ Plug 'AndrewRadev/sideways.vim'
 " Note that some of the verb plugins above also define text objects,
 " including:
 "
-" * vim-sandwich: vib), vibb, vim_ -- select surrounded text
+" * vim-sandwich: vib, vim_ -- select surrounded text
 " * sideways: vaa, via -- select arguments
 
 " Makes it easy to define custom text objects. This is a prerequisite for many
@@ -147,7 +145,7 @@ Plug 'RRethy/vim-illuminate'
 " Highlight css (and other?) colors as the color they are. Automatic for CSS
 " and HTML (see settings below), but can be enabled via {y,c}ok (k for kolor).
 Plug 'chrisbra/Colorizer'
-" Use with :DoRainbowToggle
+" Use with :DoRainbowToggle (or "co)")
 Plug 'kien/rainbow_parentheses.vim'
 " Press - to give the current identifier a random highlight and _ to clear it
 Plug 'akesling/ondemandhighlight'
@@ -167,8 +165,6 @@ Plug 'atomictom/vim-slash'
 " }}}
 
 " Sign column {{{
-" Shows git diff status
-" Plug 'airblade/vim-gitgutter'
 " Shows changes with many VCS's including git, mercurial, and perforce
 Plug 'mhinz/vim-signify'
 " Show marks (e.g. 'mx') in the sign column. Unfortunately it conflicts with
@@ -190,17 +186,14 @@ Plug 'kshenoy/vim-signature'
 " }}}
 
 " Sidebars and Windows {{{
-" Use with :GundoToggle or <F2>
-" Plug 'sjl/gundo.vim'
 " A fork of Gundo with extra features. Use with <F2>
 Plug 'simnalamburt/vim-mundo'
 " Opens a window showing vim's undo tree, use with <F3>
 " Plug 'mbbill/undotree'
 " Uses ctags and shows various tags in a 'tagbar' window, use <F8> to activate
 Plug 'majutsushi/tagbar'
+" Toggle the Vista outline with <F7>
 Plug 'liuchengxu/vista.vim'
-" Also uses ctags to show a list of tags, not sure how it's different from tagbar
-" Plug 'vim-scripts/taglist.vim'
 " A nice filesystem browser, use <F4> to open
 Plug 'scrooloose/nerdtree'
 " Use :YRShow (<F9>) to show the yankring for previous yanks/deletes. Press \p
@@ -1286,18 +1279,12 @@ xmap ia <Plug>SidewaysArgumentTextobjI
 " }}}
 
 " Signify mappings {{{
-" This adds a text object which allows selecting some arbitrary block
-" surrounded by some char or bracket-type.
-xmap ib <Plug>(textobj-sandwich-query-i)
-xmap ab <Plug>(textobj-sandwich-query-a)
-omap ib <Plug>(textobj-sandwich-query-i)
-omap ab <Plug>(textobj-sandwich-query-a)
 " This adds a text object which automatically selects the closest enclosing
 " bracket/quote like surrounding.
-xmap ibb <Plug>(textobj-sandwich-auto-i)
-xmap abb <Plug>(textobj-sandwich-auto-a)
-omap ibb <Plug>(textobj-sandwich-auto-i)
-omap abb <Plug>(textobj-sandwich-auto-a)
+xmap ib <Plug>(textobj-sandwich-auto-i)
+xmap ab <Plug>(textobj-sandwich-auto-a)
+omap ib <Plug>(textobj-sandwich-auto-i)
+omap ab <Plug>(textobj-sandwich-auto-a)
 " This adds a text object which selects an enclosing based on a literal
 " character (like '_'). May not be totally necessary, but I'll keep it for now
 " in case.
@@ -1305,6 +1292,13 @@ xmap im <Plug>(textobj-sandwich-literal-query-i)
 xmap am <Plug>(textobj-sandwich-literal-query-a)
 omap im <Plug>(textobj-sandwich-literal-query-i)
 omap am <Plug>(textobj-sandwich-literal-query-a)
+" This adds a text object which allows selecting some arbitrary block
+" surrounded by some char or bracket-type. Disabled because I'm not really
+" sure it's useful compared to just using ib or im mappings above.
+" xmap ibb <Plug>(textobj-sandwich-query-i)
+" xmap abb <Plug>(textobj-sandwich-query-a)
+" omap ibb <Plug>(textobj-sandwich-query-i)
+" omap abb <Plug>(textobj-sandwich-query-a)
 " }}}
 
 " Word column mappings {{{
