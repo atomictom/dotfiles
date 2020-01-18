@@ -1,11 +1,11 @@
 set mark-symlinked-directories on
 set bell-style none
 
-set keymap emacs
-"\C-\M-e": vi-editing-mode
-
-set keymap vi-command
-"\C-\M-e": emacs-editing-mode
-
-set keymap vi-insert
-"\C-\M-e": emacs-editing-mode
+# set keymap vi-command
+# "\C-\M-e": emacs-editing-mode
+#
+# set keymap vi-insert
+# "\C-\M-e": emacs-editing-mode
+#
+# set keymap emacs
+# "\C-\M-e": vi-editing-mode
