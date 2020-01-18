@@ -253,7 +253,7 @@ fi
 
 # Convenience to make the first screen session based on $first_screen, but then
 # all subsequent screens normally.
-function screen {
+function first-screen {
     if [[ $($(which screen) -ls) =~ "No Sockets" ]]; then
         $(which screen) '-xR' -S main -T linux -c $first_screen
     else
