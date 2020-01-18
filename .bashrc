@@ -62,6 +62,7 @@ export PATH="$HOME/.bin:$PATH"
 export EDITOR=vim
 export IDLESTARTUP="$HOME/.idle.py"
 export DISPLAY=:0.0
+export BAT_THEME="base16"
 PROMPT_COMMAND=""
 
 # Google Cloud Stuff:
