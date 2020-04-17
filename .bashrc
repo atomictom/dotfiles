@@ -138,7 +138,6 @@ function toggleprompt {
         prompt_ps1_style=1
     fi
 }
-alias tp='toggleprompt'
 
 function toggleautoname {
     if [ "$screen_auto_name" -eq 1 ]; then
@@ -147,7 +146,6 @@ function toggleautoname {
         screen_auto_name=1
     fi
 }
-alias ta='toggleautoname'
 
 # Set the prompt
 function generate_prompt {
@@ -290,6 +288,8 @@ alias vi='vim'
 alias ls='ls -h --color=auto'
 alias sr='screen -r'
 alias sx='screen -x'
+alias ta='tmux attach'
+alias tx='tmux new-session -t 0'
 alias cr='cmus-remote'
 alias crq='cmus-remote -Q'
 alias mp='cmus-remote -C player-play'

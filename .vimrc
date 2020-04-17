@@ -405,6 +405,9 @@ call plug#end()
 " }}}
 
 " Looks {{{
+if (has("termguicolors"))
+  set termguicolors
+endif
 set term=xterm-256color
 set t_Co=256
 set title
@@ -481,7 +484,7 @@ let g:tcomment_textobject_inlinecomment = ''
 let g:signify_sign_change = '~'
 " Show increased indentation levels with more broken up lines.
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-let g:hardtime_default_on = 1
+" let g:hardtime_default_on = 1
 " How many times I can use hjkl before being slowed down.
 let g:hardtime_maxcount = 10
 " Only slow down if it's the same key consecutively.
@@ -1270,8 +1273,8 @@ nmap ga <Plug>(EasyAlign)
 " }}}
 
 " Sideways mappings {{{
-nnoremap <C-h> :SidewaysLeft<CR>
-nnoremap <C-l> :SidewaysRight<CR>
+nnoremap <C-H> :SidewaysLeft<CR>
+nnoremap <C-L> :SidewaysRight<CR>
 omap aa <Plug>SidewaysArgumentTextobjA
 xmap aa <Plug>SidewaysArgumentTextobjA
 omap ia <Plug>SidewaysArgumentTextobjI
