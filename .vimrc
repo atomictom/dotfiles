@@ -556,7 +556,7 @@ let g:vimwiki_list = [{'path': '~/.vimwiki'}]
 let g:vimwiki_conceallevel = 0
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
-let g:airline_powerline_fonts=1
+let g:airline_powerline_fonts = 1
 let g:airline_theme='badwolf'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
@@ -564,6 +564,7 @@ let g:airline#extensions#tabline#tab_min_count = 2
 let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#ale#enabled = 1
 let g:yankring_history_dir = '~/.vim'
 let g:yankring_min_element_length = 2
 let g:yankring_replace_n_nkey = '<leader>P'
@@ -583,6 +584,7 @@ let g:syntastic_mode_map = {
     \ }
 let g:ragtag_global_maps = 1
 let g:niji_matching_filetypes = ['lisp', 'scheme', 'racket', 'clojure', 'hy', 'haskell']
+" Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
 let g:UltiSnipsExpandTrigger = "<c-l>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
@@ -598,7 +600,9 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 0
 let g:ycm_seed_identifiers_with_syntax = 0
 " ----------------------------------------
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+if ! exists('g:ycm_global_ycm_extra_conf')
+    let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+endif
 let g:ycm_key_list_previous_completion = ['<Up>', '<c-k>']
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<c-j>']
 let g:ycm_cache_omnifunc = 1
@@ -644,7 +648,11 @@ let g:ale_sign_warning = "⚠"
 let g:ycm_warning_symbol = "⚠"
 let g:ale_sign_style_error = "😠"
 let g:ale_sign_style_warning = "😡"
-let g:ale_linters = {'rust': ['rls']}
+let g:ale_linters = {
+    \ 'rust': [
+    \     'rls',
+    \ ],
+    \}
 let g:ale_fixers = {
     \ 'rust': [
     \     'rustfmt',
@@ -675,7 +683,7 @@ runtime macros/sandwich/keymap/surround.vim
 
 " A function to customize YankRing
 function! YRRunAfterMaps()
-    nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
+    nnoremap Y :<C-U>YRYankCount 'y$'<CR>
 endfunction
 
 function! ExecuteMacroOverVisualRange()
@@ -789,53 +797,34 @@ augroup vimrc
     " Delete all autocommands in this group (so we don't set them twice...)
     autocmd!
     " Call appropriate functions for each filetype to do multiple things
-    autocmd BufNewFile,BufRead *.md,*.markdown call s:MarkdownAutoCommands()
     autocmd BufNewFile,BufRead *.html,*.css,*.js call s:WebAutoCommands()
-    autocmd BufNewFile,BufRead *.c,*.h call s:CAutocommands()
-    autocmd BufNewFile,BufRead *.cm call s:CMinusMinusAutocommands()
     autocmd BufNewFile,BufRead *.hy call s:HyAutocommands()
-    autocmd FileType vim call s:VimAutoCommands()
     autocmd FileType bash,sh call s:BashAutoCommands()
-    autocmd FileType js,javascript call s:JsAutoCommands()
-    autocmd FileType css,scss call s:CssAutoCommands()
-    autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
-    autocmd FileType yaml call s:YamlAutoCommands()
-    autocmd FileType vimwiki call s:VimwikiAutocommands()
+    autocmd FileType bzl call s:BazelAutoCommands()
+    autocmd Filetype c call s:CAutoCommands()
     autocmd FileType coffee call s:CoffeeScriptAutocommands()
+    autocmd FileType cpp call s:CppAutoCommands()
+    autocmd FileType css,scss call s:CssAutoCommands()
+    autocmd FileType go call s:GoAutocommands()
     autocmd FileType haskell call s:HaskellAutocommands()
+    autocmd FileType htmldjango call s:HtmlDjangoAutoCommands()
     autocmd FileType java call s:JavaAutocommands()
+    autocmd FileType js,javascript call s:JsAutoCommands()
+    autocmd FileType liquid setf liquid.html
+    autocmd FileType markdown call s:MarkdownAutoCommands()
+    autocmd FileType prolog call s:PrologAutocommands()
     autocmd FileType python call s:PythonAutocommands()
     autocmd FileType racket call s:RacketAutocommands()
+    autocmd FileType rust call s:RustAutoCommands()
     autocmd FileType scheme call s:SchemeAutocommands()
-    autocmd FileType prolog call s:PrologAutocommands()
-    autocmd FileType go call s:GoAutocommands()
     " autocmd FileType htmljinja setf htmljinja.html
-    autocmd FileType liquid setf liquid.html
+    autocmd FileType svg,html,htmljinja,liquid call s:HtmlAutoCommands()
+    autocmd FileType vim call s:VimAutoCommands()
+    autocmd FileType vimwiki call s:VimwikiAutocommands()
+    autocmd FileType yaml call s:YamlAutoCommands()
 augroup END
 
-function s:VimAutoCommands()
-    setl expandtab
-    setl tabstop=8
-    setl shiftwidth=4
-    setl softtabstop=-1 " Make it the same as shiftwidth
-    colorscheme gruvbox
-endfunction
-
 function s:BashAutoCommands()
-    setl expandtab
-    setl tabstop=8
-    setl shiftwidth=4
-    setl softtabstop=-1 " Make it the same as shiftwidth
-endfunction
-
-function s:MarkdownAutoCommands()
-    setl ft=markdown
-    setl linebreak
-    setl textwidth=80
-    let g:airline#extensions#whitespace#checks = ['trailing']
-endfunction
-
-function s:JsAutoCommands()
     setl expandtab
     setl tabstop=8
     setl shiftwidth=4
@@ -854,56 +843,18 @@ function s:HtmlAutoCommands()
     setl tabstop=8
     setl shiftwidth=2
     setl softtabstop=-1 " Make it the same as shiftwidth
+    setl formatoptions=cqrjt
 endfunction
 
-function s:YamlAutoCommands()
+function s:BazelAutoCommands()
     setl expandtab
     setl tabstop=8
-    setl shiftwidth=2
+    setl shiftwidth=2 " 2 not 4 because Python double indents for some reason
     setl softtabstop=-1 " Make it the same as shiftwidth
+    setl indentexpr=ftpython#GetIndent(v:lnum)
+    " setl indentexpr=clib#GetIndent()
 endfunction
 
-let g:web_autosave = 1
-function s:WebAutoCommands()
-    " Auto save html, css, and js files whenever possible (for live.js)
-    " TODO: toggle this autocmd with a variable
-    " if g:web_autosave
-    " augroup web_autosave
-    "     autocmd!
-    "     autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
-    " augroup END
-    " let g:airline#extensions#whitespace#checks = ['trailing']
-endfunction
-
-function s:VimwikiAutocommands()
-    nnoremap j gj
-    nnoremap k gk
-    setl expandtab
-    setl shiftwidth=4
-    setl tabstop=4
-    setl linebreak
-    setl breakindent
-    " setl breakindentopt=shift:6
-    highlight Folded ctermbg=234
-    let g:airline#extensions#whitespace#checks = ['trailing']
-endfunction
-
-function s:PythonAutocommands()
-    setl expandtab
-    setl softtabstop=4
-    setl tabstop=8
-    setl shiftwidth=4
-    " let g:syntastic_python_pylint_post_args='-d invalid-name,broad-except,logging-format-interpolation'
-    let g:syntastic_python_checkers = ['flake8']
-    PyRun
-endfunction
-
-function s:JavaAutocommands()
-    abbreviate print System.out.println(
-    JavaRun
-endfunction
-
-" At some point I will probably add some so this is just a place holder
 function s:CoffeeScriptAutocommands()
     function! Build()
         write
@@ -917,7 +868,24 @@ function s:CoffeeScriptAutocommands()
     noremap <F5> :call Build()<CR>
 endfunction
 
-function s:CAutocommands()
+function s:CppAutoCommands()
+    setl expandtab
+    setl softtabstop=2
+    setl tabstop=8
+    setl shiftwidth=2
+    setl formatoptions=cqrjt
+    setl cc=80
+    " autocmd BufWritePost,FileWritePost,FileAppendPost <buffer> call s:BlockstoreFormat()
+endfunction
+
+function s:CssAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:CAutoCommands()
     setl noexpandtab
     setl tabstop=4
     setl shiftwidth=4
@@ -925,20 +893,11 @@ function s:CAutocommands()
     Gcc
 endfunction
 
-function s:CMinusMinusAutocommands()
-    " I guess these would affect non C-- buffers, but I don't feel like
-    " fixing this now since it's probably a non-issue.
-    let g:syntastic_disabled_filetypes=['c', 'cm']
-    " I thought syntastic was throwing warnings and this wasn't working,
-    " but it was YouCompleteMe...oh well
-    let g:syntastic_ignore_files = ['\v.*\.cm$', '.*\.cm', '\.*.cm', '\.\*.cm', '\v.*\.c', '.*\.c', '\.*.c']
-    let g:syntastic_check_on_open = 0
-    let g:syntastic_check_on_wq = 0
-    let g:syntastic_mode_map = {'mode': 'active',
-                \ 'active_filetypes': [],
-                \ 'passive_filetypes': ['cm', 'c'] }
-    let g:ycm_filetype_specific_completion_to_disable = {'c': 0}
-    setl filetype=c
+function s:GoAutocommands()
+    setl noexpandtab
+    setl tabstop=2
+    setl shiftwidth=2
+    setl formatoptions=cqrjt
 endfunction
 
 function s:HaskellAutocommands()
@@ -960,8 +919,62 @@ function s:HaskellAutocommands()
     DoRainbowToggle
 endfunction
 
+function s:HtmlAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=2
+    setl softtabstop=-1 " Make it the same as shiftwidth
+endfunction
+
+function s:HtmlDjangoAutoCommands()
+    setl cc=80
+endfunction
+
 function s:HyAutocommands()
     HyRun
+endfunction
+
+function s:JavaAutocommands()
+    abbreviate print System.out.println(
+    JavaRun
+    let g:syntastic_mode_map = {
+    \    'mode': 'active',
+    \    'active_filetypes': ['java'],
+    \}
+endfunction
+
+function s:JsAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
+    let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
+function s:MarkdownAutoCommands()
+    setl ft=markdown
+    setl linebreak
+    setl textwidth=80
+    let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
+function s:PrologAutocommands()
+    NoWait
+    PrologRun
+endfunction
+
+function s:PythonAutocommands()
+    setl expandtab
+    setl softtabstop=4
+    setl tabstop=8
+    setl shiftwidth=4
+    setl formatoptions=cqrjt
+    setl cc=80
+    " Stop identation when typing a colon.
+    setl indentkeys-=<:>
+    " let g:syntastic_python_pylint_post_args='-d invalid-name,broad-except,logging-format-interpolation'
+    let g:syntastic_python_checkers = ['flake8']
+    PyRun
 endfunction
 
 function s:RacketAutocommands()
@@ -970,16 +983,60 @@ function s:RacketAutocommands()
     RacketRun
 endfunction
 
+function s:RustAutoCommands()
+    setl cc=100
+    let b:syntastic_check_on_open = 0
+    let b:syntastic_check_on_wq = 0
+
+    " Use ALE error navigation
+    " noremap ]n :ALENextWrap<CR>
+    " noremap ]N :ALEPreviousWrap<CR>
+endfunction
+
 function s:SchemeAutocommands()
         let b:delimitMate_quotes = "\" ` *"
 endfunction
 
-function s:GoAutocommands()
+function s:VimAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=4
+    setl softtabstop=-1 " Make it the same as shiftwidth
+    colorscheme gruvbox
 endfunction
 
-function s:PrologAutocommands()
-    NoWait
-    PrologRun
+function s:VimwikiAutocommands()
+    nnoremap j gj
+    nnoremap k gk
+    setl breakindent
+    setl breakindentopt=shift:6
+    setl colorcolumn=999
+    setl expandtab
+    setl linebreak
+    setl shiftwidth=4
+    setl softtabstop=4
+    setl tabstop=8
+    highlight Folded ctermbg=234
+    let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
+let g:web_autosave = 1
+function s:WebAutoCommands()
+    " Auto save html, css, and js files whenever possible (for live.js)
+    " TODO: toggle this autocmd with a variable
+    " if g:web_autosave
+    " augroup web_autosave
+    "     autocmd!
+    "     autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
+    " augroup END
+    " let g:airline#extensions#whitespace#checks = ['trailing']
+endfunction
+
+function s:YamlAutoCommands()
+    setl expandtab
+    setl tabstop=8
+    setl shiftwidth=2
+    setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 " }}}
 
@@ -1151,7 +1208,6 @@ nmap coQ cs'"
 nmap yoQ cs'"
 " }}}
 
-
 " EasyMotion mappings {{{
 map gf <Plug>(easymotion-bd-f)
 map gt <Plug>(easymotion-bd-t)
@@ -1258,6 +1314,7 @@ cmap w!! %!sudo tee > /dev/null %
 
 " Tab mappings {{{
 noremap <Leader>t :tabnew<space>
+noremap <Leader>v :tabnew ~/.vimrc<CR>
 " Move between tabs
 noremap <M-Right> gt
 noremap <M-Left> gT
