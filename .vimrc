@@ -831,21 +831,6 @@ function s:BashAutoCommands()
     setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
-function s:CssAutoCommands()
-    setl expandtab
-    setl tabstop=8
-    setl shiftwidth=4
-    setl softtabstop=-1 " Make it the same as shiftwidth
-endfunction
-
-function s:HtmlAutoCommands()
-    setl expandtab
-    setl tabstop=8
-    setl shiftwidth=2
-    setl softtabstop=-1 " Make it the same as shiftwidth
-    setl formatoptions=cqrjt
-endfunction
-
 function s:BazelAutoCommands()
     setl expandtab
     setl tabstop=8
@@ -873,9 +858,7 @@ function s:CppAutoCommands()
     setl softtabstop=2
     setl tabstop=8
     setl shiftwidth=2
-    setl formatoptions=cqrjt
     setl cc=80
-    " autocmd BufWritePost,FileWritePost,FileAppendPost <buffer> call s:BlockstoreFormat()
 endfunction
 
 function s:CssAutoCommands()
@@ -897,7 +880,6 @@ function s:GoAutocommands()
     setl noexpandtab
     setl tabstop=2
     setl shiftwidth=2
-    setl formatoptions=cqrjt
 endfunction
 
 function s:HaskellAutocommands()
@@ -968,7 +950,6 @@ function s:PythonAutocommands()
     setl softtabstop=4
     setl tabstop=8
     setl shiftwidth=4
-    setl formatoptions=cqrjt
     setl cc=80
     " Stop identation when typing a colon.
     setl indentkeys-=<:>
@@ -1287,9 +1268,9 @@ noremap <F9> :Yanks<CR>
 nnoremap / /\v
 vnoremap / /\v
 " Sets up a regex
-noremap <Leader>r :s///c<Left><Left><Left>
+noremap <Leader>r :s/\v//c<Left><Left><Left>
 " Sets up a global, file wide regex
-noremap <Leader>rf :%s///c<Left><Left><Left>
+noremap <Leader>rf :%s/\v//c<Left><Left><Left>
 " Grabs the word under the cursor and sets up a regex to replace it (globally)
 nnoremap <Leader>rv :%s/\<<c-r><c-w>\>//c<left><left>
 " Grabs the word under the cursor and sets up a regex to replace it (ranged)
