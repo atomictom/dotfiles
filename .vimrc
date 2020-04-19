@@ -932,7 +932,6 @@ function s:JsAutoCommands()
     setl tabstop=8
     setl shiftwidth=4
     setl softtabstop=-1 " Make it the same as shiftwidth
-    let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:MarkdownAutoCommands()

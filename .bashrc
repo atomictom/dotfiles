@@ -31,6 +31,7 @@ export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
 export RB_USER_INSTALL='true'
 export GOPATH="$HOME/.golang/packages"
+# export GOPATH="$HOME/.go"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
@@ -43,7 +44,7 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.packages/racket/racket/bin"
 export PATH="$PATH:$HOME/.packages/google_appengine"
 export EDITOR=vim
-export PAGER='less'
+export PAGER='less -r'
 export IDLESTARTUP="$HOME/.idle.py"
 export DISPLAY=:0.0
 export BAT_THEME="base16"
@@ -188,6 +189,7 @@ function generate_prompt {
         local virtualenv_name="$bold$green($(basename "$VIRTUAL_ENV"))"
     fi
 
+    git_branch_color=""
     if git rev-parse --git-dir >/dev/null 2>&1; then
         if ! git diff-index --quiet --cached HEAD 2>/dev/null || ! git diff-files --quiet; then
             local git_branch_color="$dim$red"
@@ -243,9 +245,6 @@ function generate_prompt {
 
     # Two line style
     if [ "$prompt_ps1_style" -eq 1 ]; then
-        local directory="$(pwd)"
-        local directory="${directory/$HOME/\~}"
-        local directory="$bold$cyan$directory"
         export PS1="$return_code$virtualenv_name$chroot$directory$git_branch$dim$white:$username_host\n$datetime $prompt$end_prompt"
     fi
 
@@ -254,7 +253,7 @@ function generate_prompt {
 # Note: Always use the `export PROMPT_COMMAND="...; $PROMPT_COMMAND"` pattern
 #       with the `...` portion either coming before or after the previous
 #       PROMPT_COMMAND to avoid overwriting a PROMPT_COMMAND.
-if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt;" ]]; then
+if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt" ]]; then
     export PROMPT_COMMAND="generate_prompt; $PROMPT_COMMAND"
 fi
 # }}}
@@ -523,7 +522,6 @@ function fortune-cookie {
     box_count=${#box_names[@]}
     box_to_use=${box_names[ (( $RANDOM % $box_count )) ]}
     fortune | boxes -d $box_to_use
-    #echo $box_to_use
 }
 
 function fo {
@@ -560,5 +558,4 @@ function fo {
 function fp {
     fzf --preview='head -$LINES {}'
 }
-
 # }}}
