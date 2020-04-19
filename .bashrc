@@ -11,14 +11,9 @@ esac
 # Settings {{{
 stty -ixon
 shopt -s histappend
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
-export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
-export LESS_TERMCAP_me=$'\E[0m'           # end mode
-export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
-export LESS_TERMCAP_so=$'\E[38;5;016m\E[48;5;220m'    # begin standout-mode - info box
-export LESS_TERMCAP_ue=$'\E[0m'           # end underline
-export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # Note: All of the below are specified in .profile instead to make bash startup
 # faster: Disable some keys (to save my pinkies).
@@ -28,24 +23,9 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 # xmodmap -e 'keycode 105=' # Control_R
 # Undo the overrides with `setxkbmap`
 
-# Source some helper scripts
-if [[ -e "$HOME/.bashrc.private" ]]; then
-    source "$HOME/.bashrc.private"
-fi
-
-if [[ -e "$HOME/.bashrc.setup" ]]; then
-    source "$HOME/.bashrc.setup"
-fi
-
-if [[ -e "/usr/local/bin/virtualenvwrapper.sh" ]]; then
-    source "/usr/local/bin/virtualenvwrapper.sh"
-fi
-
-export FZF_DEFAULT_OPTS="--bind 'alt-o:execute(xdg-open {})'"
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 # Personal variables
-# This should be filled in by setup-vimruntime (from Vim source)
+# VIMRUNTIME should be filled in by setup-vimruntime in .bashrc.setup (i.e.
+# from Vim source)
 export VIMRUNTIME="/usr/share/vim/runtime"
 export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
@@ -54,16 +34,46 @@ export GOPATH="$HOME/.golang/packages"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
-export PATH="$HOME/.packages/racket/racket/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="$PATH:$HOME/.packages/racket/racket/bin"
+export PATH="$PATH:$HOME/.packages/google_appengine"
 export EDITOR=vim
+export PAGER='less'
 export IDLESTARTUP="$HOME/.idle.py"
 export DISPLAY=:0.0
 export BAT_THEME="base16"
 PROMPT_COMMAND=""
+
+export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
+export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
+export LESS_TERMCAP_me=$'\E[0m'           # end mode
+export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
+export LESS_TERMCAP_so=$'\E[38;5;016m\E[48;5;220m'    # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m'           # end underline
+export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Source some helper scripts that are per-computer (and that I don't include in
+# my .bashrc).
+[[ -e "$HOME/.bashrc.private" ]] && source "$HOME/.bashrc.private"
+
+# Source some helper scripts for setting up software (also generally
+# per-computer, but also kept in a separate repo).
+[[ -e "$HOME/.bashrc.setup" ]] && source "$HOME/.bashrc.setup"
+
+# Source Python virtualenvwrapper script, if present.
+[[ -e "/usr/local/bin/virtualenvwrapper.sh" ]] && source "/usr/local/bin/virtualenvwrapper.sh"
+
+# Setup FZF bash helpers, if present.
+export FZF_DEFAULT_OPTS="--bind 'alt-o:execute(xdg-open {})'"
+[[ -e "$HOME/.fzf.bash" ]] && source "$HOME/.fzf.bash"
 
 # Google Cloud Stuff:
 # The next line updates PATH for the Google Cloud SDK.
@@ -76,13 +86,11 @@ if [[ -e '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc' ]]; then
     source '/home/thomas/.packages/google-cloud-sdk/completion.bash.inc'
 fi
 
-export PATH="$PATH:/home/thomas/.packages/google_appengine/"
-
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
+  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
+  elif [[ -f /etc/bash_completion ]]; then
     . /etc/bash_completion
   fi
 fi
