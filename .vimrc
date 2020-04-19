@@ -316,6 +316,9 @@ Plug 'rust-lang/rust.vim'
 " Syntax file for EBNF
 Plug 'killphi/vim-ebnf'
 
+" Syntax file for .tmux.conf
+Plug 'tmux-plugins/vim-tmux'
+
 " Haskell {{{
 " Plug 'itchyny/vim-haskell-indent'
 " Automatically runs hindent on save
