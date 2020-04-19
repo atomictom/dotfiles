@@ -177,7 +177,7 @@ function generate_prompt {
     dim="\[$(tput sgr0)\]"
     local unmodify_color='\[\033[0;00m\]'
 
-    # Exit will set the return code for $(returncode) to read.  Without this,
+    # Exit will set the return code for $(returncode) to read. Without this,
     # returncode will return the status of the line before it
     $(exit $ret)
     local return_code="$dim$red"$(returncode)
@@ -230,6 +230,11 @@ function generate_prompt {
 
     # Single line style (with wrapping).
     local prelude="$return_code$virtualenv_name$chroot$username_host_dir$git_branch"
+
+    local directory="$(pwd)"
+    local directory="${directory/$HOME/\~}"
+    local directory="$bold$cyan$directory"
+
     if expr \( length "$directory" \) \> $prompt_path_wrap > /dev/null 2>&1; then
         export PS1="$prelude \n-- $prompt$end_prompt"
     else
@@ -246,6 +251,9 @@ function generate_prompt {
 
     return $ret
 }
+# Note: Always use the `export PROMPT_COMMAND="...; $PROMPT_COMMAND"` pattern
+#       with the `...` portion either coming before or after the previous
+#       PROMPT_COMMAND to avoid overwriting a PROMPT_COMMAND.
 if ! [[ "$PROMPT_COMMAND" =~ "generate_prompt;" ]]; then
     export PROMPT_COMMAND="generate_prompt; $PROMPT_COMMAND"
 fi
