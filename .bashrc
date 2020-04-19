@@ -102,6 +102,9 @@ fi
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+export HISTCONTROL=ignoreboth
 # Change the file location because certain bash sessions truncate .bash_history file upon close.
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
 export HISTFILE=~/.bash_eternal_history
@@ -113,7 +116,7 @@ function reload_history {
     history -c
     history -r
 }
-if ! [[ "$PROMT_COMMAND" =~ "reload_history" ]]; then
+if ! [[ "$PROMPT_COMMAND" =~ "reload_history" ]]; then
     precmd_functions+=(reload_history)
     PROMPT_COMMAND="reload_history; $PROMPT_COMMAND"
 fi
