@@ -122,6 +122,12 @@ Plug 'Lokaltog/vim-easymotion'
 "   + -> more indent
 "   = -> same indent
 Plug 'jeetsukumaran/vim-indentwise'
+" Gives emacs/readline-like keybindings in insert and command mode. I mostly
+" want it for command-mode, though.
+Plug 'tpope/vim-rsi'
+" Alternative to vim-rsi that I want to try if vim-rsi doesn't work. Only
+" affects command mode rather than also affecting insert-mode.
+" Plug 'ryvnf/readline.vim'
 " }}}
 
 " Theme and Visuals {{{
@@ -1513,6 +1519,20 @@ imap <expr> <f28> XTermPasteBegin("")
 vmap <expr> <f28> XTermPasteBegin("c")
 cmap <f28> <nop>
 cmap <f29> <nop>
+" }}}
+
+" Command Mode Mappings {{{
+" TODO: Either use something like this or a plugin like vim-rsi
+" cnoremap <C-Q> <C-F>
+" cnoremap <C-A> <Home>
+" cnoremap <C-B> <Left>
+" cnoremap <C-D> <Del>
+" cnoremap <C-E> <End>
+" cnoremap <C-F> <Right>
+" cnoremap <C-N> <Down>
+" cnoremap <C-P> <Up>
+" cnoremap <Esc><C-B> <S-Left>
+" cnoremap <Esc><C-F> <S-Right>
 " }}}
 
 " }}}
