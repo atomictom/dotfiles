@@ -260,7 +260,7 @@ fi
 # }}}
 
 # Start first screen session {{{
-first_screen="$HOME/.first_screen"
+# first_screen="$HOME/.first_screen"
 if [ ! -e "$first_screen" ]; then
     if [ -e "$HOME/.screenrc" ]; then
         first_screen="$HOME/.screenrc"
