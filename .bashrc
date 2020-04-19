@@ -374,6 +374,18 @@ function capitalize {
     done
 }
 
+
+function clipboard {
+  if [[ "${DISPLAY}" ]]; then
+    xclip -selection clipboard
+  elif [[ "${TMUX}" ]]; then
+    printf "\033Ptmux;\033\033]52;c;%s\a\033\\" "$(base64 --wrap=0)"
+  else
+    printf '\033]52;c;%s\a' "$(base64 --wrap=0)"
+  fi
+}
+alias C='clipboard'
+
 function hr {
     for i in $(seq $1); do
         echo -n '-'
@@ -487,9 +499,29 @@ function returncode {
     fi
 }
 
+# Copies a function named $1 to name $2
+function copy_function {
+    declare -F $1 > /dev/null || return 1
+    eval "$(echo "${2}()"; declare -f ${1} | tail -n +2)"
+}
+
 function regexkill {
     kill $(ps aux | grep -P $1 | awk '{print $2}')
 }
+
+function check {
+    grep -P '^\+' | aspell list | sort | uniq | less
+}
+
+function spellcheck {
+    git diff | grep -P '^\+' | aspell list | sort | uniq | less
+}
+alias sc='spellcheck'
+
+function spellcheck5 {
+    git5 diff | grep -P '^\+' | aspell list | sort | uniq | less
+}
+alias sc5='spellcheck5'
 
 function fortune-cookie {
     box_names=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
