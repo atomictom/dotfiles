@@ -31,7 +31,6 @@ export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
 export RB_USER_INSTALL='true'
 export GOPATH="$HOME/.golang/packages"
-# export GOPATH="$HOME/.go"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
@@ -39,7 +38,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.packages/racket/racket/bin"
 export PATH="$PATH:$HOME/.packages/google_appengine"
@@ -511,11 +509,6 @@ function spellcheck {
     git diff | grep -P '^\+' | aspell list | sort | uniq | less
 }
 alias sc='spellcheck'
-
-function spellcheck5 {
-    git5 diff | grep -P '^\+' | aspell list | sort | uniq | less
-}
-alias sc5='spellcheck5'
 
 function fortune-cookie {
     box_names=( $(cat /etc/boxes/boxes-config | grep -Poz 'BOX \K(.*)'| grep -v test) )
