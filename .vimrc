@@ -407,7 +407,7 @@ call plug#end()
 " }}}
 
 " Looks {{{
-if (has("termguicolors"))
+if has("termguicolors") && match($TERM, "screen") == -1
   set termguicolors
 endif
 set term=xterm-256color
