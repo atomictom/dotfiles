@@ -1317,8 +1317,8 @@ nmap ga <Plug>(EasyAlign)
 " }}}
 
 " Sideways mappings {{{
-nnoremap <C-H> :SidewaysLeft<CR>
-nnoremap <C-L> :SidewaysRight<CR>
+" nnoremap <C-H> :SidewaysLeft<CR>
+" nnoremap <C-L> :SidewaysRight<CR>
 omap aa <Plug>SidewaysArgumentTextobjA
 xmap aa <Plug>SidewaysArgumentTextobjA
 omap ia <Plug>SidewaysArgumentTextobjI
@@ -1500,7 +1500,10 @@ nnoremap <leader>h: :History:<CR>
 nnoremap <leader>h/ :History/<CR>
 nnoremap <leader>h_ :History<CR>
 nnoremap <c-t> :Files<CR>
+nnoremap <c-g> :GFiles<CR>
 nnoremap <c-p> :Lines<CR>
+" Actually "c-/", but vim/terminals are weird.
+nnoremap <c-_> :Rg<CR>
 " }}}
 
 " Pasting Mappings {{{
