@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Thomas Manning's bashrc file!
 
@@ -26,7 +26,7 @@ shopt -s checkwinsize
 # Personal variables
 # VIMRUNTIME should be filled in by setup-vimruntime in .bashrc.setup (i.e.
 # from Vim source)
-export VIMRUNTIME="/usr/share/vim/runtime"
+# export VIMRUNTIME="/usr/share/vim/runtime"
 export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
 export RB_USER_INSTALL='true'
@@ -346,15 +346,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Personal Aliases {{{
 # Aliases that are specific to my system either because of relying on a particular directory or command
 alias youtube-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/organized/Youtube/%(title)s.%(ext)s\""
-alias mproxy='~/.bin/make-proxy &> /dev/null &'
 alias silly-mp3="youtube-dl --extract-audio --audio-format=mp3 -o ~/\"Music/other/Silly/%(title)s.%(ext)s\""
-alias ic="iced"
+alias mproxy='~/.bin/make-proxy &> /dev/null &'
 alias zzz='sudo pm-suspend'
-alias bright='sudo ~/.bin/bright'
-alias bl='sudo ~/.bin/bright'
 alias uu='sudo ~/.bin/uu'
-alias k='klink &'
-alias rrl='rm Downloads/rtorrent/.session/rtorrent.lock'
 # I made a python utility that does a better job
 # alias dff="df -h | grep -P '(Avail|/Data|/home|/$)' | sort -hk 4"
 # }}}
