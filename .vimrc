@@ -95,6 +95,8 @@ Plug 'AndrewRadev/sideways.vim'
 " Makes it easy to define custom text objects. This is a prerequisite for many
 " other text object plugins.
 Plug 'kana/vim-textobj-user'
+" Adds a text object for selecting functions with af and if.
+Plug 'kana/vim-textobj-function'
 " Adds text objects ic, ac, and aC for selecting comments, and in the latter
 " case, surrounding whitespace.
 Plug 'glts/vim-textobj-comment'
@@ -840,6 +842,14 @@ function s:BazelAutoCommands()
     " setl indentexpr=clib#GetIndent()
 endfunction
 
+function s:CAutoCommands()
+    setl noexpandtab
+    setl tabstop=4
+    setl shiftwidth=4
+    let g:airline#extensions#whitespace#checks = ['trailing']
+    Gcc
+endfunction
+
 function s:CoffeeScriptAutocommands()
     function! Build()
         write
@@ -868,14 +878,6 @@ function s:CssAutoCommands()
     setl softtabstop=-1 " Make it the same as shiftwidth
 endfunction
 
-function s:CAutoCommands()
-    setl noexpandtab
-    setl tabstop=4
-    setl shiftwidth=4
-    let g:airline#extensions#whitespace#checks = ['trailing']
-    Gcc
-endfunction
-
 function s:GoAutocommands()
     setl noexpandtab
     setl tabstop=2
@@ -893,9 +895,9 @@ function s:HaskellAutocommands()
     " augroup END
     highlight clear Conceal
     setl nofoldenable
-    setl omnifunc=necoghc#omnifunc
     noremap gt :GhcModType<CR>
     noremap gT :GhcModTypeClear<CR>
+    " setl omnifunc=necoghc#omnifunc
     let g:necoghc_enable_detailed_browse = 1
     GhcRun
     DoRainbowToggle
@@ -937,7 +939,6 @@ function s:MarkdownAutoCommands()
     setl ft=markdown
     setl linebreak
     setl textwidth=80
-    let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:PrologAutocommands()
@@ -1459,7 +1460,7 @@ else
 " YCM mappings {{{
     nnoremap go :YcmCompleter GoTo<cr>
     nnoremap gd :YcmCompleter GoToDefinition<cr>
-    nnoremap g1 :YcmCompleter GoToDeclaration<cr>
+    nnoremap gz :YcmCompleter GoToDeclaration<cr>
     nnoremap gy :YcmCompleter GoToType<cr>
     nnoremap gi :YcmCompleter GoToImplementation<cr>
     nnoremap gr :YcmCompleter GoToReferences<cr>
