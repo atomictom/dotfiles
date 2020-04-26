@@ -660,16 +660,22 @@ let g:ale_linters = {
     \ 'rust': [
     \     'rls',
     \ ],
+    \ 'sh': [
+    \     'shellcheck',
+    \ ],
     \}
 let g:ale_fixers = {
+    \ 'python': [
+    \     'yapf',
+    \     'isort',
+    \ ],
     \ 'rust': [
     \     'rustfmt',
     \     'remove_trailing_lines',
     \     'trim_whitespace',
     \ ],
-    \ 'python': [
-    \     'yapf',
-    \     'isort',
+    \ 'sh': [
+    \     'shfmt',
     \ ],
     \}
 let g:ale_rust_rls_executable = '/home/thomas/.cargo/bin/rls'
@@ -837,6 +843,7 @@ function s:BashAutoCommands()
     setl tabstop=8
     setl shiftwidth=4
     setl softtabstop=-1 " Make it the same as shiftwidth
+    let g:ale_fix_on_save = 1
 endfunction
 
 function s:BazelAutoCommands()
