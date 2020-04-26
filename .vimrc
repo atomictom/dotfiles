@@ -1515,20 +1515,30 @@ nnoremap <c-_> :Rg<CR>
 
 " Pasting Mappings {{{
 " Supposedly this will automatically switch into paste mode when pasting from
-" the terminal into vim but it needs to be modified to work with screen.
-function! XTermPasteBegin(ret)
-  set pastetoggle=<f29>
-  set paste
-  return a:ret
+" the terminal into vim; it may not work with screen.
+function! WrapForTmux(s)
+    if !exists('$TMUX')
+        return a:s
+    endif
+
+    let tmux_start = "\<Esc>Ptmux;"
+    let tmux_end = "\<Esc>\\"
+
+    return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
 
-execute "set <f28>=\<Esc>[200~"
-execute "set <f29>=\<Esc>[201~"
-map <expr> <f28> XTermPasteBegin("i")
-imap <expr> <f28> XTermPasteBegin("")
-vmap <expr> <f28> XTermPasteBegin("c")
-cmap <f28> <nop>
-cmap <f29> <nop>
+let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+
+function! XTermPasteBegin(ret)
+    set pastetoggle=<Esc>[201~
+    set paste
+    return a:ret
+endfunction
+
+noremap <special> <expr> <Esc>[200~ XTermPasteBegin("i")
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+vnoremap <special> <expr> <Esc>[200~ XTermPasteBegin("c")
 " }}}
 
 " Command Mode Mappings {{{
