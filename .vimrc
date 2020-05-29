@@ -95,7 +95,8 @@ Plug 'AndrewRadev/sideways.vim'
 " Makes it easy to define custom text objects. This is a prerequisite for many
 " other text object plugins.
 Plug 'kana/vim-textobj-user'
-" Adds a text object for selecting functions with af and if.
+" Adds a text object for selecting functions with af and if. Only works with a
+" few languages (C, Java, Vimscript), sadly.
 Plug 'kana/vim-textobj-function'
 " Adds text objects ic, ac, and aC for selecting comments, and in the latter
 " case, surrounding whitespace.
@@ -353,6 +354,8 @@ Plug 'hylang/vim-hy'
 Plug 'hdima/python-syntax'
 " Gives Python reference for a given identifier using either <F1> or :PyRef
 Plug 'xolox/vim-pyref'
+" Provides some Python-specific text objects and movements.
+Plug 'jeetsukumaran/vim-pythonsense'
 " }}}
 
 " C/C++ {{{
@@ -660,6 +663,7 @@ let g:vista_default_executive = 'ale'
 " let g:vista#renderer#enable_icon = 1
 " Open a preview window when the cursor is on a line with an error.
 " let g:ale_cursor_detail = 1
+let g:ale_set_loclist = 1
 let g:ale_sign_error = "✗"
 let g:ycm_error_symbol = "✗"
 let g:ale_sign_warning = "⚠"
@@ -698,6 +702,9 @@ let g:ale_rust_cargo_check_examples = 1
 let g:rustfmt_autosave = 1
 let g:rustfmt_command = "rustfmt +nightly"
 let g:rustfmt_emit_files = 1
+let g:is_pythonsense_suppress_object_keymaps = 1
+let g:is_pythonsense_suppress_location_keymaps = 1
+let g:is_pythonsense_alternate_motion_keymaps = 1
 
 " Remap vim-sandwich to use surround-like mappings (i.e. ys, cs, ds).
 runtime macros/sandwich/keymap/surround.vim
@@ -976,7 +983,20 @@ function s:PythonAutocommands()
     " Stop identation when typing a colon.
     setl indentkeys-=<:>
     " let g:syntastic_python_pylint_post_args='-d invalid-name,broad-except,logging-format-interpolation'
-    let g:syntastic_python_checkers = ['flake8']
+    " let g:syntastic_python_checkers = ['flake8']
+    xmap <buffer> ak <Plug>(PythonsenseOuterClassTextObject)
+    omap <buffer> ak <Plug>(PythonsenseOuterClassTextObject)
+    xmap <buffer> ik <Plug>(PythonsenseInnerClassTextObject)
+    omap <buffer> ik <Plug>(PythonsenseInnerClassTextObject)
+    xmap <buffer> af <Plug>(PythonsenseOuterFunctionTextObject)
+    omap <buffer> af <Plug>(PythonsenseOuterFunctionTextObject)
+    xmap <buffer> if <Plug>(PythonsenseInnerFunctionTextObject)
+    omap <buffer> if <Plug>(PythonsenseInnerFunctionTextObject)
+    xmap <buffer> ad <Plug>(PythonsenseOuterDocStringTextObject)
+    omap <buffer> ad <Plug>(PythonsenseOuterDocStringTextObject)
+    xmap <buffer> id <Plug>(PythonsenseInnerDocStringTextObject)
+    omap <buffer> id <Plug>(PythonsenseInnerDocStringTextObject)
+
     PyRun
 endfunction
 
@@ -1020,6 +1040,8 @@ function s:VimwikiAutocommands()
     setl softtabstop=4
     setl tabstop=8
     highlight Folded ctermbg=234
+    " Don't overwrite the conceallevel
+    let g:indentLine_setConceal = 0
 endfunction
 
 let g:web_autosave = 1
@@ -1196,12 +1218,18 @@ xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 " vim-unimpaired-like mappings for toggling rainbow parenthesis
 map co) <Esc>:DoRainbowToggle<CR>
 map yo) <Esc>:DoRainbowToggle<CR>
+" vim-unimpaired-like mappings for toggling indentLine
+map coI <Esc>:IndentLinesToggle<CR>
+map yoI <Esc>:IndentLinesToggle<CR>
 " vim-unimpaired-like mappings for toggling the color column
 noremap yoo :ToggleColorColumn<CR>
 noremap coo :ToggleColorColumn<CR>
 " vim-unimpaired-like mappings for toggling Colorizer highlighting ('k' for kolor)
-noremap yok :ColorToggle<CR>
-noremap cok :ColorToggle<CR>
+noremap yok <ESC>:ColorToggle<CR>
+noremap cok <ESC>:ColorToggle<CR>
+" vim-unimpaired-like mappings for toggling Signify
+map yod <ESC>:SignifyToggle<CR>
+map cod <ESC>:SignifyToggle<CR>
 " Shorthand for changing double quotes to single quotes or vice-versa
 nmap coq cs"'
 nmap yoq cs"'
@@ -1285,8 +1313,9 @@ noremap <F9> :Yanks<CR>
 
 " Regex mappings {{{
 " Auto 'very magic' mode
-nnoremap / /
-vnoremap / /
+" Disabled because it's actually a bit annoying.
+" nnoremap / /\v
+" vnoremap / /\v
 " Sets up a regex
 noremap <Leader>r :s///c<Left><Left><Left>
 " Sets up a global, file wide regex
@@ -1339,7 +1368,7 @@ omap ia <Plug>SidewaysArgumentTextobjI
 xmap ia <Plug>SidewaysArgumentTextobjI
 " }}}
 
-" Signify mappings {{{
+" Sandwich mappings {{{
 " This adds a text object which automatically selects the closest enclosing
 " bracket/quote like surrounding.
 xmap ib <Plug>(textobj-sandwich-auto-i)
@@ -1500,6 +1529,10 @@ endif
 " ALE mappings {{{
 nnoremap gh :ALEHover<CR>
 nnoremap gs :ALESymbolSearch<space><c-r><c-w><CR>
+nnoremap ]g :ALENextWrap<CR>
+nnoremap [g :ALEPreviousWrap<CR>
+nnoremap ]a :ALENextWrap<CR>
+nnoremap [a :ALEPreviousWrap<CR>
 " }}}
 
 " Fuzzy search mappings {{{
@@ -1510,7 +1543,9 @@ vnoremap g/ :FuzzySearch<cr>
 " FZF mappings {{{
 nnoremap <leader>snip :Snippets<CR>
 nnoremap <leader>mark :Marks<CR>
+nnoremap <c-h> :History:<CR>
 nnoremap <leader>h: :History:<CR>
+nnoremap <c-_> :History/<CR>
 nnoremap <leader>h/ :History/<CR>
 nnoremap <leader>h_ :History<CR>
 nnoremap <c-t> :Files<CR>
