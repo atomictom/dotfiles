@@ -124,10 +124,14 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'jeetsukumaran/vim-indentwise'
 " Gives emacs/readline-like keybindings in insert and command mode. I mostly
 " want it for command-mode, though.
-Plug 'tpope/vim-rsi'
+" Plug 'tpope/vim-rsi'
+"
 " Alternative to vim-rsi that I want to try if vim-rsi doesn't work. Only
 " affects command mode rather than also affecting insert-mode.
-" Plug 'ryvnf/readline.vim'
+"
+" After trying both, this one seems to work better. I don't want emacs
+" bindings outside of command mode anyway.
+Plug 'ryvnf/readline.vim'
 " }}}
 
 " Theme and Visuals {{{
@@ -480,6 +484,9 @@ setl shortmess-=S
 " }}}
 
 " Plugin Settings {{{
+" Don't add meta-key bindings because they mess with hitting escape and then
+" normal mode keys.
+let g:rsi_no_meta = 1
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 " [Tags] Command to generate tags file
@@ -1278,12 +1285,12 @@ noremap <F9> :Yanks<CR>
 
 " Regex mappings {{{
 " Auto 'very magic' mode
-nnoremap / /\v
-vnoremap / /\v
+nnoremap / /
+vnoremap / /
 " Sets up a regex
-noremap <Leader>r :s/\v//c<Left><Left><Left>
+noremap <Leader>r :s///c<Left><Left><Left>
 " Sets up a global, file wide regex
-noremap <Leader>rf :%s/\v//c<Left><Left><Left>
+noremap <Leader>rf :%s///c<Left><Left><Left>
 " Grabs the word under the cursor and sets up a regex to replace it (globally)
 nnoremap <Leader>rv :%s/\<<c-r><c-w>\>//c<left><left>
 " Grabs the word under the cursor and sets up a regex to replace it (ranged)
