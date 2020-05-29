@@ -664,8 +664,8 @@ let g:ale_sign_error = "✗"
 let g:ycm_error_symbol = "✗"
 let g:ale_sign_warning = "⚠"
 let g:ycm_warning_symbol = "⚠"
-let g:ale_sign_style_error = "😠"
-let g:ale_sign_style_warning = "😡"
+let g:ale_sign_style_error = "😡"
+let g:ale_sign_style_warning = "😠"
 let g:ale_linters = {
     \ 'rust': [
     \     'rls',
@@ -869,7 +869,6 @@ function s:CAutoCommands()
     setl noexpandtab
     setl tabstop=4
     setl shiftwidth=4
-    let g:airline#extensions#whitespace#checks = ['trailing']
     Gcc
 endfunction
 
@@ -1021,7 +1020,6 @@ function s:VimwikiAutocommands()
     setl softtabstop=4
     setl tabstop=8
     highlight Folded ctermbg=234
-    let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 let g:web_autosave = 1
@@ -1033,7 +1031,6 @@ function s:WebAutoCommands()
     "     autocmd!
     "     autocmd CursorMoved,CursorHold *.html,*.css,*.js if expand('%') != '' && g:web_autosave == 1 | update | endif
     " augroup END
-    " let g:airline#extensions#whitespace#checks = ['trailing']
 endfunction
 
 function s:YamlAutoCommands()
