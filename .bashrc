@@ -61,10 +61,12 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # Source some helper scripts that are per-computer (and that I don't include in
 # my .bashrc).
+# shellcheck source=.bashrc.private
 [[ -e "$HOME/.bashrc.private" ]] && source "$HOME/.bashrc.private"
 
 # Source some helper scripts for setting up software (also generally
 # per-computer, but also kept in a separate repo).
+# shellcheck source=.bashrc.setup
 [[ -e "$HOME/.bashrc.setup" ]] && source "$HOME/.bashrc.setup"
 
 # Source Python virtualenvwrapper script, if present.
@@ -72,6 +74,8 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # Setup FZF bash helpers, if present.
 export FZF_DEFAULT_OPTS="--bind 'alt-o:execute(xdg-open {})'"
+export FZF_DEFAULT_COMMAND="fd --type f"
+# shellcheck source=.fzf.bash
 [[ -e "$HOME/.fzf.bash" ]] && source "$HOME/.fzf.bash"
 
 # Google Cloud Stuff:
@@ -123,7 +127,7 @@ fi
 
 # Looks {{{
 # Customize the ls colors
-eval `dircolors ~/.dircolors`
+eval "$(dircolors ~/.dircolors)"
 
 # Set the prompt
 function wrap {
