@@ -1536,6 +1536,8 @@ nnoremap [a :ALEPreviousWrap<CR>
 " }}}
 
 " Fuzzy search mappings {{{
+" In theory using fzf's :Lines would also work, but I like how fuzzy search
+" works inline (highlighting things) better.
 nnoremap g/ :FuzzySearch<cr>
 vnoremap g/ :FuzzySearch<cr>
 " }}}
@@ -1543,16 +1545,14 @@ vnoremap g/ :FuzzySearch<cr>
 " FZF mappings {{{
 nnoremap <leader>snip :Snippets<CR>
 nnoremap <leader>mark :Marks<CR>
-nnoremap <c-h> :History:<CR>
 nnoremap <leader>h: :History:<CR>
-nnoremap <c-_> :History/<CR>
 nnoremap <leader>h/ :History/<CR>
 nnoremap <leader>h_ :History<CR>
+nnoremap <c-h> :History:<CR>
+nnoremap <c-_> :History/<CR>
 nnoremap <c-t> :Files<CR>
 nnoremap <c-g> :GFiles<CR>
-nnoremap <c-p> :Lines<CR>
-" Actually "c-/", but vim/terminals are weird.
-nnoremap <c-_> :Rg<CR>
+nnoremap <c-p> :Rg<CR>
 " }}}
 
 " Pasting Mappings {{{
