@@ -26,18 +26,21 @@ shopt -s checkwinsize
 # Personal variables
 # VIMRUNTIME should be filled in by setup-vimruntime in .bashrc.setup (i.e.
 # from Vim source)
-# export VIMRUNTIME="/usr/share/vim/runtime"
+export VIMRUNTIME="/usr/share/vim/runtime"
 export GEM_HOME="$HOME/.gems"
 export GEM_PATH="$HOME/.gems:$GEM_PATH"
 export RB_USER_INSTALL='true'
 export GOPATH="$HOME/.golang/packages"
+export N_PREFIX="$HOME/.n"
 export PATH="/usr/local/go/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.gems/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bin/tmp:$PATH"
 export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.packages/racket/racket/bin"
 export PATH="$PATH:$HOME/.packages/google_appengine"
@@ -556,3 +559,5 @@ function fp {
     fzf --preview='head -$LINES {}'
 }
 # }}}
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

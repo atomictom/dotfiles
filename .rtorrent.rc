@@ -20,7 +20,7 @@ color_active_bg = 0
 
 # ------------------------------------------------------------------------------
 
-download_rate = 1000
+download_rate = 10000
 upload_rate = 50
 
 min_peers = 50

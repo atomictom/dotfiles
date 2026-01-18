@@ -230,8 +230,8 @@ Plug 'dhruvasagar/vim-zoom'
 " Same as syntastic, but async. The plan is to move entirely to Ale.
 Plug 'dense-analysis/ale'
 " Semantic autocompletion.
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --clang-completer --cs-completer --go-completer --ts-completer --rust-completer --java-completer' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --clang-completer --cs-completer --go-completer --ts-completer --rust-completer --java-completer' }
 " }}}
 
 " Vim Applications {{{
@@ -281,7 +281,7 @@ Plug 'honza/vim-snippets'
 " Use YCM to list snips, then <c-l> to activate them and <c-j/k> to navigate
 " the snippets. Disabled because it appears broken (Unknown function:
 " "UltiSnips#TrackChange").
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 " }}}
 
 " Gist commands {{{
@@ -321,21 +321,17 @@ Plug 'killphi/vim-ebnf'
 Plug 'tmux-plugins/vim-tmux'
 
 " Haskell {{{
-" Plug 'itchyny/vim-haskell-indent'
+" Automatically indents after newlines to align things like data declarations.
+Plug 'itchyny/vim-haskell-indent'
+" Expanded syntax for Haskell.
+Plug 'neovimhaskell/haskell-vim'
+" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), better syntax highlighting (similar to haskell-vim but not as intense)
+" Plug 'dag/vim2hs'
 " Automatically runs hindent on save
 " Plug 'alx741/vim-hindent'
-" Add some helpful haskell stuff like unicode 'covers' (\ -> lambda), syntax
-" highlighting, and hlint integration
-" Provides omnicomplete for haskell
-Plug 'eagletmt/neco-ghc'
-" Call hoogle from inside vim. Use <leader>h{h,i,c} to search, get additional
-" info, or close the info box
-Plug 'Twinside/vim-hoogle'
-Plug 'dag/vim2hs'
-" Works with ghcmod for...ummm...type checking?
-Plug 'eagletmt/ghcmod-vim'
-" Supposedly expanded syntax for Haskell.
-" Plug 'neovimhaskell/haskell-vim'
+"
+" It's worth noting that if stylish-haskell is installed (via Stack), I've
+" configured ALE to use it as a fixer on save.
 " }}}
 
 " Lisp {{{
@@ -375,7 +371,7 @@ Plug 'pangloss/vim-javascript'
 " need to bind some keys to leverage this)
 Plug 'marijnh/tern_for_vim'
 " Syntax and highlighting for purescript
-Plug 'raichoo/purescript-vim'
+Plug 'purescript-contrib/purescript-vim'
 " Adds coffeescript syntax and a few convenience functions for compiling,
 " running, and viewing the JS output of a coffeescript file
 Plug 'kchmck/vim-coffee-script'
@@ -575,6 +571,7 @@ let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 let g:vimwiki_list = [{'path': '~/.vimwiki'}]
 let g:vimwiki_conceallevel = 0
+let g:haskell_conceal = 0
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 let g:airline_powerline_fonts = 1
@@ -607,9 +604,11 @@ let g:ragtag_global_maps = 1
 let g:niji_matching_filetypes = ['lisp', 'scheme', 'racket', 'clojure', 'hy', 'haskell']
 " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
+let g:ghcmod_stack_exec = 1
 let g:UltiSnipsExpandTrigger = "<c-l>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+let g:ycm_auto_hover = ''
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -630,6 +629,18 @@ let g:ycm_cache_omnifunc = 1
 let g:ycm_semantic_triggers = {
     \ 'haskell': ['.', ':: ', '-> '],
     \ 'css': ['    ', 're!\s{4}', 're!^\t', 're!: (\S+ )*'],
+    \}
+let g:ycm_language_server = [
+    \ {
+    \ 'name': 'haskell',
+    \ 'filetypes': ['haskell', 'hs', 'lhs'],
+    \ 'cmdline': ['hie-wrapper', '--lsp'],
+    \ 'project_root_files': ['.stack.yaml', 'cabal.config', 'package.yaml'],
+    \ },
+    \ ]
+let g:ycm_filetype_blacklist = {
+    \ 'purescript': 1,
+    \ 'haskell': 1,
     \}
 let g:startify_session_dir = '~/.vim/sessions'
 let g:startify_enable_special = 0
@@ -672,13 +683,19 @@ let g:ale_sign_style_error = "😡"
 let g:ale_sign_style_warning = "😠"
 let g:ale_linters = {
     \ 'rust': [
-    \     'rls',
+    \     'rust-analyzer',
     \ ],
     \ 'sh': [
     \     'shellcheck',
     \ ],
     \}
 let g:ale_fixers = {
+    \ 'haskell': [
+    \     'stylish-haskell',
+    \ ],
+    \ 'purescript': [
+    \     'purty',
+    \ ],
     \ 'python': [
     \     'yapf',
     \     'isort',
@@ -692,10 +709,10 @@ let g:ale_fixers = {
     \     'shfmt',
     \ ],
     \}
-let g:ale_rust_rls_executable = '/home/thomas/.cargo/bin/rls'
+" let g:ale_rust_rls_executable = '/home/thomas/.cargo/bin/rls'
 let g:ale_fix_on_save = 1
 " Doesn't appear to work with nightly
-let g:ale_rust_rls_toolchain = 'stable'
+" let g:ale_rust_rls_toolchain = 'stable'
 let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
 let g:ale_rust_cargo_check_tests = 1
 let g:ale_rust_cargo_check_examples = 1
@@ -844,6 +861,7 @@ augroup vimrc
     autocmd FileType liquid setf liquid.html
     autocmd FileType markdown call s:MarkdownAutoCommands()
     autocmd FileType prolog call s:PrologAutocommands()
+    autocmd FileType purescript call s:PurescriptAutocommands()
     autocmd FileType python call s:PythonAutocommands()
     autocmd FileType racket call s:RacketAutocommands()
     autocmd FileType rust call s:RustAutoCommands()
@@ -928,6 +946,10 @@ function s:HaskellAutocommands()
     noremap gT :GhcModTypeClear<CR>
     " setl omnifunc=necoghc#omnifunc
     let g:necoghc_enable_detailed_browse = 1
+    let g:personal_prefer_coc = 1
+    " let g:ycm_filetype_blacklist = {
+    "     \ 'haskell': 1
+    "     \}
     GhcRun
     DoRainbowToggle
 endfunction
@@ -972,6 +994,10 @@ endfunction
 function s:PrologAutocommands()
     NoWait
     PrologRun
+endfunction
+
+function s:PurescriptAutocommands()
+    let g:personal_prefer_coc = 1
 endfunction
 
 function s:PythonAutocommands()
@@ -1270,9 +1296,6 @@ noremap <Leader>m :silent make!\|redraw!\|cw 4\|wincmd j<CR>
 noremap <Leader>nw :NoWait<CR>
 noremap <Leader>yw :Wait<CR>
 noremap <leader>er :Errors<CR>
-noremap <leader>hh :Hoogle<space>
-noremap <leader>hi :HoogleInfo<space>
-noremap <leader>hc :HoogleClose<CR>
 " }}}
 
 " Location list mappings {{{
@@ -1299,7 +1322,8 @@ noremap <Leader>so :OpenSession<space>
 " View Window mappings {{{
 "       <F1> Help
 noremap <F2> :MundoToggle<CR>
-noremap <F3> :UndotreeToggle<CR>
+" noremap <F3> :UndotreeToggle<CR>
+noremap <F3> :MundoToggle<CR>
 noremap <F4> :NERDTreeToggle<CR>
 noremap <F5> :call g:CustomBuild()<CR>
 inoremap <F5> <C-O>:call g:CustomBuild({})<CR>
@@ -1414,15 +1438,8 @@ omap ad <plug>(signify-motion-outer-pending)
 xmap ad <plug>(signify-motion-outer-visual)
 " }}}
 
-function! PlugLoaded(name)
-    return (
-        \ has_key(g:plugs, a:name) &&
-        \ isdirectory(g:plugs[a:name].dir))
-endfunction
-
-if PlugLoaded('coc.nvim')
-
 " CoC mappings {{{
+function! ConfigureCoc()
     function! s:is_previous_char_space() abort
       let col = col('.') - 1
       return !col || getline('.')[col - 1]  =~# '\s'
@@ -1486,33 +1503,72 @@ if PlugLoaded('coc.nvim')
     xmap <silent> <TAB> <Plug>(coc-range-select)
 
     xmap <leader>action <Plug>(coc-codeaction-selected)
-    nmap <leader>action <Plug>(coc-codeaction-selected)
     nmap <leader>action <Plug>(coc-codeaction)
-    nmap <leader>fix <Plug>(coc-fix-current)
-    nnoremap <leader>gq :call CocAction('format')<cr>
+    xmap gxa <Plug>(coc-codeaction-selected)
+    nmap gxa <Plug>(coc-codeaction)
+
     xmap <leader>gq <Plug>(coc-format-selected)
-    nmap <leader>gq <Plug>(coc-format-selected)
+    nmap <leader>gq <Plug>(coc-format)
+    xmap gxq <Plug>(coc-format-selected)
+    nmap gxq <Plug>(coc-format)
+
+    nmap <leader>fix <Plug>(coc-fix-current)
+    nmap gxx <Plug>(coc-fix-current)
+
     nnoremap <leader>format :call CocAction('format')<cr>
-    xmap <leader>format <Plug>(coc-format-selected)
-    nmap <leader>format <Plug>(coc-format-selected)
+    nnoremap gxf :call CocAction('format')<cr>
+
     nnoremap <leader>fold :call CocAction('fold')<cr>
+    nnoremap gxr :call CocAction('fold')<cr>
+
     nnoremap <leader>imports :call CocAction('runCommand', 'editor.action.organizeImport')<cr>
+    nnoremap gxi :call CocAction('runCommand', 'editor.action.organizeImport')<cr>
 
     " Add status line support, for integration with other plugin, checkout `:h coc-status`
     set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+endfunction
 " }}}
 
-else
-
-    set statusline+=%{NearestMethodOrFunction()}
 " YCM mappings {{{
+function! ConfigureYCM()
+    " Disable coc suggestions (if coc is loaded) to prevent conflicts with
+    " YCM.
+    let b:coc_suggest_disable = 1
+
+
+    " setl completeopt="menuone,preview"
+    " Relies on the Vista plugin; I think the statusline shows the nearest
+    " item even without this (i.e. by default), but this appears faster.
+    function! NearestMethodOrFunction() abort
+        return get(b:, 'vista_nearest_method_or_function', '')
+    endfunction
+    set statusline+=%{NearestMethodOrFunction()}
+
+    function! s:ycm_change_completeopt()
+        if match(&completeopt,  'preview') != -1
+            echom "Switching YCM to use popups"
+            setl completeopt+=popup
+            setl completeopt-=preview
+        elseif match(&completeopt,  'popup') != -1
+            echom "Switching YCM to use previews"
+            setl completeopt+=preview
+            setl completeopt-=popup
+        else
+            echom "Not changing anything for YCM"
+        endif
+    endfunction
+
+    map yoy <ESC>:call <SID>ycm_change_completeopt()<CR>
+    map coy <ESC>:call <SID>ycm_change_completeopt()<CR>
+
     nnoremap go :YcmCompleter GoTo<cr>
     nnoremap gd :YcmCompleter GoToDefinition<cr>
     nnoremap gz :YcmCompleter GoToDeclaration<cr>
     nnoremap gy :YcmCompleter GoToType<cr>
     nnoremap gi :YcmCompleter GoToImplementation<cr>
     nnoremap gr :YcmCompleter GoToReferences<cr>
-    nnoremap gh :YcmCompleter GetDoc<cr>
+    " Handled by ALEHover instead (which also shows the type, at least in Rust)
+    " nnoremap gh :YcmCompleter GetDoc<cr>
 
     nnoremap K :YcmCompleter GetDoc<cr>
     nnoremap L :YcmCompleter GetType<cr>
@@ -1522,9 +1578,35 @@ else
     nnoremap <Leader>fix :<C-u>YcmCompleter FixIt<cr>
     nnoremap <Leader>format :YcmCompleter Format<cr>
     nnoremap <Leader>imports :<C-u>YcmCompleter OrganizeImports<cr>
+endfunction
 " }}}
 
-endif
+" Completer mappings {{{
+function! PlugLoaded(name)
+    return (
+        \ has_key(g:plugs, a:name) &&
+        \ isdirectory(g:plugs[a:name].dir))
+endfunction
+
+let g:personal_completions_configured = 0
+function! ConfigureCompletions()
+    if exists('g:personal_completions_configured') && g:personal_completions_configured != 0
+        return
+    endif
+    let g:personal_completions_configured = 1
+
+    if PlugLoaded('coc.nvim') && !exists('g:personal_prefer_coc') || g:personal_prefer_coc > 0
+        echom "Using Coc"
+        call ConfigureCoc()
+    else
+        echom "Using YCM"
+        call ConfigureYCM()
+    endif
+endfunction
+autocmd BufEnter * call ConfigureCompletions()
+" call ConfigureYCM()
+" call ConfigureCoc()
+" }}}
 
 " ALE mappings {{{
 nnoremap gh :ALEHover<CR>

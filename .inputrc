@@ -2,10 +2,10 @@ set mark-symlinked-directories on
 set bell-style none
 
 # Disable arrow keys
-"\e[A": ""
-"\e[B": ""
-"\e[C": ""
-"\e[D": ""
+# "\e[A": ""
+# "\e[B": ""
+# "\e[C": ""
+# "\e[D": ""
 
 # set keymap vi-command
 # "\C-\M-e": emacs-editing-mode

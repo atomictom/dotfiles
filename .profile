@@ -25,7 +25,7 @@ export STEAM_FRAME_FORCE_CLOSE=1
 
 # Disable some keys (to save my pinkies).
 # I obtained the keycode with `xev -event keyboard`
-xmodmap -e 'keycode 62='  # Shift_R
+# xmodmap -e 'keycode 62='  # Shift_R
 # xmodmap -e 'keycode 37='  # Control_L
-xmodmap -e 'keycode 105=' # Control_R
+# xmodmap -e 'keycode 105=' # Control_R
 # Undo the overrides with `setxkbmap`
